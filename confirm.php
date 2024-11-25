@@ -16,6 +16,10 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
 
     // Check if the token exists and the user is not yet confirmed
     $stmt = $conn->prepare("SELECT id FROM users WHERE token = ? AND is_confirmed = 0");
+    if (!$stmt) {
+        die("Prepare failed: " . $conn->error);
+    }
+
     $stmt->bind_param("s", $token);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -23,6 +27,10 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
     if ($result->num_rows > 0) {
         // Token exists, proceed to confirm the user
         $stmt = $conn->prepare("UPDATE users SET is_confirmed = 1, token = NULL WHERE token = ?");
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+
         $stmt->bind_param("s", $token);
         if ($stmt->execute()) {
             echo "<p>Your email has been successfully confirmed! You can now log in.</p>";
