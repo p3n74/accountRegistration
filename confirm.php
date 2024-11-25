@@ -1,24 +1,27 @@
 <?php
 require 'includes/db.php'; // Include the database connection
 
-if (isset($_GET['token'])) {
-    $token = htmlspecialchars($_GET['token']); // Sanitize the token from the URL
+// Check if the token is provided in the URL
+if (isset($_GET['token']) && !empty($_GET['token'])) {
+    $token = htmlspecialchars($_GET['token']); // Sanitize the token
 
+    // Prepare a query to verify the token exists and the user is not confirmed yet
     $stmt = $conn->prepare("SELECT id FROM users WHERE token = ? AND is_confirmed = 0");
     $stmt->bind_param("s", $token);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
+        // Token exists, update the user's confirmation status
         $stmt = $conn->prepare("UPDATE users SET is_confirmed = 1, token = NULL WHERE token = ?");
         $stmt->bind_param("s", $token);
         if ($stmt->execute()) {
             echo "<p>Your email has been successfully confirmed! You can now log in.</p>";
         } else {
-            echo "<p>There was an error confirming your email. Please try again later.</p>";
+            echo "<p>Error updating confirmation. Please try again later.</p>";
         }
     } else {
-        echo "<p>Invalid or expired confirmation link. Please contact support if you believe this is an error.</p>";
+        echo "<p>Invalid or expired confirmation link.</p>";
     }
 
     $stmt->close();
