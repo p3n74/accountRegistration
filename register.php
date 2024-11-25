@@ -17,7 +17,7 @@ try {
     $mail->Port = 587;
 
     // Recipients
-    $mail->setFrom('your_email@gmail.com', 'Your Name');
+    $mail->setFrom('21102134@usc.edu.ph', 'Nikolai');
     $mail->addAddress($email, $name); // User's email and name
 
     // Content
