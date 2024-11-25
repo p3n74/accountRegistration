@@ -52,9 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Content
             $mail->isHTML(true);
-            $mail->Subject = 'Confirm Your Account';
-            $confirmationLink = "http://yourwebsite.com/confirm.php?token=$token";
-            $mail->Body = "<p>Hi $name,</p>
+			$mail->Subject = 'Confirm Your Account';
+			$confirmationLink = "http://accounts.dcism.org/confirm.php?token=$token";
+			$mail->Body = "<p>Hi $name,</p>
                            <p>Thank you for registering. Please click the link below to confirm your email:</p>
                            <p><a href='$confirmationLink'>Confirm My Account</a></p>";
 
