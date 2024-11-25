@@ -1,23 +1,19 @@
 <?php
-require 'includes/db.php'; // Include the database connection
+require 'includes/db.php';
 
-// Check if the token is provided in the URL
 if (isset($_GET['token']) && !empty($_GET['token'])) {
-    // Sanitize and trim the token
+    // Sanitize and validate the token
     $token = htmlspecialchars(trim($_GET['token']));
-
-    // Debugging output to verify token retrieval
     echo "Token from URL: " . $token . "<br>";
 
-    // Validate token format (assuming tokens are 64 characters long, adjust if necessary)
     if (strlen($token) !== 64) {
-        die("<p>Invalid token format.</p>");
+        die("<p>Invalid token length. Please check your confirmation link.</p>");
     }
 
-    // Check if the token exists and the user is not yet confirmed
+    // Verify the token exists in the database
     $stmt = $conn->prepare("SELECT id FROM users WHERE token = ? AND is_confirmed = 0");
     if (!$stmt) {
-        die("Prepare failed: " . $conn->error);
+        die("Prepare failed during SELECT: " . $conn->error);
     }
 
     $stmt->bind_param("s", $token);
@@ -25,33 +21,32 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // Token exists, proceed to confirm the user
-        $stmt = $conn->prepare("UPDATE users SET is_confirmed = 1, token = NULL WHERE token = ?");
-        if (!$stmt) {
-            die("Prepare failed: " . $conn->error);
+        // Token is valid and user is not confirmed
+        echo "<p>Token found in the database. Confirming the user...</p>";
+        
+        $updateStmt = $conn->prepare("UPDATE users SET is_confirmed = 1, token = '0' WHERE token = ?");
+        if (!$updateStmt) {
+            die("Prepare failed during UPDATE: " . $conn->error);
         }
 
-        $stmt->bind_param("s", $token);
-        if ($stmt->execute()) {
+        $updateStmt->bind_param("s", $token);
+        if ($updateStmt->execute()) {
             echo "<p>Your email has been successfully confirmed! You can now log in.</p>";
         } else {
-            echo "<p>Error updating confirmation. Please try again later.</p>";
+            echo "<p>Error during update execution: " . $updateStmt->error . "</p>";
         }
+
+        $updateStmt->close();
     } else {
-        // Token is invalid or the user is already confirmed
+        // No matching token found or already confirmed
         echo "<p>Invalid or expired confirmation link.</p>";
     }
 
     $stmt->close();
 } else {
-    // No token provided
-    echo "<p>No confirmation token provided. Please check the link and try again.</p>";
+    echo "<p>No confirmation token provided. Please check your link.</p>";
 }
 
-// Close the database connection
 $conn->close();
 ?>
-
-
-
 
