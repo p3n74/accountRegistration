@@ -11,9 +11,19 @@
         <h2 class="text-center">Register</h2>
         <form action="register.php" method="POST" class="mt-4">
             <div class="mb-3">
-                <label for="name" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
+                <label for="firstname" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="fname" name="fname" required>
+			</div>
+            <div class="mb-3">
+                <label for="firstname" class="form-label">Middle Name</label>
+                <input type="text" class="form-control" id="mname" name="mname" required>
+			</div>
+            <div class="mb-3">
+                <label for="firstname" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lname" name="lname" required>
+			</div>
+
+
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" class="form-control" id="email" name="email" required>

@@ -10,7 +10,10 @@ use PHPMailer\PHPMailer\Exception;
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Sanitize and validate inputs
-    $name = htmlspecialchars($_POST['name']);
+	$fname = htmlspecialchars($_POST['fname']);
+	$mname = htmlspecialchars($_POST['mname']);
+	$lname = htmlspecialchars($_POST['lname']);
+
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
 
@@ -29,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $token = bin2hex(random_bytes(32));
 
     // Insert user into the database
-    $stmt = $conn->prepare("INSERT INTO users (name, email, password, token, is_confirmed) VALUES (?, ?, ?, ?, 0)");
-    $stmt->bind_param("ssss", $name, $email, $hashedPassword, $token);
+    $stmt = $conn->prepare("INSERT INTO user_credentials (fname, mname, lname, email, password, currboundtoken, emailverified) VALUES (?, ?, ?, ?, 0)");
+    $stmt->bind_param("ssssss", $fname, $mname, $lname, $email, $hashedPassword, $token);
 
     if ($stmt->execute()) {
         // Send confirmation email
@@ -41,8 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = '21102134@usc.edu.ph'; // Replace with your Gmail
-            $mail->Password = 'rufm xhjs ntyk ofkc';   // Replace with your app password
+            $mail->Username = '21102134@usc.edu.ph'; // Gmail used to send email 
+            $mail->Password = 'rufm xhjs ntyk ofkc';   // API KEY 
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
