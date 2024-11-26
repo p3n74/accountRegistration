@@ -51,13 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Recipients
             $mail->setFrom('211021342@usc.edu.ph', 'Nikolai');
-            $mail->addAddress($email, $name);
+            $mail->addAddress($email, $fname);
 
             // Content
             $mail->isHTML(true);
 			$mail->Subject = 'Confirm Your Account';
 			$confirmationLink = "http://accounts.dcism.org/accountRegistration/confirm.php?token=$token";
-			$mail->Body = "<p>Hi $name,</p>
+			$mail->Body = "<p>Hi $fname,</p>
                            <p>Thank you for registering. Please click the link below to confirm your email:</p>
                            <p><a href='$confirmationLink'>Confirm My Account</a></p>";
 
