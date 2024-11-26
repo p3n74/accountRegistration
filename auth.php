@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'login') {
     }
 
     // Prepare SQL to fetch user details
-    $stmt = $conn->prepare("SELECT uid, fname, lname, password, emailverified FROM users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT uid, fname, lname, password, emailverified FROM user_credentials WHERE email = ?");
     if (!$stmt) {
         die("Prepare failed: " . $conn->error);
     }
