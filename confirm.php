@@ -11,7 +11,7 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
     }
 
     // Verify the token exists in the database
-    $stmt = $conn->prepare("SELECT id FROM users WHERE token = ? AND is_confirmed = 0");
+    $stmt = $conn->prepare("SELECT id FROM user_credentials WHERE currboundtoken = ? AND emailverified = 0");
     if (!$stmt) {
         die("Prepare failed during SELECT: " . $conn->error);
     }
@@ -24,7 +24,7 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
         // Token is valid and user is not confirmed
         echo "<p>Token found in the database. Confirming the user...</p>";
         
-        $updateStmt = $conn->prepare("UPDATE users SET is_confirmed = 1, token = '0' WHERE token = ?");
+        $updateStmt = $conn->prepare("UPDATE user_credentials SET emailverified = 1, currboundtoken = '0' WHERE currboundtoken = ?");
         if (!$updateStmt) {
             die("Prepare failed during UPDATE: " . $conn->error);
         }
