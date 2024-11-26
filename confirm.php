@@ -11,7 +11,7 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
     }
 
     // Verify the token exists in the database
-    $stmt = $conn->prepare("SELECT id FROM user_credentials WHERE currboundtoken = ? AND emailverified = 0");
+    $stmt = $conn->prepare("SELECT uid FROM user_credentials WHERE currboundtoken = ? AND emailverified = 0");
     if (!$stmt) {
         die("Prepare failed during SELECT: " . $conn->error);
     }
