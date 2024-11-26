@@ -13,27 +13,39 @@ require_once 'includes/db.php';
 // Retrieve UID from session
 $uid = $_SESSION['uid'];
 
+// Query to fetch user details (name, email, profile picture) based on UID
+$sql_user = "SELECT fname, mname, lname, email, profilepicture FROM user_credentials WHERE uid = ?";
+$stmt_user = $conn->prepare($sql_user);
+$stmt_user->bind_param("i", $uid);  // Bind UID to the query
+$stmt_user->execute();
+$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture);  // Bind the result to variables
+$stmt_user->fetch();  // Fetch the data into the variables
+
+// Use a default image if profile picture is not set
+$profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
+
 // Prepare the SQL query to fetch attended events
-$sql = "
+$sql_events = "
     SELECT e.eventid, e.eventname, e.startdate, e.enddate, e.location, e.eventinfopath
     FROM user_credentials u
     JOIN events e ON JSON_CONTAINS(u.attendedevents, JSON_ARRAY(e.eventid))
     WHERE u.uid = ?
 ";
 
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $uid);  // Bind UID to the query
-$stmt->execute();
-$result = $stmt->get_result();
+$stmt_events = $conn->prepare($sql_events);
+$stmt_events->bind_param("i", $uid);  // Bind UID to the query
+$stmt_events->execute();
+$result_events = $stmt_events->get_result();
 
-// Fetch the results
+// Fetch the results for attended events
 $attendedEvents = [];
-while ($row = $result->fetch_assoc()) {
+while ($row = $result_events->fetch_assoc()) {
     $attendedEvents[] = $row;
 }
 
 // Close the statement and DB connection
-$stmt->close();
+$stmt_user->close();
+$stmt_events->close();
 $conn->close();
 ?>
 
