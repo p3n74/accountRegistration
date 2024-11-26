@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $token = bin2hex(random_bytes(32));
 
     // Insert user into the database
-    $stmt = $conn->prepare("INSERT INTO user_credentials (fname, mname, lname, email, password, currboundtoken, emailverified) VALUES (?, ?, ?, ?, 0)");
+    $stmt = $conn->prepare("INSERT INTO user_credentials (fname, mname, lname, email, password, currboundtoken, emailverified) VALUES (?, ?, ?, ?, ?, ?, 0)");
     $stmt->bind_param("ssssss", $fname, $mname, $lname, $email, $hashedPassword, $token);
 
     if ($stmt->execute()) {
