@@ -1,0 +1,49 @@
+in the database, user_credentials
+contain a JSON datatype for the list
+of attended events, that way we can efficiently
+store a list
+
+
+appending new events to the list of a user
+
+we just do this query
+
+UPDATE user_credentials
+SET attendedevents = JSON_ARRAY_APPEND(attendedevents, '$', 4)
+WHERE uid = 101;
+
+this will append 4 to the list. substitute it for a
+variable when implemented
+
+
+fror the attended events, which will be needed
+we need to use JSON extract to individually
+ 
+Extract the event by index
+
+SELECT JSON_EXTRACT(attendedevents, '$[0]')
+FROM user_credentials
+WHERE uid = 101;  -- Replace with the actual user ID
+
+Create a table of all attended events of a user
+
+SELECT e.eventid, e.eventname, e.startdate, e.enddate, e.location, e.eventinfopath
+FROM user_credentials u
+JOIN events e ON JSON_CONTAINS(u.attendedevents, JSON_ARRAY(e.eventid))
+WHERE u.uid = 3;
+
+Create a list of all paths to the attended events'
+badges
+
+SELECT e.eventbadgepath FROM user_credentials u 
+JOIN events e ON JSON_CONTAINS(u.attendedevents, JSON_ARRAY(e.eventid))
+WHERE u.uid = 3;
+
+
+
+
+
+
+
+
+
