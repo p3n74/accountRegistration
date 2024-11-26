@@ -24,6 +24,9 @@ $stmt_user->fetch();  // Fetch the data into the variables
 // Use a default image if profile picture is not set
 $profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
 
+// Close the user details statement to avoid issues with subsequent queries
+$stmt_user->close();
+
 // Prepare the SQL query to fetch attended events
 $sql_events = "
     SELECT e.eventid, e.eventname, e.startdate, e.enddate, e.location, e.eventinfopath
@@ -43,8 +46,7 @@ while ($row = $result_events->fetch_assoc()) {
     $attendedEvents[] = $row;
 }
 
-// Close the statement and DB connection
-$stmt_user->close();
+// Close the events statement and DB connection
 $stmt_events->close();
 $conn->close();
 ?>
