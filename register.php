@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // Check if form is submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "register") {
     // Sanitize and validate inputs
 	$fname = htmlspecialchars($_POST['fname']);
 	$mname = htmlspecialchars($_POST['mname']);
