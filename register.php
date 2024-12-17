@@ -3,7 +3,7 @@ require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 require 'includes/db.php'; // Include the database connection
-require 'includes/apikey.php'; // Include the api key
+require 'includes/apikey.php'; // Include the API key
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -11,9 +11,9 @@ use PHPMailer\PHPMailer\Exception;
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "register") {
     // Sanitize and validate inputs
-	$fname = htmlspecialchars($_POST['fname']);
-	$mname = htmlspecialchars($_POST['mname']);
-	$lname = htmlspecialchars($_POST['lname']);
+    $fname = htmlspecialchars($_POST['fname']);
+    $mname = htmlspecialchars($_POST['mname']);
+    $lname = htmlspecialchars($_POST['lname']);
 
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
@@ -29,11 +29,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "register") {
     // Hash the password
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
+    // Check if the email already exists in the database
+    $checkEmailSql = "SELECT * FROM user_credentials WHERE email = ?";
+    $stmt = $conn->prepare($checkEmailSql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        die("Error: This email address is already registered.");
+    }
+
     // Generate a unique token for email confirmation
     $token = bin2hex(random_bytes(32));
 
     // Insert user into the database
-    $stmt = $conn->prepare("INSERT INTO user_credentials (fname, mname, lname, email, password, currboundtoken, emailverified) VALUES (?, ?, ?, ?, ?, ?, 0)");
+    $insertSql = "INSERT INTO user_credentials (fname, mname, lname, email, password, currboundtoken, emailverified) VALUES (?, ?, ?, ?, ?, ?, 0)";
+    $stmt = $conn->prepare($insertSql);
     $stmt->bind_param("ssssss", $fname, $mname, $lname, $email, $hashedPassword, $token);
 
     if ($stmt->execute()) {
@@ -56,9 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "register") {
 
             // Content
             $mail->isHTML(true);
-			$mail->Subject = 'Confirm Your Account';
-			$confirmationLink = "http://accounts.dcism.org/accountRegistration/confirm.php?token=$token";
-			$mail->Body = "<p>Hi $fname,</p>
+            $mail->Subject = 'Confirm Your Account';
+            $confirmationLink = "http://accounts.dcism.org/accountRegistration/confirm.php?token=$token";
+            $mail->Body = "<p>Hi $fname,</p>
                            <p>Thank you for registering. Please click the link below to confirm your email:</p>
                            <p><a href='$confirmationLink'>Confirm My Account</a></p>";
 
