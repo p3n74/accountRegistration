@@ -3,6 +3,7 @@ require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 require 'includes/db.php'; // Include the database connection
+require 'includes/apikey.php'; // Include the api key
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -45,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "register") {
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = '21102134@usc.edu.ph'; // Gmail used to send email 
-            $mail->Password = 'rufm xhjs ntyk ofkc';   // API KEY 
+            $mail->Password = $apikey; // API KEY 
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
