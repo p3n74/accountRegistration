@@ -26,30 +26,46 @@ $stmt_user->fetch();  // Fetch the data into the variables
 $profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
 
 // Handle the form submission for profile update
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == 'update_settings') {
-    $new_fname = $_POST['fname'];
-    $new_mname = $_POST['mname'];
-    $new_lname = $_POST['lname'];
-    $new_email = $_POST['email'];
-    $new_password = $_POST['password'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Handle personal info update
+    if (isset($_POST['action']) && $_POST['action'] == 'update_settings') {
+        $new_fname = $_POST['fname'];
+        $new_mname = $_POST['mname'];
+        $new_lname = $_POST['lname'];
+        $new_password = $_POST['password'];
 
-    // Validate email
-    if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
-        $error_message = "Invalid email format.";
-    } else {
-        // Check if new email is different from the current one
-        if ($new_email != $email) {
+        // Update the personal info (excluding email)
+        $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ? WHERE uid = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bind_param("sssi", $new_fname, $new_mname, $new_lname, $uid);
+        $stmt_update->execute();
+        if ($stmt_update->affected_rows > 0) {
+            echo "<p>Your details have been updated successfully!</p>";
+        } else {
+            $error_message = "No changes were made or an error occurred.";
+        }
+        $stmt_update->close();
+    }
+
+    // Handle email update request
+    if (isset($_POST['action']) && $_POST['action'] == 'update_email') {
+        $new_email = $_POST['email'];
+
+        // Validate the new email
+        if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
+            $error_message = "Invalid email format.";
+        } else {
             // Generate a new verification code
             $verification_code = bin2hex(random_bytes(16)); // Generate a 32-character random code
             
             // Update the database with the new email and verification code
-            $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ?, new_email = ?, verification_code = ? WHERE uid = ?";
-            $stmt_update = $conn->prepare($sql_update);
-            $stmt_update->bind_param("sssssi", $new_fname, $new_mname, $new_lname, $new_email, $verification_code, $uid);
-            $stmt_update->execute();
+            $sql_update_email = "UPDATE user_credentials SET new_email = ?, verification_code = ? WHERE uid = ?";
+            $stmt_update_email = $conn->prepare($sql_update_email);
+            $stmt_update_email->bind_param("ssi", $new_email, $verification_code, $uid);
+            $stmt_update_email->execute();
 
             // Check if the update was successful
-            if ($stmt_update->affected_rows > 0) {
+            if ($stmt_update_email->affected_rows > 0) {
                 // Send verification email (this part requires a function for email sending, e.g., using PHP mail or PHPMailer)
                 $verification_link = "http://yourdomain.com/verify-email.php?code=" . urlencode($verification_code);
                 $subject = "Email Verification";
@@ -63,23 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == 'update_setting
                     $error_message = "Failed to send verification email.";
                 }
             } else {
-                $error_message = "Failed to update your details.";
+                $error_message = "Failed to update your email request.";
             }
-        } else {
-            // If the new email is the same as the old one, just update the other fields
-            $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ? WHERE uid = ?";
-            $stmt_update = $conn->prepare($sql_update);
-            $stmt_update->bind_param("sssi", $new_fname, $new_mname, $new_lname, $uid);
-            $stmt_update->execute();
-            if ($stmt_update->affected_rows > 0) {
-                echo "<p>Your details have been updated successfully!</p>";
-            } else {
-                $error_message = "No changes were made or an error occurred.";
-            }
+            $stmt_update_email->close();
         }
     }
-
-    $stmt_update->close();
 }
 
 // Handle the file upload for profile picture
@@ -201,6 +205,7 @@ $conn->close();
       <?php endif; ?>
 
       <div class="form-container">
+        <!-- Personal Info Update Form -->
         <form action="settings.php" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="action" value="update_settings">
           <div class="mb-3">
@@ -219,11 +224,6 @@ $conn->close();
           </div>
 
           <div class="mb-3">
-            <label for="email" class="form-label">Email Address</label>
-            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
-          </div>
-
-          <div class="mb-3">
             <label for="password" class="form-label">New Password (Leave blank to keep current password)</label>
             <input type="password" class="form-control" id="password" name="password">
           </div>
@@ -234,6 +234,21 @@ $conn->close();
           </div>
 
           <button type="submit" class="btn btn-primary w-100">Update</button>
+        </form>
+      </div>
+
+      <!-- Email Update Form -->
+      <div class="form-container">
+        <h3>Change Email</h3>
+        <form action="settings.php" method="POST">
+          <input type="hidden" name="action" value="update_email">
+          
+          <div class="mb-3">
+            <label for="email" class="form-label">New Email Address</label>
+            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">Update Email</button>
         </form>
       </div>
     </div>
