@@ -88,6 +88,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 ?>
 
+<?php
+// Start the session
+session_start();
+
+// Check if user is logged in by checking session for UID
+if (!isset($_SESSION['uid'])) {
+    die("You must log in first.");
+}
+
+// Include database connection
+require_once 'includes/db.php';
+
+// Retrieve UID from session
+$uid = $_SESSION['uid'];
+
+// Query to fetch user details (name, email, profile picture) based on UID
+$sql_user = "SELECT fname, mname, lname, email, profilepicture FROM user_credentials WHERE uid = ?";
+$stmt_user = $conn->prepare($sql_user);
+$stmt_user->bind_param("i", $uid);  // Bind UID to the query
+$stmt_user->execute();
+$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture);  // Bind the result to variables
+$stmt_user->fetch();  // Fetch the data into the variables
+
+// Use a default image if profile picture is not set
+$profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
+
+// Close the user details statement to avoid issues with subsequent queries
+$stmt_user->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -202,8 +232,47 @@ $conn->close();
     </div>
   </div>
 
+  <!-- Bootstrap Modal for Tutorial -->
+  <div class="modal fade" id="tutorialModal" tabindex="-1" aria-labelledby="tutorialModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="tutorialModalLabel">Event Creation Tutorial</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6>Welcome to the event creation page!</h6>
+          <p>Follow the steps below to create your event:</p>
+          <ol>
+            <li><strong>Event Name:</strong> Enter the name of your event.</li>
+            <li><strong>Start Date & End Date:</strong> Set the start and end date and time for your event.</li>
+            <li><strong>Location:</strong> Enter the location of the event.</li>
+            <li><strong>Event Key:</strong> Provide a code for the onsite terminals to use for your event <li>
+            <li><strong>Event Short Info:</strong> Put a link to your page or event page.</li>
+            <li><strong>Event Badge:</strong> Optionally, upload a badge for you attendees to collect </li>
+            <li><strong>Event Info (PDF):</strong> Optionally, upload any additional event info, such as a PDF.</li>
+          </ol>
+          <p>Once you're done, click "Create Event" to finalize.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Bootstrap JS and dependencies -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
+  
+  <script>
+    // Show the modal when the page loads
+    window.onload = function() {
+      var tutorialModal = new bootstrap.Modal(document.getElementById('tutorialModal'));
+      tutorialModal.show();
+    };
+  </script>
 </body>
 </html>
+
