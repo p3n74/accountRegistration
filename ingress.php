@@ -68,6 +68,20 @@ if (isset($_GET['token']) && isset($_GET['event'])) {
                         $update_stmt = $conn->prepare($update_sql);
                         $update_stmt->bind_param("ii", $eventid, $uid);
                         $update_stmt->execute();
+
+                        // Append eventid to attended events
+                        $attendedEvents = json_decode($row['attendedevents'], true); // Get the attended events as an array
+                        if (!in_array($eventid, $attendedEvents)) {
+                            $attendedEvents[] = $eventid; // Add the event ID if it's not already in the list
+                            $updatedAttendedevents = json_encode($attendedEvents); // Convert it back to JSON
+
+                            // Update the attendedevents field
+                            $update_user_sql = "UPDATE user_credentials SET attendedevents = ? WHERE uid = ?";
+                            $update_user_stmt = $conn->prepare($update_user_sql);
+                            $update_user_stmt->bind_param("si", $updatedAttendedevents, $uid);
+                            $update_user_stmt->execute();
+                        }
+
                         echo "<div class='alert alert-success mt-4'>You have successfully left the event.</div>";
                     } else {
                         echo "<div class='alert alert-info mt-4'>You have already recorded both your join and leave times.</div>";
