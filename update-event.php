@@ -13,6 +13,15 @@ require_once 'includes/db.php';
 // Retrieve UID from session
 $uid = $_SESSION['uid'];
 
+// Fetch user profile details (fname, lname, email)
+$sql_user = "SELECT fname, lname, email FROM users WHERE uid = ?";
+$stmt_user = $conn->prepare($sql_user);
+$stmt_user->bind_param("i", $uid);
+$stmt_user->execute();
+$stmt_user->store_result();
+$stmt_user->bind_result($fname, $lname, $email);
+$stmt_user->fetch();
+
 // Get eventid from URL
 if (isset($_GET['eventid'])) {
     $eventid = $_GET['eventid'];
@@ -44,7 +53,36 @@ if (isset($_POST['update_event'])) {
     $eventkey = $_POST['eventkey'];
     $eventshortinfo = $_POST['eventshortinfo'];
     $eventinfopath = $_POST['eventinfopath'];
-    $eventbadgepath = $_POST['eventbadgepath'];
+
+    // Handle file upload for event badge
+    if (isset($_FILES['eventbadgepath']) && $_FILES['eventbadgepath']['error'] == 0) {
+        $badge_tmp_name = $_FILES['eventbadgepath']['tmp_name'];
+        $badge_name = $_FILES['eventbadgepath']['name'];
+        $badge_ext = pathinfo($badge_name, PATHINFO_EXTENSION);
+        $badge_new_name = "badge_" . time() . "." . $badge_ext;
+        $badge_upload_dir = 'uploads/';
+        
+        if (move_uploaded_file($badge_tmp_name, $badge_upload_dir . $badge_new_name)) {
+            $eventbadgepath = $badge_upload_dir . $badge_new_name;
+        } else {
+            $error_message = "Error uploading the event badge.";
+        }
+    }
+
+    // Handle file upload for event certificate
+    if (isset($_FILES['eventinfopath']) && $_FILES['eventinfopath']['error'] == 0) {
+        $cert_tmp_name = $_FILES['eventinfopath']['tmp_name'];
+        $cert_name = $_FILES['eventinfopath']['name'];
+        $cert_ext = pathinfo($cert_name, PATHINFO_EXTENSION);
+        $cert_new_name = "certificate_" . time() . "." . $cert_ext;
+        $cert_upload_dir = 'uploads/';
+        
+        if (move_uploaded_file($cert_tmp_name, $cert_upload_dir . $cert_new_name)) {
+            $eventinfopath = $cert_upload_dir . $cert_new_name;
+        } else {
+            $error_message = "Error uploading the event certificate.";
+        }
+    }
 
     // Prepare update query
     $sql_update = "UPDATE events SET eventname = ?, startdate = ?, enddate = ?, location = ?, eventkey = ?, eventshortinfo = ?, eventinfopath = ?, eventbadgepath = ? WHERE eventid = ?";
@@ -56,6 +94,27 @@ if (isset($_POST['update_event'])) {
             $error_message = "Error updating the event.";
         }
         $stmt_update->close();
+    }
+}
+
+// Handle file deletion
+if (isset($_POST['delete_files'])) {
+    // Delete the event badge
+    if (!empty($eventbadgepath) && file_exists($eventbadgepath)) {
+        unlink($eventbadgepath);
+    }
+
+    // Delete the event certificate
+    if (!empty($eventinfopath) && file_exists($eventinfopath)) {
+        unlink($eventinfopath);
+    }
+
+    // Update the database to remove file paths
+    $sql_delete_files = "UPDATE events SET eventbadgepath = '', eventinfopath = '' WHERE eventid = ?";
+    if ($stmt_delete_files = $conn->prepare($sql_delete_files)) {
+        $stmt_delete_files->bind_param("i", $eventid);
+        $stmt_delete_files->execute();
+        $success_message = "Files deleted successfully.";
     }
 }
 
@@ -72,7 +131,6 @@ $conn->close();
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    /* Custom CSS for layout and table */
     .sidebar {
       min-height: 100vh;
       background-color: #f8f9fa;
@@ -105,7 +163,6 @@ $conn->close();
     <!-- Sidebar with profile information -->
     <div class="sidebar col-md-3 col-lg-2 p-3">
       <div class="text-center">
-        <!-- Display profile picture -->
         <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
         <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
         <p><?php echo htmlspecialchars($email); ?></p>
@@ -165,14 +222,20 @@ $conn->close();
             <input type="url" class="form-control" id="eventshortinfo" name="eventshortinfo" value="<?php echo htmlspecialchars($eventshortinfo); ?>" required>
           </div>
           <div class="mb-3">
-            <label for="eventinfopath" class="form-label">Event Info Link</label>
-            <input type="url" class="form-control" id="eventinfopath" name="eventinfopath" value="<?php echo htmlspecialchars($eventinfopath); ?>" required>
+            <label for="eventinfopath" class="form-label">Event Certificate (Upload)</label>
+            <input type="file" class="form-control" id="eventinfopath" name="eventinfopath">
           </div>
           <div class="mb-3">
-            <label for="eventbadgepath" class="form-label">Event Badge (Image URL)</label>
-            <input type="text" class="form-control" id="eventbadgepath" name="eventbadgepath" value="<?php echo htmlspecialchars($eventbadgepath); ?>" required>
+            <label for="eventbadgepath" class="form-label">Event Badge (Upload)</label>
+            <input type="file" class="form-control" id="eventbadgepath" name="eventbadgepath">
           </div>
+          
           <button type="submit" name="update_event" class="btn btn-primary btn-custom">Update Event</button>
+        </form>
+        
+        <!-- Delete Files Form -->
+        <form method="POST" class="mt-3">
+          <button type="submit" name="delete_files" class="btn btn-danger btn-custom">Delete Event Badge and Certificate</button>
         </form>
       </div>
     </div>
