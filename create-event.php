@@ -35,6 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $enddate = $_POST['enddate'];
     $location = $_POST['location'];
     $eventdetails = $_POST['eventdetails'];
+    $eventkey = $_POST['eventkey'];
+    $eventshortinfo = $_POST['eventshortinfo'];
 
     // Event Badge Upload
     $eventbadgepath = 'eventbadges/default.png';  // Default badge if none uploaded
@@ -51,11 +53,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
+    // Event Info Upload (PDF or file)
+    $eventinfopath = NULL;  // Default is null if no file uploaded
+    if (isset($_FILES['eventinfo']) && $_FILES['eventinfo']['error'] == 0) {
+        $file_tmp = $_FILES['eventinfo']['tmp_name'];
+        $file_name = $_FILES['eventinfo']['name'];
+        $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
+        $file_new_name = uniqid() . '.' . $file_extension;
+        $file_path = 'eventinfo/' . $file_new_name;
+
+        // Move the uploaded PDF or file to the eventinfo folder
+        if (move_uploaded_file($file_tmp, $file_path)) {
+            $eventinfopath = $file_path; // Update the path if successfully uploaded
+        }
+    }
+
     // Insert the event into the database
-    $sql = "INSERT INTO events (eventname, startdate, enddate, location, eventinfopath, eventbadgepath, eventcreator)
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO events (eventname, startdate, enddate, location, eventinfopath, eventbadgepath, eventcreator, eventkey, eventshortinfo)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("ssssssi", $eventname, $startdate, $enddate, $location, $eventdetails, $eventbadgepath, $uid);
+        $stmt->bind_param("ssssssiss", $eventname, $startdate, $enddate, $location, $eventinfopath, $eventbadgepath, $uid, $eventkey, $eventshortinfo);
         if ($stmt->execute()) {
             // Redirect to the dashboard or another page after successful creation
             header("Location: dashboard.php");
@@ -93,9 +110,6 @@ $conn->close();
       margin-bottom: 20px;
     }
     .form-container {
-      padding: 20px;
-    }
-    .table-container {
       padding: 20px;
     }
   </style>
@@ -161,8 +175,23 @@ $conn->close();
         </div>
 
         <div class="mb-3">
+          <label for="eventkey" class="form-label">Event Key</label>
+          <input type="text" class="form-control" id="eventkey" name="eventkey" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="eventshortinfo" class="form-label">Event Short Info</label>
+          <input type="text" class="form-control" id="eventshortinfo" name="eventshortinfo" required>
+        </div>
+
+        <div class="mb-3">
           <label for="eventbadge" class="form-label">Event Badge (Optional)</label>
           <input type="file" class="form-control" id="eventbadge" name="eventbadge">
+        </div>
+
+        <div class="mb-3">
+          <label for="eventinfo" class="form-label">Event Info (PDF or file)</label>
+          <input type="file" class="form-control" id="eventinfo" name="eventinfo">
         </div>
 
         <button type="submit" class="btn btn-primary">Create Event</button>
