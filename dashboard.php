@@ -34,7 +34,7 @@ $stmt_user->close();
 
 // Prepare the SQL query to fetch attended events
 $sql_events = "
-    SELECT e.eventid, e.eventname, e.startdate, e.enddate, e.location, e.eventinfopath
+    SELECT e.eventid, e.eventname, e.startdate, e.enddate, e.location, e.eventshortinfo
     FROM events e 
     WHERE e.eventid IN (
         SELECT JSON_UNQUOTE(JSON_EXTRACT(attendedevents, CONCAT('$[', n.n, ']')))
@@ -186,7 +186,7 @@ $conn->close();
                     echo "<td>" . htmlspecialchars($event['eventname']) . "</td>";
                     echo "<td>" . htmlspecialchars($event['startdate']) . "</td>";
                     echo "<td>" . htmlspecialchars($event['location']) . "</td>";
-                    echo "<td><a href='" . htmlspecialchars($event['eventinfopath']) . "' target='_blank'>Details</a></td>";
+                    echo "<td><a href='" . htmlspecialchars($event['eventshortinfo']) . "' target='_blank'>Details</a></td>";
                     echo "</tr>";
                 }
               }
