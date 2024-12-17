@@ -56,41 +56,31 @@ if (isset($_POST['update_event'])) {
 
     // Handle file upload for event badge
     if (isset($_FILES['eventbadgepath']) && $_FILES['eventbadgepath']['error'] == 0) {
-        // Check if event badge already exists
-        if (!empty($eventbadgepath) && file_exists($eventbadgepath)) {
-            $error_message = "You must delete the existing event badge before uploading a new one.";
+        $badge_tmp_name = $_FILES['eventbadgepath']['tmp_name'];
+        $badge_name = $_FILES['eventbadgepath']['name'];
+        $badge_ext = pathinfo($badge_name, PATHINFO_EXTENSION);
+        $badge_new_name = "badge_" . time() . "." . $badge_ext;
+        $badge_upload_dir = 'uploads/';
+        
+        if (move_uploaded_file($badge_tmp_name, $badge_upload_dir . $badge_new_name)) {
+            $eventbadgepath = $badge_upload_dir . $badge_new_name;
         } else {
-            $badge_tmp_name = $_FILES['eventbadgepath']['tmp_name'];
-            $badge_name = $_FILES['eventbadgepath']['name'];
-            $badge_ext = pathinfo($badge_name, PATHINFO_EXTENSION);
-            $badge_new_name = "badge_" . time() . "." . $badge_ext;
-            $badge_upload_dir = 'uploads/';
-            
-            if (move_uploaded_file($badge_tmp_name, $badge_upload_dir . $badge_new_name)) {
-                $eventbadgepath = $badge_upload_dir . $badge_new_name;
-            } else {
-                $error_message = "Error uploading the event badge.";
-            }
+            $error_message = "Error uploading the event badge.";
         }
     }
 
     // Handle file upload for event certificate
     if (isset($_FILES['eventinfopath']) && $_FILES['eventinfopath']['error'] == 0) {
-        // Check if event certificate already exists
-        if (!empty($eventinfopath) && file_exists($eventinfopath)) {
-            $error_message = "You must delete the existing event certificate before uploading a new one.";
+        $cert_tmp_name = $_FILES['eventinfopath']['tmp_name'];
+        $cert_name = $_FILES['eventinfopath']['name'];
+        $cert_ext = pathinfo($cert_name, PATHINFO_EXTENSION);
+        $cert_new_name = "certificate_" . time() . "." . $cert_ext;
+        $cert_upload_dir = 'uploads/';
+        
+        if (move_uploaded_file($cert_tmp_name, $cert_upload_dir . $cert_new_name)) {
+            $eventinfopath = $cert_upload_dir . $cert_new_name;
         } else {
-            $cert_tmp_name = $_FILES['eventinfopath']['tmp_name'];
-            $cert_name = $_FILES['eventinfopath']['name'];
-            $cert_ext = pathinfo($cert_name, PATHINFO_EXTENSION);
-            $cert_new_name = "certificate_" . time() . "." . $cert_ext;
-            $cert_upload_dir = 'uploads/';
-            
-            if (move_uploaded_file($cert_tmp_name, $cert_upload_dir . $cert_new_name)) {
-                $eventinfopath = $cert_upload_dir . $cert_new_name;
-            } else {
-                $error_message = "Error uploading the event certificate.";
-            }
+            $error_message = "Error uploading the event certificate.";
         }
     }
 
@@ -106,27 +96,6 @@ if (isset($_POST['update_event'])) {
             }
             $stmt_update->close();
         }
-    }
-}
-
-// Handle file deletion
-if (isset($_POST['delete_files'])) {
-    // Delete the event badge
-    if (!empty($eventbadgepath) && file_exists($eventbadgepath)) {
-        unlink($eventbadgepath);
-    }
-
-    // Delete the event certificate
-    if (!empty($eventinfopath) && file_exists($eventinfopath)) {
-        unlink($eventinfopath);
-    }
-
-    // Update the database to remove file paths
-    $sql_delete_files = "UPDATE events SET eventbadgepath = '', eventinfopath = '' WHERE eventid = ?";
-    if ($stmt_delete_files = $conn->prepare($sql_delete_files)) {
-        $stmt_delete_files->bind_param("i", $eventid);
-        $stmt_delete_files->execute();
-        $success_message = "Files deleted successfully.";
     }
 }
 
@@ -249,11 +218,6 @@ $conn->close();
           </div>
           
           <button type="submit" name="update_event" class="btn btn-primary btn-custom">Update Event</button>
-        </form>
-        
-        <!-- Delete Files Form -->
-        <form method="POST" class="mt-3">
-          <button type="submit" name="delete_files" class="btn btn-danger btn-custom">Delete Event Badge and Certificate</button>
         </form>
       </div>
     </div>
