@@ -51,7 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_update->bind_param("sssi", $new_fname, $new_mname, $new_lname, $uid);
         $stmt_update->execute();
         if ($stmt_update->affected_rows > 0) {
-            echo "<p>Your details have been updated successfully!</p>";
+			//echo "<p>Your details have been updated successfully!</p>";
+			header('Location: ' . $_SERVER['PHP_SELF']);
+			exit();
         } else {
             $error_message = "No changes were made or an error occurred.";
         }
