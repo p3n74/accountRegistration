@@ -121,7 +121,7 @@ $conn->close();
       <hr>
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a class="nav-link active" href="#">Dashboard</a>
+          <a class="nav-link active" href="dashboard.php">Dashboard</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="settings.php">Settings</a>

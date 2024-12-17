@@ -167,10 +167,11 @@ $conn->close();
       <div class="two-columns">
         
         <!-- Left Column (Attended Events) -->
-        <div class="table-container-left">
-		  <h3>Attended Events</h3>
-			<a href="badges.php" class="btn btn-info btn-sm">View Badges</a>
-          <table class="table table-bordered table-striped">
+		<div class="table-container-left">
+			<div class="d-flex justify-content-between align-items-center">
+            <h3>Attended Events</h3>
+            <a href="badges.php" class="btn btn-primary">View Badges</a>
+          </div>
             <thead>
               <tr>
                 <th>#</th>
