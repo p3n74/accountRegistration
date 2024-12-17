@@ -6,7 +6,7 @@ ob_end_clean();
 // Include TCPDF library
 require_once('tcpdf/tcpdf.php');
 
-// Includ database connection
+// Include database connection
 require_once 'includes/db.php';
 
 // Check if eventid is passed
@@ -28,9 +28,11 @@ $pdf->SetFont('helvetica', '', 12);
 $pdf->Cell(0, 10, 'Participants List for Event ID: ' . $eventid, 0, 1, 'C');
 
 // Connect to your database to fetch participant details
-// Example query for participants (adjust according to your DB)
-$sql = "SELECT fname, lname, email, join_time, leave_time FROM event_participants WHERE eventid = ?";
-$stmt = $conn->prepare($sql);
+$sql_participants = "SELECT u.fname, u.lname, u.email, e.join_time, e.leave_time 
+                     FROM event_participants e 
+                     JOIN user_credentials u ON e.uid = u.uid 
+                     WHERE e.eventid = ?";
+$stmt = $conn->prepare($sql_participants);
 $stmt->bind_param("i", $eventid);
 $stmt->execute();
 $result_participants = $stmt->get_result();
