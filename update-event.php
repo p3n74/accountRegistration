@@ -14,7 +14,7 @@ require_once 'includes/db.php';
 $uid = $_SESSION['uid'];
 
 // Fetch user profile details (fname, lname, email)
-$sql_user = "SELECT fname, lname, email FROM users WHERE uid = ?";
+$sql_user = "SELECT fname, lname, email FROM user_credentials WHERE uid = ?";
 $stmt_user = $conn->prepare($sql_user);
 $stmt_user->bind_param("i", $uid);
 $stmt_user->execute();
