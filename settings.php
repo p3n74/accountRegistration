@@ -10,23 +10,16 @@ if (!isset($_SESSION['uid'])) {
 // Include database connection
 require_once 'includes/db.php';
 
-// Include PHPMailer and the API key for SMTP
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-// Include the API key configuration file
-$apikey = include('includes/apikey.php');
-
 // Retrieve UID from session
 $uid = $_SESSION['uid'];
 
 // Query to fetch user details (name, email, profile picture) based on UID
-$sql_user = "SELECT fname, mname, lname, email, profilepicture, verified FROM user_credentials WHERE uid = ?";
+$sql_user = "SELECT fname, mname, lname, email, profilepicture, verification_code FROM user_credentials WHERE uid = ?";
 $stmt_user = $conn->prepare($sql_user);
 $stmt_user->bind_param("i", $uid);  // Bind UID to the query
 $stmt_user->execute();
 $stmt_user->store_result();  // Store the result set to avoid "Commands out of sync" error
-$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture, $verified);  // Bind the result to variables
+$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture, $verification_code);  // Bind the result to variables
 $stmt_user->fetch();  // Fetch the data into the variables
 
 // Use a default image if profile picture is not set
@@ -43,84 +36,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == 'update_setting
     // Validate email
     if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
         $error_message = "Invalid email format.";
-    }
-
-    // Initialize SQL to update user details
-    $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ?, email = ?";
-
-    // If password is provided, hash it and add to the query
-    if (!empty($new_password)) {
-        $new_password = password_hash($new_password, PASSWORD_BCRYPT);
-        $sql_update .= ", password = ?";  // Add password field to update query
-    }
-
-    $sql_update .= " WHERE uid = ?";  // Add WHERE clause to the query
-    $stmt_update = $conn->prepare($sql_update);
-
-    // Bind parameters (check if password exists)
-    if (!empty($new_password)) {
-        $stmt_update->bind_param("sssssi", $new_fname, $new_mname, $new_lname, $new_email, $new_password, $uid);
     } else {
-        $stmt_update->bind_param("ssssi", $new_fname, $new_mname, $new_lname, $new_email, $uid);
-    }
-    $stmt_update->execute();
+        // Check if new email is different from the current one
+        if ($new_email != $email) {
+            // Generate a new verification code
+            $verification_code = bin2hex(random_bytes(16)); // Generate a 32-character random code
+            
+            // Update the database with the new email and verification code
+            $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ?, new_email = ?, verification_code = ? WHERE uid = ?";
+            $stmt_update = $conn->prepare($sql_update);
+            $stmt_update->bind_param("sssssi", $new_fname, $new_mname, $new_lname, $new_email, $verification_code, $uid);
+            $stmt_update->execute();
 
-    // Check if the update was successful
-    if ($stmt_update->affected_rows > 0) {
-        // Send verification email if the email is updated
-        if ($email !== $new_email) {
-            // Generate a random verification code
-            $verification_code = bin2hex(random_bytes(16)); // Secure random code
-
-            // Save the verification code in the database
-            $sql_update_email = "UPDATE user_credentials SET email = ?, verification_code = ? WHERE uid = ?";
-            $stmt_update_email = $conn->prepare($sql_update_email);
-            $stmt_update_email->bind_param("ssi", $new_email, $verification_code, $uid);
-            $stmt_update_email->execute();
-
-            if ($stmt_update_email->affected_rows > 0) {
-                // PHPMailer instance
-                $mail = new PHPMailer(true);
-
-                try {
-                    // Server settings (from the API key file)
-                    $mail->isSMTP();                          // Set mailer to use SMTP
-                    $mail->Host = $apikey['smtp_host'];        // SMTP host
-                    $mail->SMTPAuth = true;                   // Enable SMTP authentication
-                    $mail->Username = $apikey['smtp_username'];  // SMTP username
-                    $mail->Password = $apikey['smtp_password'];  // SMTP password
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Enable TLS encryption
-                    $mail->Port = $apikey['smtp_port'];       // SMTP Port (usually 587)
-
-                    // Recipients
-                    $mail->setFrom($apikey['from_email'], $apikey['from_name']);  // Sender info
-                    $mail->addAddress($new_email);  // Add recipient email (the new email)
-
-                    // Content
-                    $mail->isHTML(true);               // Set email format to HTML
-                    $mail->Subject = 'Email Verification';
-                    $mail->Body    = "Please click <a href='http://accounts.dcism.com/accountRegistration/verify_email.php?code=$verification_code'>here</a> to verify your new email address.";
-
-                    // Send the email
-                    if ($mail->send()) {
-                        //echo "Verification email has been sent to your new email address.";
-                    } else {
-                        //echo "Failed to send verification email.";
-                    }
-
-                } catch (Exception $e) {
-                    //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            // Check if the update was successful
+            if ($stmt_update->affected_rows > 0) {
+                // Send verification email (this part requires a function for email sending, e.g., using PHP mail or PHPMailer)
+                $verification_link = "http://yourdomain.com/verify-email.php?code=" . urlencode($verification_code);
+                $subject = "Email Verification";
+                $message = "Please click the following link to verify your new email address: $verification_link";
+                $headers = "From: no-reply@yourdomain.com";
+                
+                // Send the email (ensure your mail configuration is correct)
+                if (mail($new_email, $subject, $message, $headers)) {
+                    echo "<p>A verification email has been sent to your new email address. Please check your inbox.</p>";
+                } else {
+                    $error_message = "Failed to send verification email.";
                 }
             } else {
-                $error_message = "Error updating email in the database.";
+                $error_message = "Failed to update your details.";
+            }
+        } else {
+            // If the new email is the same as the old one, just update the other fields
+            $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ? WHERE uid = ?";
+            $stmt_update = $conn->prepare($sql_update);
+            $stmt_update->bind_param("sssi", $new_fname, $new_mname, $new_lname, $uid);
+            $stmt_update->execute();
+            if ($stmt_update->affected_rows > 0) {
+                echo "<p>Your details have been updated successfully!</p>";
+            } else {
+                $error_message = "No changes were made or an error occurred.";
             }
         }
-
-        // Redirect after successful update
-        header("Location: settings.php?status=success");
-        exit();
-    } else {
-        $error_message = "No changes were made or an error occurred.";
     }
 
     $stmt_update->close();
@@ -176,7 +132,6 @@ $conn->close();
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    /* Custom CSS for the layout */
     .sidebar {
       min-height: 100vh;
       background-color: #f8f9fa;
@@ -206,23 +161,18 @@ $conn->close();
       display: flex;
     }
     .sidebar-col {
-      flex: 0 0 250px; /* Ensure sidebar takes up 250px width */
+      flex: 0 0 250px;
     }
     .main-col {
-      flex: 1; /* Make main content take the remaining space */
+      flex: 1;
       padding-left: 30px;
-    }
-    .nav-link.active {
-      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <div class="d-flex">
-    <!-- Sidebar with profile information -->
     <div class="sidebar sidebar-col col-md-3 col-lg-2 p-3">
       <div class="text-center">
-        <!-- Display profile picture -->
         <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
         <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
         <p><?php echo htmlspecialchars($email); ?></p>
@@ -241,25 +191,23 @@ $conn->close();
       </ul>
     </div>
 
-    <!-- Main content (Settings form) -->
     <div class="main-col col-md-9 col-lg-10">
       <h2>Settings</h2>
-      
+
       <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
         <div class="alert alert-success">Your details have been updated successfully!</div>
       <?php elseif (isset($error_message)): ?>
         <div class="alert alert-danger"><?php echo $error_message; ?></div>
       <?php endif; ?>
-      
+
       <div class="form-container">
         <form action="settings.php" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="action" value="update_settings">
-
           <div class="mb-3">
             <label for="fname" class="form-label">First Name</label>
             <input type="text" class="form-control" id="fname" name="fname" value="<?php echo htmlspecialchars($fname); ?>" required>
           </div>
-          
+
           <div class="mb-3">
             <label for="mname" class="form-label">Middle Name</label>
             <input type="text" class="form-control" id="mname" name="mname" value="<?php echo htmlspecialchars($mname); ?>">
@@ -291,7 +239,6 @@ $conn->close();
     </div>
   </div>
 
-  <!-- Bootstrap JS and dependencies -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
 </body>
