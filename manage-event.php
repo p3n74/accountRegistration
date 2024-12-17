@@ -13,6 +13,25 @@ require_once 'includes/db.php';
 // Retrieve UID from session
 $uid = $_SESSION['uid'];
 
+// Query to fetch user details (name, email, profile picture) based on UID
+$sql_user = "SELECT fname, mname, lname, email, profilepicture FROM user_credentials WHERE uid = ?";
+$stmt_user = $conn->prepare($sql_user);
+$stmt_user->bind_param("i", $uid);  // Bind UID to the query
+$stmt_user->execute();
+$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture);  // Bind the result to variables
+
+// Fetch user data first
+if ($stmt_user->fetch()) {
+    // Use a default image if profile picture is not set
+    $profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
+} else {
+    // Handle error if no data is found (this block might not be needed in your case)
+    die("User not found.");
+}
+
+// Close the user details statement after fetching the results
+$stmt_user->close();
+
 // Get eventid from URL
 if (isset($_GET['eventid'])) {
     $eventid = $_GET['eventid'];
