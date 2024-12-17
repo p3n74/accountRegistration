@@ -81,7 +81,7 @@ $conn->close();
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    /* Custom CSS for the layout */
+    /* Custom CSS for layout and table */
     .sidebar {
       min-height: 100vh;
       background-color: #f8f9fa;
@@ -96,18 +96,24 @@ $conn->close();
     .two-columns {
       display: flex;
       justify-content: space-between;
-      gap: 20px;  /* Adds space between the tables */
+      gap: 20px;
     }
     .table-container-left,
     .table-container-right {
-      width: 48%;  /* Equal width for both tables */
+      width: 48%;
       padding: 20px;
       background-color: #f8f9fa;
       border-radius: 5px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
+    .table th, .table td {
+      vertical-align: middle;
+    }
     .create-event-btn {
       margin-left: 10px;
+    }
+    .btn-custom {
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -137,7 +143,7 @@ $conn->close();
 
     <!-- Main content for Manage Event -->
     <div class="col-md-9 col-lg-10 p-3">
-      <h2>Manage Event: <?php echo htmlspecialchars($eventname); ?></h2>
+      <h2 class="mb-4">Manage Event: <?php echo htmlspecialchars($eventname); ?></h2>
 
       <?php
       if (isset($success_message)) {
@@ -148,51 +154,53 @@ $conn->close();
       }
       ?>
 
-      <!-- Event Details -->
-      <table class="table table-bordered">
-        <tr>
-          <th>Event Name</th>
-          <td><?php echo htmlspecialchars($eventname); ?></td>
-        </tr>
-        <tr>
-          <th>Start Date</th>
-          <td><?php echo htmlspecialchars($startdate); ?></td>
-        </tr>
-        <tr>
-          <th>End Date</th>
-          <td><?php echo htmlspecialchars($enddate); ?></td>
-        </tr>
-        <tr>
-          <th>Location</th>
-          <td><?php echo htmlspecialchars($location); ?></td>
-        </tr>
-        <tr>
-          <th>Event Key</th>
-          <td><?php echo htmlspecialchars($eventkey); ?></td>
-        </tr>
-        <tr>
-          <th>Event Link</th>
-          <td><a href="<?php echo htmlspecialchars($eventshortinfo); ?>" target="_blank"><?php echo htmlspecialchars($eventshortinfo); ?></a></td>
-        </tr>
-        <tr>
-          <th>Event Badge</th>
-          <td><img src="<?php echo htmlspecialchars($eventbadgepath); ?>" alt="Event Badge" class="img-fluid" style="max-width: 200px;"></td>
-        </tr>
-        <tr>
-          <th>Event Info</th>
-          <td><a href="<?php echo htmlspecialchars($eventinfopath); ?>" target="_blank">Download Event Info</a></td>
-        </tr>
-      </table>
+      <!-- Event Details Table -->
+      <div class="table-container-left">
+        <table class="table table-striped table-bordered">
+          <tr>
+            <th>Event Name</th>
+            <td><?php echo htmlspecialchars($eventname); ?></td>
+          </tr>
+          <tr>
+            <th>Start Date</th>
+            <td><?php echo htmlspecialchars($startdate); ?></td>
+          </tr>
+          <tr>
+            <th>End Date</th>
+            <td><?php echo htmlspecialchars($enddate); ?></td>
+          </tr>
+          <tr>
+            <th>Location</th>
+            <td><?php echo htmlspecialchars($location); ?></td>
+          </tr>
+          <tr>
+            <th>Event Key</th>
+            <td><?php echo htmlspecialchars($eventkey); ?></td>
+          </tr>
+          <tr>
+            <th>Event Link</th>
+            <td><a href="<?php echo htmlspecialchars($eventshortinfo); ?>" target="_blank"><?php echo htmlspecialchars($eventshortinfo); ?></a></td>
+          </tr>
+          <tr>
+            <th>Event Badge</th>
+            <td><img src="<?php echo htmlspecialchars($eventbadgepath); ?>" alt="Event Badge" class="img-fluid" style="max-width: 200px;"></td>
+          </tr>
+          <tr>
+            <th>Event Info</th>
+            <td><a href="<?php echo htmlspecialchars($eventinfopath); ?>" target="_blank">Download Event Info</a></td>
+          </tr>
+        </table>
+      </div>
 
-      <!-- Button to Edit Event (Redirect to a page to update the event) -->
-      <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning">Edit Event</a>
+      <!-- Action Buttons -->
+      <div class="mt-4">
+        <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning btn-custom">Edit Event</a>
 
-      <!-- Form to Delete Event -->
-      <form method="POST" class="mt-3">
-        <button type="submit" name="delete_event" class="btn btn-danger">Delete Event</button>
-      </form>
+        <form method="POST" class="d-inline">
+          <button type="submit" name="delete_event" class="btn btn-danger btn-custom">Delete Event</button>
+        </form>
+      </div>
     </div>
-
   </div>
 
   <!-- Bootstrap JS and dependencies -->
