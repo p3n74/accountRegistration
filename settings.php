@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mail = new PHPMailer(true);
                 try {
                     $mail->isSMTP();
-                    $mail->Host = 'smtp.mailtrap.io';  // Set your SMTP server (replace with actual server)
+                    $mail->Host = 'smtp.gmail.com';  // Set your SMTP server (replace with actual server)
                     $mail->SMTPAuth = true;
                     $mail->Username = '21102134@usc.edu.ph';  // Replace with Mailtrap SMTP username
                     $mail->Password = $apikey;  // Replace with Mailtrap SMTP password
