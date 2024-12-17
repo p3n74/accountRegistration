@@ -65,7 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt_update->bind_param("ssssssssi", $eventname, $startdate, $enddate, $location, $eventkey, $eventshortinfo, $eventbadgepath, $eventinfopath, $eventid);
 
     if ($stmt_update->execute()) {
-        $success_message = "Event updated successfully!";
+        // After a successful update, redirect to avoid resubmitting
+        header("Location: update-event.php?eventid=$eventid&status=success");
+        exit();
     } else {
         $error_message = "Failed to update event.";
     }
@@ -124,7 +126,9 @@ $conn->close();
   <div class="col-md-9 col-lg-10 p-3">
     <div class="form-container">
       <h2>Update Event</h2>
-      <?php if (isset($success_message)) echo "<div class='alert alert-success'>$success_message</div>"; ?>
+      <?php if (isset($_GET['status']) && $_GET['status'] == 'success') {
+        echo "<div class='alert alert-success'>Event updated successfully!</div>";
+      } ?>
       <?php if (isset($error_message)) echo "<div class='alert alert-danger'>$error_message</div>"; ?>
       
       <form method="POST" enctype="multipart/form-data">

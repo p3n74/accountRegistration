@@ -60,7 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == 'update_setting
 
     // Check if the update was successful
     if ($stmt_update->affected_rows > 0) {
-        $success_message = "Your details have been updated successfully.";
+        // Redirect after successful update
+        header("Location: settings.php?status=success");
+        exit();
     } else {
         $error_message = "No changes were made or an error occurred.";
     }
@@ -93,7 +95,9 @@ if (isset($_FILES['profilepicture']) && $_FILES['profilepicture']['error'] == 0)
             $stmt_update_pic->execute();
 
             if ($stmt_update_pic->affected_rows > 0) {
-                $success_message = "Profile picture updated successfully.";
+                // Redirect after successful profile picture update
+                header("Location: settings.php?status=success");
+                exit();
             } else {
                 $error_message = "Error updating profile picture.";
             }
@@ -129,7 +133,19 @@ $conn->close();
       margin-bottom: 20px;
     }
     .form-container {
-      padding: 20px;
+      padding: 30px;
+      margin: 30px auto;
+      max-width: 800px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+    }
+    .main-content {
+      margin-left: 250px;
+      padding: 30px;
+      background-color: #f1f1f1;
+    }
+    .nav-link.active {
+      font-weight: bold;
     }
   </style>
 </head>
@@ -158,50 +174,52 @@ $conn->close();
     </div>
 
     <!-- Main content (Settings form) -->
-    <div class="col-md-9 col-lg-10 p-3 form-container">
+    <div class="main-content col-md-9 col-lg-10 p-3">
       <h2>Settings</h2>
       
-      <?php if (isset($error_message)): ?>
+      <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
+        <div class="alert alert-success">Your details have been updated successfully!</div>
+      <?php elseif (isset($error_message)): ?>
         <div class="alert alert-danger"><?php echo $error_message; ?></div>
-      <?php elseif (isset($success_message)): ?>
-        <div class="alert alert-success"><?php echo $success_message; ?></div>
       <?php endif; ?>
       
-      <form action="settings.php" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="action" value="update_settings">
+      <div class="form-container">
+        <form action="settings.php" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="action" value="update_settings">
 
-        <div class="mb-3">
-          <label for="fname" class="form-label">First Name</label>
-          <input type="text" class="form-control" id="fname" name="fname" value="<?php echo htmlspecialchars($fname); ?>" required>
-        </div>
-        
-        <div class="mb-3">
-          <label for="mname" class="form-label">Middle Name</label>
-          <input type="text" class="form-control" id="mname" name="mname" value="<?php echo htmlspecialchars($mname); ?>">
-        </div>
+          <div class="mb-3">
+            <label for="fname" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="fname" name="fname" value="<?php echo htmlspecialchars($fname); ?>" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="mname" class="form-label">Middle Name</label>
+            <input type="text" class="form-control" id="mname" name="mname" value="<?php echo htmlspecialchars($mname); ?>">
+          </div>
 
-        <div class="mb-3">
-          <label for="lname" class="form-label">Last Name</label>
-          <input type="text" class="form-control" id="lname" name="lname" value="<?php echo htmlspecialchars($lname); ?>" required>
-        </div>
+          <div class="mb-3">
+            <label for="lname" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lname" name="lname" value="<?php echo htmlspecialchars($lname); ?>" required>
+          </div>
 
-        <div class="mb-3">
-          <label for="email" class="form-label">Email Address</label>
-          <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
-        </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+          </div>
 
-        <div class="mb-3">
-          <label for="password" class="form-label">New Password (Leave blank to keep current password)</label>
-          <input type="password" class="form-control" id="password" name="password">
-        </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">New Password (Leave blank to keep current password)</label>
+            <input type="password" class="form-control" id="password" name="password">
+          </div>
 
-        <div class="mb-3">
-          <label for="profilepicture" class="form-label">Profile Picture</label>
-          <input type="file" class="form-control" id="profilepicture" name="profilepicture">
-        </div>
+          <div class="mb-3">
+            <label for="profilepicture" class="form-label">Profile Picture</label>
+            <input type="file" class="form-control" id="profilepicture" name="profilepicture">
+          </div>
 
-        <button type="submit" class="btn btn-primary w-100">Update</button>
-      </form>
+          <button type="submit" class="btn btn-primary w-100">Update</button>
+        </form>
+      </div>
     </div>
   </div>
 
