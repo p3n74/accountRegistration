@@ -155,7 +155,8 @@ $result_participants = $stmt_participants->get_result();
 		  </table>
 
 		  <!-- Download Button Under the Table -->
-		  <div class="mt-3 text-center">
+		</div>
+		 <div class="mt-3 text-center">
 			<form action="generate-participants-pdf.php" method="GET" target="_blank">
 			  <input type="hidden" name="eventid" value="<?php echo htmlspecialchars($eventid); ?>">
 			  <button type="submit" class="btn btn-primary">
@@ -164,7 +165,7 @@ $result_participants = $stmt_participants->get_result();
 			</form>
 		  </div>
 		</div>
-	  </div>
+
 
 	  <!-- Action Buttons (Edit and Delete) -->
 	  <div class="mt-4">
