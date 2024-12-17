@@ -111,8 +111,8 @@ $conn->close();
     }
     .form-container {
       padding: 30px;
-      margin: 30px auto; /* Add margin around the form container */
-      max-width: 800px; /* Set max-width to limit the form's width */
+      margin: 30px auto;
+      max-width: 800px;
       background-color: #f8f9fa;
       border-radius: 8px;
     }
@@ -159,14 +159,15 @@ $conn->close();
             <input type="text" class="form-control" id="eventname" name="eventname" required>
           </div>
 
-          <div class="mb-3">
-            <label for="startdate" class="form-label">Start Date</label>
-            <input type="datetime-local" class="form-control" id="startdate" name="startdate" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="enddate" class="form-label">End Date</label>
-            <input type="datetime-local" class="form-control" id="enddate" name="enddate" required>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="startdate" class="form-label">Start Date</label>
+              <input type="datetime-local" class="form-control" id="startdate" name="startdate" required>
+            </div>
+            <div class="col-md-6">
+              <label for="enddate" class="form-label">End Date</label>
+              <input type="datetime-local" class="form-control" id="enddate" name="enddate" required>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -174,19 +175,15 @@ $conn->close();
             <input type="text" class="form-control" id="location" name="location" required>
           </div>
 
-          <div class="mb-3">
-            <label for="eventdetails" class="form-label">Event Details</label>
-            <textarea class="form-control" id="eventdetails" name="eventdetails" rows="4" required></textarea>
-          </div>
-
-          <div class="mb-3">
-            <label for="eventkey" class="form-label">Event Key</label>
-            <input type="text" class="form-control" id="eventkey" name="eventkey" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="eventshortinfo" class="form-label">Event Short Info</label>
-            <input type="text" class="form-control" id="eventshortinfo" name="eventshortinfo" required>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="eventkey" class="form-label">Event Key</label>
+              <input type="text" class="form-control" id="eventkey" name="eventkey" required>
+            </div>
+            <div class="col-md-6">
+              <label for="eventshortinfo" class="form-label">Event Short Info</label>
+              <input type="text" class="form-control" id="eventshortinfo" name="eventshortinfo" required>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -210,4 +207,3 @@ $conn->close();
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
-
