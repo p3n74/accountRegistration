@@ -155,7 +155,7 @@ $result_participants = $stmt_participants->get_result();
           </table>
 		</div>
 		<div class="mt-3 text-center">
-		  <form action="generate_participants_pdf.php" method="GET" target="_blank">
+		  <form action="generate-participants-pdf.php" method="GET" target="_blank">
 			<input type="hidden" name="eventid" value="<?php echo htmlspecialchars($eventid); ?>">
 			<button type="submit" class="btn btn-primary">Download Participants List as PDF</button>
 		  </form>
