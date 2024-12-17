@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $verification_code = bin2hex(random_bytes(16)); // Generate a 32-character random code
             
             // Update the database with the new email and verification code
-            $sql_update_email = "UPDATE user_credentials SET new_email = ?, verification_code = ? WHERE uid = ?";
+            $sql_update_email = "UPDATE user_credentials SET new_email = ?, verification_code = ? WHERE uid = ?, emailverified = 0";
             $stmt_update_email = $conn->prepare($sql_update_email);
             $stmt_update_email->bind_param("ssi", $new_email, $verification_code, $uid);
             $stmt_update_email->execute();
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Check if the update was successful
             if ($stmt_update_email->affected_rows > 0) {
                 // Send verification email using PHPMailer
-                $verification_link = "http://accounts.dcism.com/accountRegistration/verify_email.php?code=" . urlencode($verification_code);
+                $verification_link = "http://accounts.dcism.org/accountRegistration/verify_email.php?code=" . urlencode($verification_code);
 
                 // Set up PHPMailer
                 $mail = new PHPMailer(true);
@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     // Content
                     $mail->isHTML(true);
-                    $mail->Subject = 'Email Verification';
+                    $mail->Subject = 'DCISM Accounts';
                     $mail->Body    = "Please verify your email by clicking the following link:<br><br><a href='$verification_link'>Verify Email</a>";
 
                     // Send the email

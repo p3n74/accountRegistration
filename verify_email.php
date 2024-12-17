@@ -23,7 +23,8 @@ if (isset($_GET['code']) && !empty($_GET['code'])) {
 
         // If the user is already verified, inform them
         if ($emailverified == 1) {
-            echo "<p>Your email is already verified.</p>";
+            $message = "Your email is already verified.";
+            $alert_class = "alert-success";
         } else {
             // Mark the email as verified and update the user's email address
             $sql_update = "UPDATE user_credentials SET email = ?, verification_code = NULL, emailverified = 1 WHERE uid = ?";
@@ -32,22 +33,73 @@ if (isset($_GET['code']) && !empty($_GET['code'])) {
             $stmt_update->execute();
 
             if ($stmt_update->affected_rows > 0) {
-                echo "<p>Your new email has been successfully verified and updated.</p>";
+                $message = "Your new email has been successfully verified and updated.";
+                $alert_class = "alert-success";
             } else {
-                echo "<p>There was an error verifying your email. Please try again later.</p>";
+                $message = "There was an error verifying your email. Please try again later.";
+                $alert_class = "alert-danger";
             }
         }
     } else {
         // Invalid verification code
-        echo "<p>The verification code is invalid or has expired.</p>";
+        $message = "The verification code is invalid or has expired.";
+        $alert_class = "alert-danger";
     }
 
     $stmt->close();
 } else {
     // If no verification code is provided
-    echo "<p>No verification code provided.</p>";
+    $message = "No verification code provided.";
+    $alert_class = "alert-danger";
 }
 
 $conn->close();
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f1f1f1;
+        }
+        .verification-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .verification-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="verification-container">
+    <h2>Email Verification</h2>
+
+    <div class="alert <?php echo $alert_class; ?>" role="alert">
+        <?php echo $message; ?>
+    </div>
+
+    <div class="text-center">
+        <a href="index.php" class="btn btn-primary">Go to Dashboard</a>
+    </div>
+</div>
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>
 
