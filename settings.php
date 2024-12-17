@@ -177,16 +177,7 @@ $conn->close();
       border-radius: 50%;
       margin-bottom: 20px;
     }
-    .sidebar .nav-item {
-      margin-bottom: 15px;
-    }
-    .sidebar .nav-link {
-      color: black;
-      font-weight: bold;
-    }
-    .sidebar .nav-link:hover {
-      color: #007bff;
-    }
+    
     .main-content {
       padding: 30px;
       background-color: #ffffff;
