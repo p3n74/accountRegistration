@@ -13,13 +13,13 @@ require_once 'includes/db.php';
 // Retrieve UID from session
 $uid = $_SESSION['uid'];
 
-// Fetch user profile details (fname, lname, email)
-$sql_user = "SELECT fname, lname, email FROM user_credentials WHERE uid = ?";
+// Fetch user profile details (fname, lname, email, profile picture)
+$sql_user = "SELECT fname, lname, email, profilepicture FROM user_credentials WHERE uid = ?";
 $stmt_user = $conn->prepare($sql_user);
 $stmt_user->bind_param("i", $uid);
 $stmt_user->execute();
 $stmt_user->store_result();
-$stmt_user->bind_result($fname, $lname, $email);
+$stmt_user->bind_result($fname, $lname, $email, $profilepicture);
 $stmt_user->fetch();
 
 // Get eventid from URL
@@ -56,44 +56,56 @@ if (isset($_POST['update_event'])) {
 
     // Handle file upload for event badge
     if (isset($_FILES['eventbadgepath']) && $_FILES['eventbadgepath']['error'] == 0) {
-        $badge_tmp_name = $_FILES['eventbadgepath']['tmp_name'];
-        $badge_name = $_FILES['eventbadgepath']['name'];
-        $badge_ext = pathinfo($badge_name, PATHINFO_EXTENSION);
-        $badge_new_name = "badge_" . time() . "." . $badge_ext;
-        $badge_upload_dir = 'uploads/';
-        
-        if (move_uploaded_file($badge_tmp_name, $badge_upload_dir . $badge_new_name)) {
-            $eventbadgepath = $badge_upload_dir . $badge_new_name;
+        // Check if event badge already exists
+        if (!empty($eventbadgepath) && file_exists($eventbadgepath)) {
+            $error_message = "You must delete the existing event badge before uploading a new one.";
         } else {
-            $error_message = "Error uploading the event badge.";
+            $badge_tmp_name = $_FILES['eventbadgepath']['tmp_name'];
+            $badge_name = $_FILES['eventbadgepath']['name'];
+            $badge_ext = pathinfo($badge_name, PATHINFO_EXTENSION);
+            $badge_new_name = "badge_" . time() . "." . $badge_ext;
+            $badge_upload_dir = 'uploads/';
+            
+            if (move_uploaded_file($badge_tmp_name, $badge_upload_dir . $badge_new_name)) {
+                $eventbadgepath = $badge_upload_dir . $badge_new_name;
+            } else {
+                $error_message = "Error uploading the event badge.";
+            }
         }
     }
 
     // Handle file upload for event certificate
     if (isset($_FILES['eventinfopath']) && $_FILES['eventinfopath']['error'] == 0) {
-        $cert_tmp_name = $_FILES['eventinfopath']['tmp_name'];
-        $cert_name = $_FILES['eventinfopath']['name'];
-        $cert_ext = pathinfo($cert_name, PATHINFO_EXTENSION);
-        $cert_new_name = "certificate_" . time() . "." . $cert_ext;
-        $cert_upload_dir = 'uploads/';
-        
-        if (move_uploaded_file($cert_tmp_name, $cert_upload_dir . $cert_new_name)) {
-            $eventinfopath = $cert_upload_dir . $cert_new_name;
+        // Check if event certificate already exists
+        if (!empty($eventinfopath) && file_exists($eventinfopath)) {
+            $error_message = "You must delete the existing event certificate before uploading a new one.";
         } else {
-            $error_message = "Error uploading the event certificate.";
+            $cert_tmp_name = $_FILES['eventinfopath']['tmp_name'];
+            $cert_name = $_FILES['eventinfopath']['name'];
+            $cert_ext = pathinfo($cert_name, PATHINFO_EXTENSION);
+            $cert_new_name = "certificate_" . time() . "." . $cert_ext;
+            $cert_upload_dir = 'uploads/';
+            
+            if (move_uploaded_file($cert_tmp_name, $cert_upload_dir . $cert_new_name)) {
+                $eventinfopath = $cert_upload_dir . $cert_new_name;
+            } else {
+                $error_message = "Error uploading the event certificate.";
+            }
         }
     }
 
     // Prepare update query
-    $sql_update = "UPDATE events SET eventname = ?, startdate = ?, enddate = ?, location = ?, eventkey = ?, eventshortinfo = ?, eventinfopath = ?, eventbadgepath = ? WHERE eventid = ?";
-    if ($stmt_update = $conn->prepare($sql_update)) {
-        $stmt_update->bind_param("ssssssssi", $eventname, $startdate, $enddate, $location, $eventkey, $eventshortinfo, $eventinfopath, $eventbadgepath, $eventid);
-        if ($stmt_update->execute()) {
-            $success_message = "Event updated successfully.";
-        } else {
-            $error_message = "Error updating the event.";
+    if (!isset($error_message)) {
+        $sql_update = "UPDATE events SET eventname = ?, startdate = ?, enddate = ?, location = ?, eventkey = ?, eventshortinfo = ?, eventinfopath = ?, eventbadgepath = ? WHERE eventid = ?";
+        if ($stmt_update = $conn->prepare($sql_update)) {
+            $stmt_update->bind_param("ssssssssi", $eventname, $startdate, $enddate, $location, $eventkey, $eventshortinfo, $eventinfopath, $eventbadgepath, $eventid);
+            if ($stmt_update->execute()) {
+                $success_message = "Event updated successfully.";
+            } else {
+                $error_message = "Error updating the event.";
+            }
+            $stmt_update->close();
         }
-        $stmt_update->close();
     }
 }
 
@@ -224,10 +236,16 @@ $conn->close();
           <div class="mb-3">
             <label for="eventinfopath" class="form-label">Event Certificate (Upload)</label>
             <input type="file" class="form-control" id="eventinfopath" name="eventinfopath">
+            <?php if (!empty($eventinfopath)) { ?>
+              <p>Current certificate: <a href="<?php echo htmlspecialchars($eventinfopath); ?>" target="_blank">Download</a></p>
+            <?php } ?>
           </div>
           <div class="mb-3">
             <label for="eventbadgepath" class="form-label">Event Badge (Upload)</label>
             <input type="file" class="form-control" id="eventbadgepath" name="eventbadgepath">
+            <?php if (!empty($eventbadgepath)) { ?>
+              <p>Current badge: <a href="<?php echo htmlspecialchars($eventbadgepath); ?>" target="_blank">View Badge</a></p>
+            <?php } ?>
           </div>
           
           <button type="submit" name="update_event" class="btn btn-primary btn-custom">Update Event</button>
