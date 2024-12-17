@@ -1,75 +1,76 @@
 <?php
-// Start the session
-session_start();
+	// Start the session
+	session_start();
 
-// Check if user is logged in by checking session for UID
-if (!isset($_SESSION['uid'])) {
-    die("You must log in first.");
-}
+	// Check if user is logged in by checking session for UID
+	if (!isset($_SESSION['uid'])) {
+		die("You must log in first.");
+	}
 
-// Include database connection
-require_once 'includes/db.php';
+	// Include database connection
+	require_once 'includes/db.php';
 
-// Retrieve UID from session
-$uid = $_SESSION['uid'];
+	// Retrieve UID from session
+	$uid = $_SESSION['uid'];
 
-// Query to fetch user details (name, email, profile picture) based on UID
-$sql_user = "SELECT fname, mname, lname, email, profilepicture FROM user_credentials WHERE uid = ?";
-$stmt_user = $conn->prepare($sql_user);
-$stmt_user->bind_param("i", $uid);  // Bind UID to the query
-$stmt_user->execute();
-$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture);  // Bind the result to variables
-$stmt_user->fetch();  // Fetch the data into the variables
+	// Query to fetch user details (name, email, profile picture) based on UID
+	$sql_user = "SELECT fname, mname, lname, email, profilepicture FROM user_credentials WHERE uid = ?";
+	$stmt_user = $conn->prepare($sql_user);
+	$stmt_user->bind_param("i", $uid);  // Bind UID to the query
+	$stmt_user->execute();
+	$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture);  // Bind the result to variables
 
-// Use a default image if profile picture is not set
-$profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
+	// Fetch user data first, before closing the statement
+	$stmt_user->fetch();
 
-// Close the user details statement to avoid issues with subsequent queries
-$stmt_user->close();
+	// Use a default image if profile picture is not set
+	$profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
 
-// Prepare the SQL query to fetch attended events
-$sql_events = "
-    SELECT e.eventid, e.eventname, e.startdate, e.enddate, e.location, e.eventinfopath
-    FROM user_credentials u
-    JOIN events e ON JSON_CONTAINS(u.attendedevents, JSON_ARRAY(e.eventid))
-    WHERE u.uid = ?
-";
+	// Now that data has been fetched, close the statement
+	$stmt_user->close();
 
-$stmt_events = $conn->prepare($sql_events);
-$stmt_events->bind_param("i", $uid);  // Bind UID to the query
-$stmt_events->execute();
-$result_events = $stmt_events->get_result();
+	// Prepare the SQL query to fetch attended events
+	$sql_events = "
+		SELECT e.eventid, e.eventname, e.startdate, e.enddate, e.location, e.eventinfopath
+		FROM user_credentials u
+		JOIN events e ON JSON_CONTAINS(u.attendedevents, JSON_ARRAY(e.eventid))
+		WHERE u.uid = ?
+	";
 
-// Fetch the results for attended events
-$attendedEvents = [];
-while ($row = $result_events->fetch_assoc()) {
-    $attendedEvents[] = $row;
-}
+	$stmt_events = $conn->prepare($sql_events);
+	$stmt_events->bind_param("i", $uid);  // Bind UID to the query
+	$stmt_events->execute();
+	$result_events = $stmt_events->get_result();
 
-// Prepare the SQL query to fetch My Events (events created by the user)
-$sql_my_events = "
-    SELECT eventid, eventname, startdate, enddate, location
-    FROM events
-    WHERE eventcreator = ?
-";
+	// Fetch the results for attended events
+	$attendedEvents = [];
+	while ($row = $result_events->fetch_assoc()) {
+		$attendedEvents[] = $row;
+	}
 
-$stmt_my_events = $conn->prepare($sql_my_events);
-$stmt_my_events->bind_param("i", $uid);  // Bind UID to the query
-$stmt_my_events->execute();
-$result_my_events = $stmt_my_events->get_result();
+	// Prepare the SQL query to fetch My Events (events created by the user)
+	$sql_my_events = "
+		SELECT eventid, eventname, startdate, enddate, location
+		FROM events
+		WHERE eventcreator = ?
+	";
 
-// Fetch the results for My Events
-$myEvents = [];
-while ($row = $result_my_events->fetch_assoc()) {
-    $myEvents[] = $row;
-}
+	$stmt_my_events = $conn->prepare($sql_my_events);
+	$stmt_my_events->bind_param("i", $uid);  // Bind UID to the query
+	$stmt_my_events->execute();
+	$result_my_events = $stmt_my_events->get_result();
 
-// Close the events statement and DB connection
-$stmt_events->close();
-$stmt_my_events->close();
-$conn->close();
-?>
+	// Fetch the results for My Events
+	$myEvents = [];
+	while ($row = $result_my_events->fetch_assoc()) {
+		$myEvents[] = $row;
+	}
 
+	// Close the events statement and DB connection
+	$stmt_events->close();
+	$stmt_my_events->close();
+	$conn->close();
+	?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
