@@ -102,6 +102,10 @@ $conn->close();
     .table-container-right {
       width: 48%;
     }
+    /* Styling for Create Event button */
+    .create-event-btn {
+      margin-left: 10px;
+    }
   </style>
 </head>
 <body>
@@ -174,6 +178,7 @@ $conn->close();
         <!-- Right Column (My Events) -->
         <div class="table-container-right">
           <h3>My Events</h3>
+          <a href="create_event.php" class="btn btn-primary create-event-btn">Create Event</a>
           <table class="table table-bordered table-striped">
             <thead>
               <tr>
