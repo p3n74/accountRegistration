@@ -3,14 +3,18 @@
 require 'includes/db.php';
 
 // Check if 'userid' is passed in the URL query string
-if (isset($_GET['userid'])) {
-    // Get the value of 'userid'
-    $userid = $_GET['userid'];
-    
-    // Echo the value
-    echo "User ID: " . htmlspecialchars($userid);
+
+//switched over to passing the token
+
+$token;
+
+if(isset($_GET['token'])) {
+	// Get the 32 Char token
+	$token = $_GET['token'];
+
+	echo "User Token: " + $token;
 } else {
-    echo "No User ID provided.";
+	echo "Token Invalid Or Expired";
 }
 
 ?>
