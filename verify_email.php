@@ -5,56 +5,50 @@ session_start();
 // Include database connection
 require_once 'includes/db.php';
 
-// Check if the verification code is passed in the URL
-if (isset($_GET['code'])) {
+// Check if the verification code is provided
+if (isset($_GET['code']) && !empty($_GET['code'])) {
     $verification_code = $_GET['code'];
 
-    // Query to check if the verification code exists in the database
-    $sql_check_code = "SELECT uid, email FROM user_credentials WHERE verification_code = ?";
-    $stmt_check_code = $conn->prepare($sql_check_code);
-    $stmt_check_code->bind_param("s", $verification_code);
-    $stmt_check_code->execute();
-    $stmt_check_code->store_result(); // Store result for checking row count
+    // SQL to find the user with the provided verification code
+    $sql = "SELECT uid, email, verified FROM user_credentials WHERE verification_code = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $verification_code);
+    $stmt->execute();
+    $stmt->store_result();
 
-    // If a user is found with the verification code
-    if ($stmt_check_code->num_rows > 0) {
-        // User exists, fetch the user's UID and email
-        $stmt_check_code->bind_result($uid, $email);
-        $stmt_check_code->fetch();
+    // Check if the verification code exists in the database
+    if ($stmt->num_rows > 0) {
+        $stmt->bind_result($uid, $email, $verified);
+        $stmt->fetch();
 
-        // Update the user's email status by removing the verification code
-        $sql_update_email = "UPDATE user_credentials SET verification_code = NULL WHERE uid = ?";
-        $stmt_update_email = $conn->prepare($sql_update_email);
-        $stmt_update_email->bind_param("i", $uid);
-        $stmt_update_email->execute();
+        // If the user is already verified, inform them
+        if ($verified == 1) {
+            //echo "<p>Your email is already verified.</p>";
+        } else {
+            // Mark the email as verified and reset the verification code
+            $sql_update = "UPDATE user_credentials SET verified = 1, verification_code = NULL WHERE uid = ?";
+            $stmt_update = $conn->prepare($sql_update);
+            $stmt_update->bind_param("i", $uid);
+            $stmt_update->execute();
 
-        // Send confirmation email to the user that the email was successfully verified
-        $subject = "Email Verification Successful";
-        $message = "Your email address has been successfully verified and updated.";
-        $headers = "From: no-reply@yourwebsite.com";
-
-        mail($email, $subject, $message, $headers);
-
-        // Redirect the user to the login page or their dashboard with a success message
-        $_SESSION['message'] = "Email successfully verified!";
-        header("Location: login.php"); // Or you can redirect to the dashboard
-        exit();
-
+            if ($stmt_update->affected_rows > 0) {
+                echo "<p>Your email has been successfully verified. You can now log in.</p>";
+            } else {
+                echo "<p>There was an error verifying your email. Please try again later.</p>";
+            }
+        }
     } else {
-        // No user found with that verification code
-        $_SESSION['message'] = "Invalid or expired verification link.";
-        header("Location: login.php"); // Or an error page
-        exit();
+        // Invalid verification code
+        //echo "<p>The verification code is invalid or has expired.</p>";
     }
 
-    $stmt_check_code->close();
+    $stmt->close();
 } else {
-    // If no verification code is passed in the URL
-    $_SESSION['message'] = "No verification code provided.";
-    header("Location: login.php"); // Or an error page
-    exit();
+    // If no verification code is provided
+    //echo "<p>No verification code provided.</p>";
 }
 
 $conn->close();
 ?>
+
 

@@ -10,30 +10,43 @@ if (!isset($_SESSION['uid'])) {
 // Include database connection
 require_once 'includes/db.php';
 
+// Include PHPMailer and the API key for SMTP
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Include the API key configuration file
+$apikey = include('includes/apikey.php');
+
 // Retrieve UID from session
 $uid = $_SESSION['uid'];
 
 // Query to fetch user details (name, email, profile picture) based on UID
-$sql_user = "SELECT fname, mname, lname, email, profilepicture FROM user_credentials WHERE uid = ?";
+$sql_user = "SELECT fname, mname, lname, email, profilepicture, verified FROM user_credentials WHERE uid = ?";
 $stmt_user = $conn->prepare($sql_user);
 $stmt_user->bind_param("i", $uid);  // Bind UID to the query
 $stmt_user->execute();
 $stmt_user->store_result();  // Store the result set to avoid "Commands out of sync" error
-$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture);  // Bind the result to variables
+$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture, $verified);  // Bind the result to variables
 $stmt_user->fetch();  // Fetch the data into the variables
 
 // Use a default image if profile picture is not set
 $profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
 
-// Handle the form submission for profile update (excluding email)
+// Handle the form submission for profile update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == 'update_settings') {
     $new_fname = $_POST['fname'];
     $new_mname = $_POST['mname'];
     $new_lname = $_POST['lname'];
+    $new_email = $_POST['email'];
     $new_password = $_POST['password'];
 
-    // Initialize SQL to update user details (excluding email)
-    $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ?";
+    // Validate email
+    if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
+        $error_message = "Invalid email format.";
+    }
+
+    // Initialize SQL to update user details
+    $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ?, email = ?";
 
     // If password is provided, hash it and add to the query
     if (!empty($new_password)) {
@@ -46,14 +59,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == 'update_setting
 
     // Bind parameters (check if password exists)
     if (!empty($new_password)) {
-        $stmt_update->bind_param("sssssi", $new_fname, $new_mname, $new_lname, $new_password, $uid);
+        $stmt_update->bind_param("sssssi", $new_fname, $new_mname, $new_lname, $new_email, $new_password, $uid);
     } else {
-        $stmt_update->bind_param("ssssi", $new_fname, $new_mname, $new_lname, $uid);
+        $stmt_update->bind_param("ssssi", $new_fname, $new_mname, $new_lname, $new_email, $uid);
     }
     $stmt_update->execute();
 
     // Check if the update was successful
     if ($stmt_update->affected_rows > 0) {
+        // Send verification email if the email is updated
+        if ($email !== $new_email) {
+            // Generate a random verification code
+            $verification_code = bin2hex(random_bytes(16)); // Secure random code
+
+            // Save the verification code in the database
+            $sql_update_email = "UPDATE user_credentials SET email = ?, verification_code = ? WHERE uid = ?";
+            $stmt_update_email = $conn->prepare($sql_update_email);
+            $stmt_update_email->bind_param("ssi", $new_email, $verification_code, $uid);
+            $stmt_update_email->execute();
+
+            if ($stmt_update_email->affected_rows > 0) {
+                // PHPMailer instance
+                $mail = new PHPMailer(true);
+
+                try {
+                    // Server settings (from the API key file)
+                    $mail->isSMTP();                          // Set mailer to use SMTP
+                    $mail->Host = $apikey['smtp_host'];        // SMTP host
+                    $mail->SMTPAuth = true;                   // Enable SMTP authentication
+                    $mail->Username = $apikey['smtp_username'];  // SMTP username
+                    $mail->Password = $apikey['smtp_password'];  // SMTP password
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Enable TLS encryption
+                    $mail->Port = $apikey['smtp_port'];       // SMTP Port (usually 587)
+
+                    // Recipients
+                    $mail->setFrom($apikey['from_email'], $apikey['from_name']);  // Sender info
+                    $mail->addAddress($new_email);  // Add recipient email (the new email)
+
+                    // Content
+                    $mail->isHTML(true);               // Set email format to HTML
+                    $mail->Subject = 'Email Verification';
+                    $mail->Body    = "Please click <a href='http://accounts.dcism.com/accountRegistration/verify_email.php?code=$verification_code'>here</a> to verify your new email address.";
+
+                    // Send the email
+                    if ($mail->send()) {
+                        //echo "Verification email has been sent to your new email address.";
+                    } else {
+                        //echo "Failed to send verification email.";
+                    }
+
+                } catch (Exception $e) {
+                    //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                }
+            } else {
+                $error_message = "Error updating email in the database.";
+            }
+        }
+
         // Redirect after successful update
         header("Location: settings.php?status=success");
         exit();
@@ -62,40 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == 'update_setting
     }
 
     $stmt_update->close();
-}
-
-// Handle the email change and verification request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == 'update_email') {
-    $new_email = $_POST['email'];
-
-    // Validate email format
-    if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
-        $error_message = "Invalid email format.";
-    } else {
-        // Generate a unique verification code
-        $verification_code = md5(uniqid(rand(), true));
-
-        // Store the verification code in the database
-        $sql_update_email = "UPDATE user_credentials SET email = ?, verification_code = ? WHERE uid = ?";
-        $stmt_update_email = $conn->prepare($sql_update_email);
-        $stmt_update_email->bind_param("ssi", $new_email, $verification_code, $uid);
-        $stmt_update_email->execute();
-
-        // Send a verification email to the new address
-        $verification_link = "http://yourwebsite.com/verify_email.php?code=" . $verification_code;
-
-        $subject = "Email Verification";
-        $message = "Click the link below to verify your new email address:\n\n" . $verification_link;
-        $headers = "From: no-reply@yourwebsite.com";
-
-        if (mail($new_email, $subject, $message, $headers)) {
-            $success_message = "A verification link has been sent to your new email address.";
-        } else {
-            $error_message = "Failed to send verification email.";
-        }
-
-        $stmt_update_email->close();
-    }
 }
 
 // Handle the file upload for profile picture
@@ -217,8 +245,8 @@ $conn->close();
     <div class="main-col col-md-9 col-lg-10">
       <h2>Settings</h2>
       
-      <?php if (isset($success_message)): ?>
-        <div class="alert alert-success"><?php echo $success_message; ?></div>
+      <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
+        <div class="alert alert-success">Your details have been updated successfully!</div>
       <?php elseif (isset($error_message)): ?>
         <div class="alert alert-danger"><?php echo $error_message; ?></div>
       <?php endif; ?>
@@ -243,6 +271,11 @@ $conn->close();
           </div>
 
           <div class="mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+          </div>
+
+          <div class="mb-3">
             <label for="password" class="form-label">New Password (Leave blank to keep current password)</label>
             <input type="password" class="form-control" id="password" name="password">
           </div>
@@ -253,17 +286,6 @@ $conn->close();
           </div>
 
           <button type="submit" class="btn btn-primary w-100">Update</button>
-        </form>
-
-        <!-- Email change section -->
-        <form action="settings.php" method="POST">
-          <input type="hidden" name="action" value="update_email">
-          <div class="mb-3">
-            <label for="email" class="form-label">Change Email Address</label>
-            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
-          </div>
-
-          <button type="submit" class="btn btn-info w-100">Send Verification</button>
         </form>
       </div>
     </div>
