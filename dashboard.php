@@ -168,7 +168,8 @@ $conn->close();
         
         <!-- Left Column (Attended Events) -->
         <div class="table-container-left">
-          <h3>Attended Events</h3>
+		  <h3>Attended Events</h3>
+			<a href="badges.php" class="btn btn-info btn-sm">View Badges</a>
           <table class="table table-bordered table-striped">
             <thead>
               <tr>
