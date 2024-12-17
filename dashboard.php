@@ -108,12 +108,16 @@ $conn->close();
     .two-columns {
       display: flex;
       justify-content: space-between;
+      gap: 20px;  /* Adds space between the tables */
     }
     .table-container-left,
     .table-container-right {
-      width: 48%;
+      width: 48%;  /* Equal width for both tables */
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    /* Optional styling for the button */
     .create-event-btn {
       margin-left: 10px;
     }
