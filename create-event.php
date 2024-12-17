@@ -1,3 +1,93 @@
+<?php
+// Start the session
+session_start();
+
+// Check if user is logged in by checking session for UID
+if (!isset($_SESSION['uid'])) {
+    die("You must log in first.");
+}
+
+// Include database connection
+require_once 'includes/db.php';
+
+// Retrieve UID from session
+$uid = $_SESSION['uid'];
+
+// Query to fetch user details (name, email, profile picture) based on UID
+$sql_user = "SELECT fname, mname, lname, email, profilepicture FROM user_credentials WHERE uid = ?";
+$stmt_user = $conn->prepare($sql_user);
+$stmt_user->bind_param("i", $uid);  // Bind UID to the query
+$stmt_user->execute();
+$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture);  // Bind the result to variables
+$stmt_user->fetch();  // Fetch the data into the variables
+
+// Use a default image if profile picture is not set
+$profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
+
+// Close the user details statement to avoid issues with subsequent queries
+$stmt_user->close();
+
+// If the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Sanitize and collect form data
+    $eventname = $_POST['eventname'];
+    $startdate = $_POST['startdate'];
+    $enddate = $_POST['enddate'];
+    $location = $_POST['location'];
+    $eventdetails = $_POST['eventdetails'];
+    $eventkey = $_POST['eventkey'];
+    $eventshortinfo = $_POST['eventshortinfo'];
+
+    // Event Badge Upload
+    $eventbadgepath = 'eventbadges/default.png';  // Default badge if none uploaded
+    if (isset($_FILES['eventbadge']) && $_FILES['eventbadge']['error'] == 0) {
+        $file_tmp = $_FILES['eventbadge']['tmp_name'];
+        $file_name = $_FILES['eventbadge']['name'];
+        $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
+        $file_new_name = uniqid() . '.' . $file_extension;
+        $file_path = 'eventbadges/' . $file_new_name;
+
+        // Move the uploaded badge image to the eventbadges folder
+        if (move_uploaded_file($file_tmp, $file_path)) {
+            $eventbadgepath = $file_path; // Update the path if successfully uploaded
+        }
+    }
+
+    // Event Info Upload (PDF or file)
+    $eventinfopath = NULL;  // Default is null if no file uploaded
+    if (isset($_FILES['eventinfo']) && $_FILES['eventinfo']['error'] == 0) {
+        $file_tmp = $_FILES['eventinfo']['tmp_name'];
+        $file_name = $_FILES['eventinfo']['name'];
+        $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
+        $file_new_name = uniqid() . '.' . $file_extension;
+        $file_path = 'eventinfo/' . $file_new_name;
+
+        // Move the uploaded PDF or file to the eventinfo folder
+        if (move_uploaded_file($file_tmp, $file_path)) {
+            $eventinfopath = $file_path; // Update the path if successfully uploaded
+        }
+    }
+
+    // Insert the event into the database
+    $sql = "INSERT INTO events (eventname, startdate, enddate, location, eventinfopath, eventbadgepath, eventcreator, eventkey, eventshortinfo)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("ssssssiss", $eventname, $startdate, $enddate, $location, $eventinfopath, $eventbadgepath, $uid, $eventkey, $eventshortinfo);
+        if ($stmt->execute()) {
+            // Redirect to the dashboard or another page after successful creation
+            header("Location: dashboard.php");
+            exit();
+        } else {
+            $error_message = "Error creating the event.";
+        }
+        $stmt->close();
+    }
+}
+
+// Close DB connection
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
