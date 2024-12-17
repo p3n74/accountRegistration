@@ -13,17 +13,42 @@ require_once 'includes/db.php';
 // Retrieve UID from session
 $uid = $_SESSION['uid'];
 
-// Query to fetch attended events
+// Query to fetch user details (name, email, profile picture) based on UID
+$sql_user = "SELECT fname, mname, lname, email, profilepicture FROM user_credentials WHERE uid = ?";
+$stmt_user = $conn->prepare($sql_user);
+$stmt_user->bind_param("i", $uid);  // Bind UID to the query
+$stmt_user->execute();
+$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture);  // Bind the result to variables
+
+// Fetch user data first
+if ($stmt_user->fetch()) {
+    // Use a default image if profile picture is not set
+    $profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
+} else {
+    die("User not found.");
+}
+
+// Close the user details statement after fetching the results
+$stmt_user->close();
+
+// Prepare the SQL query to fetch attended events with badge image URL
 $sql_events = "
-    SELECT e.eventid, e.eventname, e.startdate, e.enddate, e.location, e.eventshortinfo
-    FROM events e 
-    WHERE e.eventid IN (
-        SELECT JSON_UNQUOTE(JSON_EXTRACT(attendedevents, CONCAT('$[', n.n, ']')))
-        FROM user_credentials, 
-             (SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 
-              UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS n
-        WHERE uid = ?
-    );
+WITH user_events AS (
+    SELECT
+        JSON_UNQUOTE(JSON_EXTRACT(attendedevents, CONCAT('$[', n.n, ']'))) AS eventid
+    FROM user_credentials u
+    JOIN (
+        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 
+        UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 
+        UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 
+        UNION ALL SELECT 9
+    ) AS n
+    WHERE u.uid = ?
+    AND JSON_UNQUOTE(JSON_EXTRACT(u.attendedevents, CONCAT('$[', n.n, ']'))) IS NOT NULL
+)
+SELECT e.eventid, e.eventname, e.startdate, e.enddate, e.location, e.eventshortinfo, e.eventbadgepath
+FROM events e
+JOIN user_events ue ON e.eventid = ue.eventid;
 ";
 
 $stmt_events = $conn->prepare($sql_events);
@@ -50,89 +75,65 @@ $conn->close();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Event Badges</title>
+  <title>Badges</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    /* Custom CSS for the layout */
-    .sidebar {
-      min-height: 100vh;
-      background-color: #f8f9fa;
-      padding-top: 20px;
-    }
-    .sidebar img {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      margin-bottom: 20px;
-    }
-    .badge-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-top: 30px;
-    }
-    .badge {
-      font-size: 18px;
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: white;
-      border-radius: 25px;
-      text-transform: capitalize;
-      font-weight: bold;
-    }
-    .badge:hover {
-      background-color: #0056b3;
-      cursor: pointer;
-    }
-  </style>
 </head>
 <body>
-  <div class="d-flex">
-    <!-- Sidebar with profile information -->
-    <div class="sidebar col-md-3 col-lg-2 p-3">
-      <div class="text-center">
-        <!-- Display profile picture -->
-        <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
-        <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
-        <p><?php echo htmlspecialchars($email); ?></p>
-      </div>
-      <hr>
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="settings.php">Settings</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="logout.php">Logout</a>
-        </li>
-      </ul>
+  <div class="container">
+    <h2>Badges</h2>
+
+    <!-- Display user information -->
+    <div class="user-info">
+      <p>Name: <?php echo htmlspecialchars($fname . ' ' . $lname); ?></p>
+      <p>Email: <?php echo htmlspecialchars($email); ?></p>
     </div>
 
-    <!-- Main content (badge layout) -->
-    <div class="col-md-9 col-lg-10 p-3">
-      <h2>My Event Badges</h2>
-
-      <!-- Event Badges Section -->
-      <div class="badge-container">
+    <!-- Display attended events and their badges -->
+    <h3>Attended Events</h3>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Event Name</th>
+          <th>Date</th>
+          <th>Location</th>
+          <th>Badge</th>
+        </tr>
+      </thead>
+      <tbody>
         <?php
         // Check if there are any attended events
         if (empty($attendedEvents)) {
-            echo "<p>No attended events found.</p>";
+            echo "<tr><td colspan='5'>No attended events found.</td></tr>";
         } else {
-            // Loop through the attended events array and display each as a badge
+            // Loop through the attended events array and display them
+            $count = 1;
             foreach ($attendedEvents as $event) {
-                echo "<div class='badge'>";
-                echo htmlspecialchars($event['eventname']);
-                echo "</div>";
+                echo "<tr>";
+                echo "<td>" . $count++ . "</td>";
+                echo "<td>" . htmlspecialchars($event['eventname']) . "</td>";
+                echo "<td>" . htmlspecialchars($event['startdate']) . "</td>";
+                echo "<td>" . htmlspecialchars($event['location']) . "</td>";
+                echo "<td>";
+                // Check if event badge exists and display the image
+                if (!empty($event['eventbadgepath'])) {
+                    echo "<img src='" . htmlspecialchars($event['eventbadgepath']) . "' alt='Event Badge' width='50' height='50'>";
+                } else {
+                    echo "No Badge Available";
+                }
+                echo "</td>";
+                echo "</tr>";
             }
         }
         ?>
-      </div>
+      </tbody>
+    </table>
+  </div>
 
-	</div>
-	</body>
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
+</body>
 </html>
 
