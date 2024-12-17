@@ -168,7 +168,23 @@ if (isset($_GET['token']) && isset($_GET['event'])) {
 }
 ?>
 
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+
+	<title>Ingress</title>
+	<!-- Favicon -->
+<link rel="icon" href="icon.png" type="image/png">
+
+
+</head>
+<body>
 <!-- Add Bootstrap JS (required for some functionality) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist></script>
+</body>
+</html>
+
 
