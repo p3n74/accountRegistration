@@ -1,105 +1,77 @@
 <?php
-// Start the session
 session_start();
 
-// Check if user is logged in by checking session for UID
+// Check if the user is logged in
 if (!isset($_SESSION['uid'])) {
     die("You must log in first.");
 }
 
-// Include database connection
+// Include the database connection
 require_once 'includes/db.php';
 
-// Retrieve UID from session
 $uid = $_SESSION['uid'];
 
-// Fetch user profile details (fname, lname, email, profile picture)
+// Fetch user information
 $sql_user = "SELECT fname, lname, email, profilepicture FROM user_credentials WHERE uid = ?";
 $stmt_user = $conn->prepare($sql_user);
 $stmt_user->bind_param("i", $uid);
 $stmt_user->execute();
-$stmt_user->store_result();
 $stmt_user->bind_result($fname, $lname, $email, $profilepicture);
 $stmt_user->fetch();
+$stmt_user->close();
 
-// Get eventid from URL
+// Check for Event ID
 if (isset($_GET['eventid'])) {
     $eventid = $_GET['eventid'];
 } else {
     die("Event ID is missing.");
 }
 
-// Query to fetch event details for the specified eventid
-$sql_event = "SELECT eventid, eventname, startdate, enddate, location, eventkey, eventshortinfo, eventinfopath, eventbadgepath FROM events WHERE eventid = ? AND eventcreator = ?";
+// Fetch event details
+$sql_event = "SELECT eventname, startdate, enddate, location, eventkey, eventshortinfo, eventbadgepath, eventinfopath 
+              FROM events WHERE eventid = ? AND eventcreator = ?";
 $stmt_event = $conn->prepare($sql_event);
 $stmt_event->bind_param("ii", $eventid, $uid);
 $stmt_event->execute();
-$stmt_event->store_result();
-$stmt_event->bind_result($eventid, $eventname, $startdate, $enddate, $location, $eventkey, $eventshortinfo, $eventinfopath, $eventbadgepath);
+$stmt_event->bind_result($eventname, $startdate, $enddate, $location, $eventkey, $eventshortinfo, $eventbadgepath, $eventinfopath);
+$stmt_event->fetch();
+$stmt_event->close();
 
-// Check if event exists
-if ($stmt_event->num_rows == 0) {
-    die("Event not found or you do not have permission to manage it.");
-}
-
-$stmt_event->fetch();  // Fetch event details
-
-// Handle form submission to update event
-if (isset($_POST['update_event'])) {
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $eventname = $_POST['eventname'];
     $startdate = $_POST['startdate'];
     $enddate = $_POST['enddate'];
     $location = $_POST['location'];
     $eventkey = $_POST['eventkey'];
     $eventshortinfo = $_POST['eventshortinfo'];
-    $eventinfopath = $_POST['eventinfopath'];
 
-    // Handle file upload for event badge
-    if (isset($_FILES['eventbadgepath']) && $_FILES['eventbadgepath']['error'] == 0) {
-        $badge_tmp_name = $_FILES['eventbadgepath']['tmp_name'];
-        $badge_name = $_FILES['eventbadgepath']['name'];
-        $badge_ext = pathinfo($badge_name, PATHINFO_EXTENSION);
-        $badge_new_name = "badge_" . time() . "." . $badge_ext;
-        $badge_upload_dir = 'uploads/';
-        
-        if (move_uploaded_file($badge_tmp_name, $badge_upload_dir . $badge_new_name)) {
-            $eventbadgepath = $badge_upload_dir . $badge_new_name;
-        } else {
-            $error_message = "Error uploading the event badge.";
-        }
+    // File uploads
+    if (isset($_FILES['eventbadge']) && $_FILES['eventbadge']['error'] === 0) {
+        $badge_path = "uploads/badge_" . time() . "_" . basename($_FILES['eventbadge']['name']);
+        move_uploaded_file($_FILES['eventbadge']['tmp_name'], $badge_path);
+        $eventbadgepath = $badge_path;
     }
 
-    // Handle file upload for event certificate
-    if (isset($_FILES['eventinfopath']) && $_FILES['eventinfopath']['error'] == 0) {
-        $cert_tmp_name = $_FILES['eventinfopath']['tmp_name'];
-        $cert_name = $_FILES['eventinfopath']['name'];
-        $cert_ext = pathinfo($cert_name, PATHINFO_EXTENSION);
-        $cert_new_name = "certificate_" . time() . "." . $cert_ext;
-        $cert_upload_dir = 'uploads/';
-        
-        if (move_uploaded_file($cert_tmp_name, $cert_upload_dir . $cert_new_name)) {
-            $eventinfopath = $cert_upload_dir . $cert_new_name;
-        } else {
-            $error_message = "Error uploading the event certificate.";
-        }
+    if (isset($_FILES['eventinfo']) && $_FILES['eventinfo']['error'] === 0) {
+        $info_path = "uploads/certificate_" . time() . "_" . basename($_FILES['eventinfo']['name']);
+        move_uploaded_file($_FILES['eventinfo']['tmp_name'], $info_path);
+        $eventinfopath = $info_path;
     }
 
-    // Prepare update query
-    if (!isset($error_message)) {
-        $sql_update = "UPDATE events SET eventname = ?, startdate = ?, enddate = ?, location = ?, eventkey = ?, eventshortinfo = ?, eventinfopath = ?, eventbadgepath = ? WHERE eventid = ?";
-        if ($stmt_update = $conn->prepare($sql_update)) {
-            $stmt_update->bind_param("ssssssssi", $eventname, $startdate, $enddate, $location, $eventkey, $eventshortinfo, $eventinfopath, $eventbadgepath, $eventid);
-            if ($stmt_update->execute()) {
-                $success_message = "Event updated successfully.";
-            } else {
-                $error_message = "Error updating the event.";
-            }
-            $stmt_update->close();
-        }
+    // Update database
+    $sql_update = "UPDATE events SET eventname = ?, startdate = ?, enddate = ?, location = ?, eventkey = ?, eventshortinfo = ?, eventbadgepath = ?, eventinfopath = ? WHERE eventid = ?";
+    $stmt_update = $conn->prepare($sql_update);
+    $stmt_update->bind_param("ssssssssi", $eventname, $startdate, $enddate, $location, $eventkey, $eventshortinfo, $eventbadgepath, $eventinfopath, $eventid);
+
+    if ($stmt_update->execute()) {
+        $success_message = "Event updated successfully!";
+    } else {
+        $error_message = "Failed to update event.";
     }
+    $stmt_update->close();
 }
 
-// Close DB connection
 $conn->close();
 ?>
 
@@ -109,7 +81,6 @@ $conn->close();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Update Event</title>
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     .sidebar {
@@ -123,109 +94,82 @@ $conn->close();
       border-radius: 50%;
       margin-bottom: 20px;
     }
-    .two-columns {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-    }
     .form-container {
+      padding: 30px;
+      margin: 30px auto;
+      max-width: 800px;
       background-color: #f8f9fa;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .btn-custom {
-      margin-top: 10px;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
-  <div class="d-flex">
-    <!-- Sidebar with profile information -->
-    <div class="sidebar col-md-3 col-lg-2 p-3">
-      <div class="text-center">
-        <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
-        <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
-        <p><?php echo htmlspecialchars($email); ?></p>
-      </div>
-      <hr>
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link" href="dashboard.php">Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="settings.php">Settings</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="logout.php">Logout</a>
-        </li>
-      </ul>
+<div class="d-flex">
+  <!-- Sidebar -->
+  <div class="sidebar col-md-3 col-lg-2 p-3">
+    <div class="text-center">
+      <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile">
+      <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
+      <p><?php echo htmlspecialchars($email); ?></p>
     </div>
-
-    <!-- Main content for Update Event -->
-    <div class="col-md-9 col-lg-10 p-3">
-      <h2 class="mb-4">Update Event: <?php echo htmlspecialchars($eventname); ?></h2>
-
-      <?php
-      if (isset($success_message)) {
-          echo "<div class='alert alert-success'>" . htmlspecialchars($success_message) . "</div>";
-      }
-      if (isset($error_message)) {
-          echo "<div class='alert alert-danger'>" . htmlspecialchars($error_message) . "</div>";
-      }
-      ?>
-
-      <!-- Event Update Form -->
-      <div class="form-container">
-        <form method="POST" enctype="multipart/form-data">
-          <div class="mb-3">
-            <label for="eventname" class="form-label">Event Name</label>
-            <input type="text" class="form-control" id="eventname" name="eventname" value="<?php echo htmlspecialchars($eventname); ?>" required>
-          </div>
-          <div class="mb-3">
-            <label for="startdate" class="form-label">Start Date</label>
-            <input type="datetime-local" class="form-control" id="startdate" name="startdate" value="<?php echo htmlspecialchars($startdate); ?>" required>
-          </div>
-          <div class="mb-3">
-            <label for="enddate" class="form-label">End Date</label>
-            <input type="datetime-local" class="form-control" id="enddate" name="enddate" value="<?php echo htmlspecialchars($enddate); ?>" required>
-          </div>
-          <div class="mb-3">
-            <label for="location" class="form-label">Location</label>
-            <input type="text" class="form-control" id="location" name="location" value="<?php echo htmlspecialchars($location); ?>" required>
-          </div>
-          <div class="mb-3">
-            <label for="eventkey" class="form-label">Event Key</label>
-            <input type="text" class="form-control" id="eventkey" name="eventkey" value="<?php echo htmlspecialchars($eventkey); ?>" required>
-          </div>
-          <div class="mb-3">
-            <label for="eventshortinfo" class="form-label">Event Link</label>
-            <input type="url" class="form-control" id="eventshortinfo" name="eventshortinfo" value="<?php echo htmlspecialchars($eventshortinfo); ?>" required>
-          </div>
-          <div class="mb-3">
-            <label for="eventinfopath" class="form-label">Event Certificate (Upload)</label>
-            <input type="file" class="form-control" id="eventinfopath" name="eventinfopath">
-            <?php if (!empty($eventinfopath)) { ?>
-              <p>Current certificate: <a href="<?php echo htmlspecialchars($eventinfopath); ?>" target="_blank">Download</a></p>
-            <?php } ?>
-          </div>
-          <div class="mb-3">
-            <label for="eventbadgepath" class="form-label">Event Badge (Upload)</label>
-            <input type="file" class="form-control" id="eventbadgepath" name="eventbadgepath">
-            <?php if (!empty($eventbadgepath)) { ?>
-              <p>Current badge: <a href="<?php echo htmlspecialchars($eventbadgepath); ?>" target="_blank">View Badge</a></p>
-            <?php } ?>
-          </div>
-          
-          <button type="submit" name="update_event" class="btn btn-primary btn-custom">Update Event</button>
-        </form>
-      </div>
-    </div>
+    <hr>
+    <ul class="nav flex-column">
+      <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link" href="settings.php">Settings</a></li>
+      <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
+    </ul>
   </div>
 
-  <!-- Bootstrap JS and dependencies -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
+  <!-- Main Content -->
+  <div class="col-md-9 col-lg-10 p-3">
+    <div class="form-container">
+      <h2>Update Event</h2>
+      <?php if (isset($success_message)) echo "<div class='alert alert-success'>$success_message</div>"; ?>
+      <?php if (isset($error_message)) echo "<div class='alert alert-danger'>$error_message</div>"; ?>
+      
+      <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label class="form-label">Event Name</label>
+          <input type="text" class="form-control" name="eventname" value="<?php echo htmlspecialchars($eventname); ?>" required>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Start Date</label>
+            <input type="datetime-local" class="form-control" name="startdate" value="<?php echo $startdate; ?>" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">End Date</label>
+            <input type="datetime-local" class="form-control" name="enddate" value="<?php echo $enddate; ?>" required>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Location</label>
+          <input type="text" class="form-control" name="location" value="<?php echo htmlspecialchars($location); ?>" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Event Key</label>
+          <input type="text" class="form-control" name="eventkey" value="<?php echo htmlspecialchars($eventkey); ?>" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Event Link</label>
+          <input type="text" class="form-control" name="eventshortinfo" value="<?php echo htmlspecialchars($eventshortinfo); ?>" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Event Badge</label>
+          <input type="file" class="form-control" name="eventbadge">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Event Certificate</label>
+          <input type="file" class="form-control" name="eventinfo">
+        </div>
+        <button type="submit" class="btn btn-primary">Update Event</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
 
