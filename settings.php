@@ -10,7 +10,6 @@ if (!isset($_SESSION['uid'])) {
 // Include database connection
 require_once 'includes/db.php';
 
-
 // Include PHPMailer
 require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
@@ -20,17 +19,16 @@ require 'includes/apikey.php'; // Include the API key
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-
 // Retrieve UID from session
 $uid = $_SESSION['uid'];
 
 // Query to fetch user details (name, email, profile picture) based on UID
-$sql_user = "SELECT fname, mname, lname, email, profilepicture, verification_code FROM user_credentials WHERE uid = ?";
+$sql_user = "SELECT fname, mname, lname, email, profilepicture, verification_code, password FROM user_credentials WHERE uid = ?";
 $stmt_user = $conn->prepare($sql_user);
 $stmt_user->bind_param("i", $uid);  // Bind UID to the query
 $stmt_user->execute();
 $stmt_user->store_result();  // Store the result set to avoid "Commands out of sync" error
-$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture, $verification_code);  // Bind the result to variables
+$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture, $verification_code, $current_password);  // Bind the result to variables
 $stmt_user->fetch();  // Fetch the data into the variables
 
 // Use a default image if profile picture is not set
@@ -45,15 +43,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $new_lname = $_POST['lname'];
         $new_password = $_POST['password'];
 
-        // Update the personal info (excluding email)
-        $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ? WHERE uid = ?";
-        $stmt_update = $conn->prepare($sql_update);
-        $stmt_update->bind_param("sssi", $new_fname, $new_mname, $new_lname, $uid);
+        // If the password field is not empty, hash the new password
+        if (!empty($new_password)) {
+            // Hash the new password using bcrypt
+            $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
+            // Update password along with other details
+            $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ?, password = ? WHERE uid = ?";
+            $stmt_update = $conn->prepare($sql_update);
+            $stmt_update->bind_param("ssssi", $new_fname, $new_mname, $new_lname, $hashed_password, $uid);
+        } else {
+            // Update only the personal info without changing the password
+            $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ? WHERE uid = ?";
+            $stmt_update = $conn->prepare($sql_update);
+            $stmt_update->bind_param("sssi", $new_fname, $new_mname, $new_lname, $uid);
+        }
+
         $stmt_update->execute();
         if ($stmt_update->affected_rows > 0) {
-			//echo "<p>Your details have been updated successfully!</p>";
-			header('Location: ' . $_SERVER['PHP_SELF']);
-			exit();
+            // Redirect after successful update
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit();
         } else {
             $error_message = "No changes were made or an error occurred.";
         }
@@ -156,6 +165,8 @@ if (isset($_FILES['profilepicture']) && $_FILES['profilepicture']['error'] == 0)
 
 $conn->close();
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
