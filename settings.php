@@ -161,7 +161,7 @@ $conn->close();
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    /* New Styles */
+    /* Unified Styles */
     body {
       background-color: #f4f6f9;
     }
@@ -250,7 +250,7 @@ $conn->close();
 
           <div class="mb-3">
             <label for="mname" class="form-label">Middle Name</label>
-            <input type="text" class="form-control" id="mname" name="mname" value="<?php echo htmlspecialchars($mname); ?>">
+            <input type="text" class="form-control" id="mname" name="mname" value="<?php echo htmlspecialchars($mname); ?>" required>
           </div>
 
           <div class="mb-3">
@@ -259,39 +259,43 @@ $conn->close();
           </div>
 
           <div class="mb-3">
-            <label for="password" class="form-label">New Password (Leave blank to keep current password)</label>
-            <input type="password" class="form-control" id="password" name="password">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
           </div>
 
-          <div class="mb-3">
-            <label for="profilepicture" class="form-label">Profile Picture</label>
-            <input type="file" class="form-control" id="profilepicture" name="profilepicture">
-          </div>
-
-          <button type="submit" class="btn btn-custom btn-primary w-100">Update</button>
+          <button type="submit" class="btn btn-primary btn-custom">Save Changes</button>
         </form>
       </div>
 
       <!-- Email Update Form -->
       <div class="form-container">
-        <h3>Change Email</h3>
         <form action="settings.php" method="POST">
           <input type="hidden" name="action" value="update_email">
-          
           <div class="mb-3">
-            <label for="email" class="form-label">New Email Address</label>
+            <label for="email" class="form-label">New Email</label>
             <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
           </div>
 
-          <button type="submit" class="btn btn-custom btn-primary w-100">Update Email</button>
+          <button type="submit" class="btn btn-warning btn-custom">Update Email</button>
+        </form>
+      </div>
+
+      <!-- Profile Picture Upload -->
+      <div class="form-container">
+        <form action="settings.php" method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="profilepicture" class="form-label">Profile Picture</label>
+            <input type="file" class="form-control" id="profilepicture" name="profilepicture" accept="image/*">
+          </div>
+
+          <button type="submit" class="btn btn-info btn-custom">Upload Picture</button>
         </form>
       </div>
     </div>
   </div>
 
   <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 
