@@ -78,57 +78,92 @@ $conn->close();
   <title>Badges</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Custom CSS for the layout */
+    .sidebar {
+      min-height: 100vh;
+      background-color: #f8f9fa;
+      padding-top: 20px;
+    }
+    .sidebar img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+    }
+    .badge-card {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .badge-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-bottom: 1px solid #ddd;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Badges</h2>
-
-    <!-- Display user information -->
-    <div class="user-info">
-      <p>Name: <?php echo htmlspecialchars($fname . ' ' . $lname); ?></p>
-      <p>Email: <?php echo htmlspecialchars($email); ?></p>
+  <div class="d-flex">
+    <!-- Sidebar with profile information -->
+    <div class="sidebar col-md-3 col-lg-2 p-3">
+      <div class="text-center">
+        <!-- Display profile picture -->
+        <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
+        <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
+        <p><?php echo htmlspecialchars($email); ?></p>
+      </div>
+      <hr>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="settings.php">Settings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="logout.php">Logout</a>
+        </li>
+      </ul>
     </div>
 
-    <!-- Display attended events and their badges -->
-    <h3>Attended Events</h3>
-    <table class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Event Name</th>
-          <th>Date</th>
-          <th>Location</th>
-          <th>Badge</th>
-        </tr>
-      </thead>
-      <tbody>
+    <!-- Main content (Badges) -->
+    <div class="col-md-9 col-lg-10 p-3">
+      <h2>Badges</h2>
+
+      <!-- Display attended events as cards in two columns -->
+      <div class="row">
         <?php
         // Check if there are any attended events
         if (empty($attendedEvents)) {
-            echo "<tr><td colspan='5'>No attended events found.</td></tr>";
+            echo "<p>No attended events found.</p>";
         } else {
-            // Loop through the attended events array and display them
-            $count = 1;
+            // Loop through the attended events array and display them as cards
             foreach ($attendedEvents as $event) {
-                echo "<tr>";
-                echo "<td>" . $count++ . "</td>";
-                echo "<td>" . htmlspecialchars($event['eventname']) . "</td>";
-                echo "<td>" . htmlspecialchars($event['startdate']) . "</td>";
-                echo "<td>" . htmlspecialchars($event['location']) . "</td>";
-                echo "<td>";
-                // Check if event badge exists and display the image
+                echo '<div class="col-md-6 col-lg-4">';
+                echo '<div class="card badge-card">';
+                
+                // Display badge image (if available)
                 if (!empty($event['eventbadgepath'])) {
-                    echo "<img src='" . htmlspecialchars($event['eventbadgepath']) . "' alt='Event Badge' width='50' height='50'>";
+                    echo '<img src="' . htmlspecialchars($event['eventbadgepath']) . '" class="card-img-top badge-img" alt="Event Badge">';
                 } else {
-                    echo "No Badge Available";
+                    echo '<div class="card-img-top badge-img bg-light d-flex justify-content-center align-items-center">
+                            <span>No Badge</span>
+                          </div>';
                 }
-                echo "</td>";
-                echo "</tr>";
+
+                // Display event name in the card body
+                echo '<div class="card-body">';
+                echo '<h5 class="card-title">' . htmlspecialchars($event['eventname']) . '</h5>';
+                echo '</div>';
+                
+                echo '</div>';
+                echo '</div>';
             }
         }
         ?>
-      </tbody>
-    </table>
+      </div>
+    </div>
   </div>
 
   <!-- Bootstrap JS and dependencies -->
