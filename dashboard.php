@@ -29,8 +29,7 @@ if ($stmt_user->fetch()) {
     die("User not found.");
 }
 
-// Close the user details statement to avoid issues with subsequent queries
-$stmt_user->close();
+// Do not close the user statement just yet; we'll use it later if needed
 
 // Prepare the SQL query to fetch attended events
 $sql_events = "
@@ -43,7 +42,7 @@ $sql_events = "
 $stmt_events = $conn->prepare($sql_events);
 $stmt_events->bind_param("i", $uid);  // Bind UID to the query
 $stmt_events->execute();
-$result_events = $stmt_events->get_result(); // This should come after execute()
+$result_events = $stmt_events->get_result(); // Get result set
 
 // Fetch the results for attended events
 $attendedEvents = [];
@@ -63,7 +62,7 @@ $sql_my_events = "
 $stmt_my_events = $conn->prepare($sql_my_events);
 $stmt_my_events->bind_param("i", $uid);  // Bind UID to the query
 $stmt_my_events->execute();
-$result_my_events = $stmt_my_events->get_result(); // Get the result after execution
+$result_my_events = $stmt_my_events->get_result(); // Get result set
 
 // Fetch the results for My Events
 $myEvents = [];
@@ -71,12 +70,13 @@ while ($row = $result_my_events->fetch_assoc()) {
     $myEvents[] = $row;
 }
 
-// Close the event statements and DB connection
-$stmt_events->close();
-$stmt_my_events->close();
-$conn->close();
-?>
+// **Do not close the statements just yet**
 
+$stmt_user->close(); // Close the user statement after all queries are done
+$stmt_events->close(); // Close the event statements only after you're done fetching
+$stmt_my_events->close();
+$conn->close(); // Close the database connection last
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
