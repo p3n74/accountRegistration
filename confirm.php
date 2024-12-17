@@ -1,19 +1,6 @@
 <?php
 require 'includes/db.php';
 
-if (isset($_GET['token']) && !empty($_GET['token'])) {
-    // Sanitize and validate the token
-    $token = htmlspecialchars(trim($_GET['token']));
-    echo "Token from URL: " . $token . "<br>";
-
-    if (strlen($token) !== 64) {
-        die("<p>Invalid token length. Please check your confirmation link.</p>");
-    }
-
-    // Verify the token exists in the database
-<?php
-require 'includes/db.php';
-
 ?>
 
 <!DOCTYPE html>
