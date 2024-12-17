@@ -10,6 +10,7 @@ if (!isset($_SESSION['uid'])) {
 // Include database connection
 require_once 'includes/db.php';
 
+
 // Include PHPMailer
 require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
@@ -18,6 +19,7 @@ require 'includes/apikey.php'; // Include the API key
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
 
 // Retrieve UID from session
 $uid = $_SESSION['uid'];
@@ -49,8 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_update->bind_param("sssi", $new_fname, $new_mname, $new_lname, $uid);
         $stmt_update->execute();
         if ($stmt_update->affected_rows > 0) {
-            header('Location: ' . $_SERVER['PHP_SELF']);
-            exit();
+			//echo "<p>Your details have been updated successfully!</p>";
+			header('Location: ' . $_SERVER['PHP_SELF']);
+			exit();
         } else {
             $error_message = "No changes were made or an error occurred.";
         }
@@ -101,6 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     // Send the email
                     $mail->send();
+                    //echo "<p>A verification email has been sent to your new email address. Please check your inbox.</p>";
                 } catch (Exception $e) {
                     $error_message = "Failed to send verification email. Error: " . $mail->ErrorInfo;
                 }
@@ -137,6 +141,7 @@ if (isset($_FILES['profilepicture']) && $_FILES['profilepicture']['error'] == 0)
             $stmt_update_pic->execute();
 
             if ($stmt_update_pic->affected_rows > 0) {
+                // Redirect after successful profile picture update
                 header("Location: settings.php?status=success");
                 exit();
             } else {
@@ -151,7 +156,6 @@ if (isset($_FILES['profilepicture']) && $_FILES['profilepicture']['error'] == 0)
 
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -161,15 +165,12 @@ $conn->close();
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    /* Unified Styles */
-    body {
-      background-color: #f4f6f9;
-    }
     .sidebar {
       min-height: 100vh;
       background-color: #f8f9fa;
-      color: black;
       padding-top: 20px;
+      position: sticky;
+      top: 0;
     }
     .sidebar img {
       width: 60px;
@@ -177,38 +178,34 @@ $conn->close();
       border-radius: 50%;
       margin-bottom: 20px;
     }
-    
-    .main-content {
-      padding: 30px;
-      background-color: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
     .form-container {
-      margin-top: 30px;
       padding: 30px;
+      margin: 30px auto;
+      max-width: 800px;
       background-color: #f8f9fa;
       border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    .btn-custom {
-      margin-top: 10px;
-      border-radius: 5px;
+    .main-content {
+      padding: 30px;
+      background-color: #f1f1f1;
+      width: 100%;
     }
-    .btn-custom:hover {
-      opacity: 0.9;
+    .d-flex {
+      display: flex;
     }
-    .alert {
-      margin-top: 20px;
+    .sidebar-col {
+      flex: 0 0 250px;
+    }
+    .main-col {
+      flex: 1;
+      padding-left: 30px;
     }
   </style>
 </head>
 <body>
   <div class="d-flex">
-    <!-- Sidebar with profile information -->
-    <div class="sidebar col-md-3 col-lg-2 p-3">
+    <div class="sidebar sidebar-col col-md-3 col-lg-2 p-3">
       <div class="text-center">
-        <!-- Display profile picture -->
         <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
         <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
         <p><?php echo htmlspecialchars($email); ?></p>
@@ -219,7 +216,7 @@ $conn->close();
           <a class="nav-link" href="dashboard.php">Dashboard</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="settings.php">Settings</a>
+          <a class="nav-link active" href="settings.php">Settings</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="logout.php">Logout</a>
@@ -227,20 +224,17 @@ $conn->close();
       </ul>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content col-md-9 col-lg-10 p-3">
+    <div class="main-col col-md-9 col-lg-10">
       <h2>Settings</h2>
 
-      <!-- Display messages -->
       <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
         <div class="alert alert-success">Your details have been updated successfully!</div>
       <?php elseif (isset($error_message)): ?>
         <div class="alert alert-danger"><?php echo $error_message; ?></div>
       <?php endif; ?>
 
-      <!-- Personal Info Update Form -->
       <div class="form-container">
-        <h4>Update Personal Information</h4>
+        <!-- Personal Info Update Form -->
         <form action="settings.php" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="action" value="update_settings">
           <div class="mb-3">
@@ -250,7 +244,7 @@ $conn->close();
 
           <div class="mb-3">
             <label for="mname" class="form-label">Middle Name</label>
-            <input type="text" class="form-control" id="mname" name="mname" value="<?php echo htmlspecialchars($mname); ?>" required>
+            <input type="text" class="form-control" id="mname" name="mname" value="<?php echo htmlspecialchars($mname); ?>">
           </div>
 
           <div class="mb-3">
@@ -259,46 +253,37 @@ $conn->close();
           </div>
 
           <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" >
+            <label for="password" class="form-label">New Password (Leave blank to keep current password)</label>
+            <input type="password" class="form-control" id="password" name="password">
           </div>
 
-          <button type="submit" class="btn btn-primary btn-custom">Save Changes</button>
+          <div class="mb-3">
+            <label for="profilepicture" class="form-label">Profile Picture</label>
+            <input type="file" class="form-control" id="profilepicture" name="profilepicture">
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">Update</button>
         </form>
       </div>
 
       <!-- Email Update Form -->
       <div class="form-container">
-        <h4>Update Email</h4>
+        <h3>Change Email</h3>
         <form action="settings.php" method="POST">
           <input type="hidden" name="action" value="update_email">
+          
           <div class="mb-3">
-            <label for="email" class="form-label">New Email</label>
+            <label for="email" class="form-label">New Email Address</label>
             <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-custom">Update Email</button>
-        </form>
-      </div>
-
-      <!-- Profile Picture Upload -->
-      <div class="form-container">
-        <h4>Upload Profile Picture</h4>
-        <form action="settings.php" method="POST" enctype="multipart/form-data">
-          <div class="mb-3">
-            <label for="profilepicture" class="form-label">Choose a Picture</label>
-            <input type="file" class="form-control" id="profilepicture" name="profilepicture">
-          </div>
-
-          <button type="submit" class="btn btn-primary btn-custom">Upload Picture</button>
+          <button type="submit" class="btn btn-primary w-100">Update Email</button>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- Bootstrap JS and dependencies -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
-
