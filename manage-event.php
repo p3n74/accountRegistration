@@ -154,6 +154,7 @@ $result_participants = $stmt_participants->get_result();
             </tbody>
           </table>
 		</div>
+		<br>
 		<div class="mt-3 text-center">
 		  <form action="generate-participants-pdf.php" method="GET" target="_blank">
 			<input type="hidden" name="eventid" value="<?php echo htmlspecialchars($eventid); ?>">
