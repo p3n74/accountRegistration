@@ -46,8 +46,27 @@ while ($row = $result_events->fetch_assoc()) {
     $attendedEvents[] = $row;
 }
 
+// Prepare the SQL query to fetch My Events (events created by the user)
+$sql_my_events = "
+    SELECT eventid, eventname, startdate, enddate, location
+    FROM events
+    WHERE eventcreator = ?
+";
+
+$stmt_my_events = $conn->prepare($sql_my_events);
+$stmt_my_events->bind_param("i", $uid);  // Bind UID to the query
+$stmt_my_events->execute();
+$result_my_events = $stmt_my_events->get_result();
+
+// Fetch the results for My Events
+$myEvents = [];
+while ($row = $result_my_events->fetch_assoc()) {
+    $myEvents[] = $row;
+}
+
 // Close the events statement and DB connection
 $stmt_events->close();
+$stmt_my_events->close();
 $conn->close();
 ?>
 
@@ -75,6 +94,14 @@ $conn->close();
     .table-container {
       padding: 20px;
     }
+    .two-columns {
+      display: flex;
+      justify-content: space-between;
+    }
+    .table-container-left,
+    .table-container-right {
+      width: 48%;
+    }
   </style>
 </head>
 <body>
@@ -101,40 +128,87 @@ $conn->close();
       </ul>
     </div>
 
-    <!-- Main content (table of attended events) -->
-    <div class="col-md-9 col-lg-10 p-3 table-container">
-      <h2>Attended Events</h2>
-      <table class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Event Name</th>
-            <th>Date</th>
-            <th>Location</th>
-            <th>Details</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          // Check if there are any attended events
-          if (empty($attendedEvents)) {
-            echo "<tr><td colspan='6'>No attended events found.</td></tr>";
-          } else {
-            // Loop through the attended events array and display them
-            $count = 1;
-            foreach ($attendedEvents as $event) {
-                echo "<tr>";
-                echo "<td>" . $count++ . "</td>";
-                echo "<td>" . htmlspecialchars($event['eventname']) . "</td>";
-                echo "<td>" . htmlspecialchars($event['startdate']) . "</td>";
-                echo "<td>" . htmlspecialchars($event['location']) . "</td>";
-                echo "<td><a href='" . htmlspecialchars($event['eventinfopath']) . "' target='_blank'>Details</a></td>";
-                echo "</tr>";
-            }
-          }
-          ?>
-        </tbody>
-      </table>
+    <!-- Main content (two columns layout) -->
+    <div class="col-md-9 col-lg-10 p-3">
+      <h2>Dashboard</h2>
+
+      <!-- Two-column layout for attended events and my events -->
+      <div class="two-columns">
+        
+        <!-- Left Column (Attended Events) -->
+        <div class="table-container-left">
+          <h3>Attended Events</h3>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Event Name</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              // Check if there are any attended events
+              if (empty($attendedEvents)) {
+                echo "<tr><td colspan='5'>No attended events found.</td></tr>";
+              } else {
+                // Loop through the attended events array and display them
+                $count = 1;
+                foreach ($attendedEvents as $event) {
+                    echo "<tr>";
+                    echo "<td>" . $count++ . "</td>";
+                    echo "<td>" . htmlspecialchars($event['eventname']) . "</td>";
+                    echo "<td>" . htmlspecialchars($event['startdate']) . "</td>";
+                    echo "<td>" . htmlspecialchars($event['location']) . "</td>";
+                    echo "<td><a href='" . htmlspecialchars($event['eventinfopath']) . "' target='_blank'>Details</a></td>";
+                    echo "</tr>";
+                }
+              }
+              ?>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Right Column (My Events) -->
+        <div class="table-container-right">
+          <h3>My Events</h3>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Event Name</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Manage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              // Check if there are any events created by the user
+              if (empty($myEvents)) {
+                echo "<tr><td colspan='5'>No events created.</td></tr>";
+              } else {
+                // Loop through the user's events array and display them
+                $count = 1;
+                foreach ($myEvents as $event) {
+                    echo "<tr>";
+                    echo "<td>" . $count++ . "</td>";
+                    echo "<td>" . htmlspecialchars($event['eventname']) . "</td>";
+                    echo "<td>" . htmlspecialchars($event['startdate']) . "</td>";
+                    echo "<td>" . htmlspecialchars($event['location']) . "</td>";
+                    echo "<td><a href='manage_event.php?eventid=" . $event['eventid'] . "'>Manage</a></td>";
+                    echo "</tr>";
+                }
+              }
+              ?>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
     </div>
   </div>
 
