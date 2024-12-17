@@ -217,7 +217,7 @@ $conn->close();
             <li><strong>Event Name:</strong> Enter the name of your event.</li>
             <li><strong>Start Date & End Date:</strong> Set the start and end date and time for your event.</li>
             <li><strong>Location:</strong> Enter the location of the event.</li>
-            <li><strong>Event Key:</strong> Provide a code for the onsite terminals to use for your event <li>
+            <li><strong>Event Key:</strong> Provide a code for the onsite terminals to use for your event. Use <strong>palisade.dcism.org</strong> for onsite registration and attendee tracking</li>
             <li><strong>Event Short Info:</strong> Put a link to your page or event page.</li>
             <li><strong>Event Badge:</strong> Optionally, upload a badge for you attendees to collect </li>
             <li><strong>Event Info (PDF):</strong> Optionally, upload any additional event info, such as a PDF.</li>
@@ -225,7 +225,6 @@ $conn->close();
           <p>Once you're done, click "Create Event" to finalize.</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
         </div>
       </div>
