@@ -195,6 +195,10 @@ $conn->close();
     }
     .form-container {
       margin-top: 30px;
+      padding: 30px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     .btn-custom {
       margin-top: 10px;
@@ -202,9 +206,6 @@ $conn->close();
     }
     .btn-custom:hover {
       opacity: 0.9;
-    }
-    .table th, .table td {
-      vertical-align: middle;
     }
     .alert {
       margin-top: 20px;
@@ -241,6 +242,7 @@ $conn->close();
 
       <!-- Personal Info Update Form -->
       <div class="form-container">
+        <h4>Update Personal Information</h4>
         <form action="settings.php" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="action" value="update_settings">
           <div class="mb-3">
@@ -269,6 +271,7 @@ $conn->close();
 
       <!-- Email Update Form -->
       <div class="form-container">
+        <h4>Update Email</h4>
         <form action="settings.php" method="POST">
           <input type="hidden" name="action" value="update_email">
           <div class="mb-3">
@@ -282,9 +285,10 @@ $conn->close();
 
       <!-- Profile Picture Upload -->
       <div class="form-container">
+        <h4>Upload Profile Picture</h4>
         <form action="settings.php" method="POST" enctype="multipart/form-data">
           <div class="mb-3">
-            <label for="profilepicture" class="form-label">Upload Profile Picture</label>
+            <label for="profilepicture" class="form-label">Choose a Picture</label>
             <input type="file" class="form-control" id="profilepicture" name="profilepicture">
           </div>
 
