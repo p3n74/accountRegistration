@@ -12,7 +12,7 @@ if(isset($_GET['token'])) {
 	// Get the 32 Char token
 	$token = $_GET['token'];
 
-	echo "User Token: " + $token;
+	echo "User Token: " . $token;
 } else {
 	echo "Token Invalid Or Expired";
 }
