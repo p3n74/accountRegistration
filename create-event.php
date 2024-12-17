@@ -94,7 +94,7 @@ $conn->close();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Event</title>
+  <title>Create Event</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
@@ -118,19 +118,6 @@ $conn->close();
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    .table-container {
-      margin-top: 30px;
-      background-color: #ffffff;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .table th, .table td {
-      text-align: center;
-    }
-    .btn-custom {
-      margin-top: 10px;
-    }
   </style>
 </head>
 <body>
@@ -138,6 +125,7 @@ $conn->close();
     <!-- Sidebar with profile information -->
     <div class="sidebar col-md-3 col-lg-2 p-3">
       <div class="text-center">
+        <!-- Display profile picture -->
         <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
         <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
         <p><?php echo htmlspecialchars($email); ?></p>
@@ -156,73 +144,95 @@ $conn->close();
       </ul>
     </div>
 
-    <!-- Main content for Manage Event -->
+    <!-- Main content for Create Event form -->
     <div class="col-md-9 col-lg-10 p-3">
-      <h2>Manage Event: <?php echo htmlspecialchars($eventname); ?></h2>
+      <div class="form-container">
+        <h2>Create New Event</h2>
 
-      <div class="row">
-        <!-- Event Details -->
-        <div class="col-md-6 table-container">
-          <h4>Event Details</h4>
-          <table class="table table-bordered">
-            <tr><th>Name</th><td><?php echo htmlspecialchars($eventname); ?></td></tr>
-            <tr><th>Start Date</th><td><?php echo htmlspecialchars($startdate); ?></td></tr>
-            <tr><th>End Date</th><td><?php echo htmlspecialchars($enddate); ?></td></tr>
-            <tr><th>Location</th><td><?php echo htmlspecialchars($location); ?></td></tr>
-            <tr><th>Event Key</th><td><?php echo htmlspecialchars($eventkey); ?></td></tr>
-            <tr><th>Event Link</th><td><a href="<?php echo htmlspecialchars($eventshortinfo); ?>" target="_blank">Visit Link</a></td></tr>
-          </table>
-        </div>
+        <?php
+        if (isset($error_message)) {
+            echo "<div class='alert alert-danger'>" . htmlspecialchars($error_message) . "</div>";
+        }
+        ?>
 
-        <!-- Participants List -->
-        <div class="col-md-6 table-container">
-          <h4>Participants</h4>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Join Time</th>
-                <th>Leave Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php while ($row = $result_participants->fetch_assoc()): ?>
-                <tr>
-                  <td><?php echo htmlspecialchars($row['fname'] . ' ' . $row['lname']); ?></td>
-                  <td><?php echo htmlspecialchars($row['email']); ?></td>
-                  <td><?php echo htmlspecialchars($row['join_time']); ?></td>
-                  <td><?php echo htmlspecialchars($row['leave_time'] ?? 'N/A'); ?></td>
-                </tr>
-              <?php endwhile; ?>
-            </tbody>
-          </table>
-        </div>
-      </div>
+        <form method="POST" action="create-event.php" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="eventname" class="form-label">Event Name</label>
+            <input type="text" class="form-control" id="eventname" name="eventname" required>
+          </div>
 
-      <!-- Action Buttons (Edit and Delete) -->
-      <div class="mt-4">
-        <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning btn-custom">Edit Event</a>
-        <form method="POST" class="d-inline">
-          <button type="submit" name="delete_event" class="btn btn-danger btn-custom">Delete Event</button>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="startdate" class="form-label">Start Date</label>
+              <input type="datetime-local" class="form-control" id="startdate" name="startdate" required>
+            </div>
+            <div class="col-md-6">
+              <label for="enddate" class="form-label">End Date</label>
+              <input type="datetime-local" class="form-control" id="enddate" name="enddate" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" id="location" name="location" required>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="eventkey" class="form-label">Event Key</label>
+              <input type="text" class="form-control" id="eventkey" name="eventkey" required>
+            </div>
+            <div class="col-md-6">
+              <label for="eventshortinfo" class="form-label">Event Link</label>
+              <input type="text" class="form-control" id="eventshortinfo" name="eventshortinfo">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="eventbadge" class="form-label">Event Badge (Optional)</label>
+            <input type="file" class="form-control" id="eventbadge" name="eventbadge">
+          </div>
+
+          <div class="mb-3">
+            <label for="eventinfo" class="form-label">Event Certificate (PDF or file)</label>
+            <input type="file" class="form-control" id="eventinfo" name="eventinfo">
+          </div>
+
+          <button type="submit" class="btn btn-primary">Create Event</button>
         </form>
       </div>
+    </div>
+  </div>
 
-      <!-- Download Participants List -->
-      <div class="mt-3 text-center">
-        <form action="generate-participants-pdf.php" method="GET" target="_blank">
-          <input type="hidden" name="eventid" value="<?php echo htmlspecialchars($eventid); ?>">
-          <button type="submit" class="btn btn-primary">
-            Download Participants List as PDF
-          </button>
-        </form>
+  <!-- Bootstrap Modal for Tutorial -->
+  <div class="modal fade" id="tutorialModal" tabindex="-1" aria-labelledby="tutorialModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="tutorialModalLabel">Event Creation Tutorial</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6>Welcome to the event creation page!</h6>
+          <p>Follow the steps below to create your event:</p>
+          <ol>
+            <li><strong>Event Name:</strong> Enter the name of your event.</li>
+            <li><strong>Start Date & End Date:</strong> Set the start and end date and time for your event.</li>
+            <li><strong>Location:</strong> Enter the location of the event.</li>
+            <li><strong>Event Key:</strong> Provide a code for the onsite terminals to use for your event. Use <strong>palisade.dcism.org</strong> for onsite registration and attendee tracking</li>
+            <li><strong>Event Short Info:</strong> Put a link to your page or event page.</li>
+            <li><strong>Event Badge:</strong> Optionally, upload a badge for your attendees to collect.</li>
+            <li><strong>Event Certificate (PDF):</strong> Optionally, upload a certificate for your attendees.</li>
+          </ol>
+          <p>Once you're done, click "Create Event" to finalize.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Bootstrap JS and dependencies -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
-</body>
-</html>
 

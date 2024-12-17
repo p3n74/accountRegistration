@@ -66,19 +66,14 @@ $result_participants = $stmt_participants->get_result();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manage Event</title>
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    /* New Styles */
-    body {
-      background-color: #f4f6f9;
-      font-family: 'Arial', sans-serif;
-    }
+    /* Custom CSS for the layout */
     .sidebar {
       min-height: 100vh;
-      background-color: #343a40;
-      color: white;
+      background-color: #f8f9fa;
       padding-top: 20px;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     }
     .sidebar img {
       width: 60px;
@@ -86,113 +81,32 @@ $result_participants = $stmt_participants->get_result();
       border-radius: 50%;
       margin-bottom: 20px;
     }
-    .sidebar .nav-item {
-      margin-bottom: 15px;
-    }
-    .sidebar .nav-link {
-      color: white;
-      font-weight: bold;
-      font-size: 16px;
-    }
-    .sidebar .nav-link:hover {
-      background-color: #495057;
-      border-radius: 4px;
-    }
-
-    .content-area {
-      background-color: white;
+    .form-container {
       padding: 30px;
-      margin-left: 250px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-    }
-
-    .content-area h2 {
-      font-size: 30px;
-      color: #333;
-    }
-
-    .content-area .table-container h4 {
-      margin-bottom: 20px;
-      font-size: 22px;
-      color: #555;
-    }
-
-    .table-container table {
-      width: 100%;
-      margin-top: 20px;
-    }
-
-    .table-container table th {
+      margin: 30px auto;
+      max-width: 800px;
       background-color: #f8f9fa;
-      color: #495057;
-      font-weight: bold;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-
-    .table-container table td {
-      color: #6c757d;
-    }
-
-    .btn-custom {
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 5px;
-    }
-
-    .btn-warning {
-      background-color: #ffc107;
-      border-color: #ffc107;
-    }
-
-    .btn-danger {
-      background-color: #dc3545;
-      border-color: #dc3545;
-    }
-
-    .btn-primary {
-      background-color: #007bff;
-      border-color: #007bff;
-    }
-
-    .btn-warning:hover, .btn-danger:hover, .btn-primary:hover {
-      filter: brightness(85%);
-    }
-
-    .two-columns {
-      display: flex;
-      gap: 30px;
-      flex-wrap: wrap;
-    }
-
-    .two-columns .table-container {
-      flex: 1;
-      min-width: 48%;
-    }
-
-    .mt-4 {
-      margin-top: 40px;
-    }
-
-    .mt-3 {
+    .table-container {
       margin-top: 30px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-
-    /* For Mobile Devices */
-    @media (max-width: 768px) {
-      .two-columns {
-        flex-direction: column;
-      }
-      .content-area {
-        margin-left: 0;
-        padding: 20px;
-      }
+    .table th, .table td {
+      text-align: center;
+    }
+    .btn-custom {
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
   <div class="d-flex">
-    <!-- Sidebar -->
+    <!-- Sidebar with profile information -->
     <div class="sidebar col-md-3 col-lg-2 p-3">
       <div class="text-center">
         <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
@@ -201,19 +115,25 @@ $result_participants = $stmt_participants->get_result();
       </div>
       <hr>
       <ul class="nav flex-column">
-        <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="settings.php">Settings</a></li>
-        <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.php">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="settings.php">Settings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="logout.php">Logout</a>
+        </li>
       </ul>
     </div>
 
-    <!-- Main Content -->
-    <div class="content-area col-md-9 col-lg-10">
+    <!-- Main content for Manage Event -->
+    <div class="col-md-9 col-lg-10 p-3">
       <h2>Manage Event: <?php echo htmlspecialchars($eventname); ?></h2>
 
-      <div class="two-columns">
+      <div class="row">
         <!-- Event Details -->
-        <div class="table-container">
+        <div class="col-md-6 table-container">
           <h4>Event Details</h4>
           <table class="table table-bordered">
             <tr><th>Name</th><td><?php echo htmlspecialchars($eventname); ?></td></tr>
@@ -226,7 +146,7 @@ $result_participants = $stmt_participants->get_result();
         </div>
 
         <!-- Participants List -->
-        <div class="table-container">
+        <div class="col-md-6 table-container">
           <h4>Participants</h4>
           <table class="table table-striped">
             <thead>
@@ -271,6 +191,7 @@ $result_participants = $stmt_participants->get_result();
     </div>
   </div>
 
+  <!-- Bootstrap JS and dependencies -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
 </body>
