@@ -121,7 +121,7 @@ $conn->close();
     <div class="sidebar col-md-3 col-lg-2 p-3">
       <div class="text-center">
         <!-- Display profile picture -->
-        <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid rounded-circle mb-3">
+        <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
         <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
         <p><?php echo htmlspecialchars($email); ?></p>
       </div>
