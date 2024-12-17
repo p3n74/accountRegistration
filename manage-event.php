@@ -155,7 +155,7 @@ $result_participants = $stmt_participants->get_result();
 		  </table>
 		</div>
 
-		<!-- Download Button Under the Table -->
+		<!-- Download Button Outside the Two-Column Layout -->
 		<div class="mt-3 text-center">
 		  <form action="generate-participants-pdf.php" method="GET" target="_blank">
 			<input type="hidden" name="eventid" value="<?php echo htmlspecialchars($eventid); ?>">
@@ -163,15 +163,15 @@ $result_participants = $stmt_participants->get_result();
 			  Download Participants List as PDF
 			</button>
 		  </form>
+		</div>     
+		<!-- Action Buttons -->
+		<div class="mt-4">
+		  <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning btn-custom">Edit Event</a>
+		  <form method="POST" class="d-inline">
+			<button type="submit" name="delete_event" class="btn btn-danger btn-custom">Delete Event</button>
+		  </form>
 		</div>
-      <!-- Action Buttons -->
-      <div class="mt-4">
-        <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning btn-custom">Edit Event</a>
-        <form method="POST" class="d-inline">
-          <button type="submit" name="delete_event" class="btn btn-danger btn-custom">Delete Event</button>
-        </form>
-      </div>
-    </div>
+	</div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
