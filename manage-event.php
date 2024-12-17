@@ -130,39 +130,40 @@ $result_participants = $stmt_participants->get_result();
           </table>
         </div>
 
-        <!-- Participants List -->
-        <div class="table-container">
-          <h4>Participants</h4>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Join Time</th>
-                <th>Leave Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php while ($row = $result_participants->fetch_assoc()): ?>
-                <tr>
-                  <td><?php echo htmlspecialchars($row['fname'] . ' ' . $row['lname']); ?></td>
-                  <td><?php echo htmlspecialchars($row['email']); ?></td>
-                  <td><?php echo htmlspecialchars($row['join_time']); ?></td>
-                  <td><?php echo htmlspecialchars($row['leave_time'] ?? 'N/A'); ?></td>
-                </tr>
-              <?php endwhile; ?>
-            </tbody>
-          </table>
+       <!-- Participants List Table -->
+		<div class="table-container">
+		  <h4>Participants</h4>
+		  <table class="table table-striped">
+			<thead>
+			  <tr>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Join Time</th>
+				<th>Leave Time</th>
+			  </tr>
+			</thead>
+			<tbody>
+			  <?php while ($row = $result_participants->fetch_assoc()): ?>
+				<tr>
+				  <td><?php echo htmlspecialchars($row['fname'] . ' ' . $row['lname']); ?></td>
+				  <td><?php echo htmlspecialchars($row['email']); ?></td>
+				  <td><?php echo htmlspecialchars($row['join_time']); ?></td>
+				  <td><?php echo htmlspecialchars($row['leave_time'] ?? 'N/A'); ?></td>
+				</tr>
+			  <?php endwhile; ?>
+			</tbody>
+		  </table>
 		</div>
-		<br>
+
+		<!-- Download Button Under the Table -->
 		<div class="mt-3 text-center">
 		  <form action="generate-participants-pdf.php" method="GET" target="_blank">
 			<input type="hidden" name="eventid" value="<?php echo htmlspecialchars($eventid); ?>">
-			<button type="submit" class="btn btn-primary">Download Participants List as PDF</button>
+			<button type="submit" class="btn btn-primary">
+			  Download Participants List as PDF
+			</button>
 		  </form>
 		</div>
-      </div>
-
       <!-- Action Buttons -->
       <div class="mt-4">
         <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning btn-custom">Edit Event</a>
