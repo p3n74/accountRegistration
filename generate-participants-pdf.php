@@ -1,7 +1,7 @@
 <?php
 // Start output buffering and clean any unexpected output
-ob_start();
-ob_end_clean();
+ob_start();  // Start output buffering
+ob_end_clean();  // Clean any previous output
 
 // Include TCPDF library
 require_once('tcpdf/tcpdf.php');
