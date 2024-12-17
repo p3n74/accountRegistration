@@ -91,6 +91,7 @@ $result_participants = $stmt_participants->get_result();
       color: white;
       font-weight: bold;
 	}
+	</style>
 </head>
 <body>
   <div class="d-flex">

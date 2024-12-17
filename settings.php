@@ -165,11 +165,7 @@ $conn->close();
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    .sidebar {
-      min-height: 100vh;
-      background-color: #f8f9fa;
-      padding-top: 20px;
-    <style>
+
     /* Custom CSS for the layout */
     .sidebar {
       min-height: 100vh;
