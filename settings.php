@@ -169,8 +169,12 @@ $conn->close();
       min-height: 100vh;
       background-color: #f8f9fa;
       padding-top: 20px;
-      position: sticky;
-      top: 0;
+    <style>
+    /* Custom CSS for the layout */
+    .sidebar {
+      min-height: 100vh;
+      background-color: #f8f9fa;
+      padding-top: 20px;
     }
     .sidebar img {
       width: 60px;
@@ -178,27 +182,44 @@ $conn->close();
       border-radius: 50%;
       margin-bottom: 20px;
     }
-    .form-container {
-      padding: 30px;
-      margin: 30px auto;
-      max-width: 800px;
-      background-color: #f8f9fa;
-      border-radius: 8px;
+    .table-container {
+      padding: 20px;
     }
-    .main-content {
-      padding: 30px;
-      background-color: #f1f1f1;
-      width: 100%;
-    }
-    .d-flex {
+    .two-columns {
       display: flex;
+      justify-content: space-between;
+      gap: 20px;  /* Adds space between the tables */
     }
-    .sidebar-col {
-      flex: 0 0 250px;
+    .table-container-left,
+    .table-container-right {
+      width: 48%;  /* Equal width for both tables */
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    .main-col {
-      flex: 1;
-      padding-left: 30px;
+    .create-event-btn {
+      margin-left: 10px;
+    }
+    h3 {
+      color: #007BFF;
+    }
+    .btn-primary {
+      background-color: #007BFF;
+      border-color: #007BFF;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #004085;
+    }
+    .alert {
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .alert-info {
+      background-color: #d1ecf1;
+      border-color: #bee5eb;
+      color: #0c5460;
     }
   </style>
 </head>

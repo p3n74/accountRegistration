@@ -90,55 +90,7 @@ $result_participants = $stmt_participants->get_result();
     .sidebar .nav-link {
       color: white;
       font-weight: bold;
-    }
-    .sidebar .nav-link:hover {
-      color: #ffc107;
-    }
-    .content-area {
-      padding: 30px;
-    }
-    .content-area h2 {
-      font-size: 2rem;
-      margin-bottom: 30px;
-    }
-    .two-columns {
-      display: flex;
-      gap: 20px;
-    }
-    .table-container {
-      width: 48%;
-      background-color: #ffffff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .btn-custom {
-      margin-top: 10px;
-      border-radius: 5px;
-    }
-    .btn-custom:hover {
-      opacity: 0.9;
-    }
-    .table th, .table td {
-      vertical-align: middle;
-    }
-    .btn-primary {
-      background-color: #007bff;
-      border-color: #007bff;
-    }
-    .btn-warning {
-      background-color: #ffc107;
-      border-color: #ffc107;
-    }
-    .btn-danger {
-      background-color: #dc3545;
-      border-color: #dc3545;
-    }
-    .text-center form {
-      display: inline-block;
-      margin-top: 20px;
-    }
-  </style>
+	}
 </head>
 <body>
   <div class="d-flex">
