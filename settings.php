@@ -125,6 +125,8 @@ $conn->close();
       min-height: 100vh;
       background-color: #f8f9fa;
       padding-top: 20px;
+      position: sticky;
+      top: 0;
     }
     .sidebar img {
       width: 60px;
@@ -140,9 +142,19 @@ $conn->close();
       border-radius: 8px;
     }
     .main-content {
-      margin-left: 250px;
       padding: 30px;
       background-color: #f1f1f1;
+      width: 100%;
+    }
+    .d-flex {
+      display: flex;
+    }
+    .sidebar-col {
+      flex: 0 0 250px; /* Ensure sidebar takes up 250px width */
+    }
+    .main-col {
+      flex: 1; /* Make main content take the remaining space */
+      padding-left: 30px;
     }
     .nav-link.active {
       font-weight: bold;
@@ -152,7 +164,7 @@ $conn->close();
 <body>
   <div class="d-flex">
     <!-- Sidebar with profile information -->
-    <div class="sidebar col-md-3 col-lg-2 p-3">
+    <div class="sidebar sidebar-col col-md-3 col-lg-2 p-3">
       <div class="text-center">
         <!-- Display profile picture -->
         <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
@@ -174,7 +186,7 @@ $conn->close();
     </div>
 
     <!-- Main content (Settings form) -->
-    <div class="main-content col-md-9 col-lg-10 p-3">
+    <div class="main-col col-md-9 col-lg-10">
       <h2>Settings</h2>
       
       <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
