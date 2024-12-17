@@ -43,15 +43,15 @@ $sql_events = "
 $stmt_events = $conn->prepare($sql_events);
 $stmt_events->bind_param("i", $uid);  // Bind UID to the query
 $stmt_events->execute();
-$result_events = $stmt_events->get_result();
-
-$stmt_events->close();
+$result_events = $stmt_events->get_result(); // This should come after execute()
 
 // Fetch the results for attended events
 $attendedEvents = [];
 while ($row = $result_events->fetch_assoc()) {
     $attendedEvents[] = $row;
 }
+
+// **Do not close the statement yet** as we need the result set
 
 // Prepare the SQL query to fetch My Events (events created by the user)
 $sql_my_events = "
@@ -63,7 +63,7 @@ $sql_my_events = "
 $stmt_my_events = $conn->prepare($sql_my_events);
 $stmt_my_events->bind_param("i", $uid);  // Bind UID to the query
 $stmt_my_events->execute();
-$result_my_events = $stmt_my_events->get_result();
+$result_my_events = $stmt_my_events->get_result(); // Get the result after execution
 
 // Fetch the results for My Events
 $myEvents = [];
@@ -71,10 +71,12 @@ while ($row = $result_my_events->fetch_assoc()) {
     $myEvents[] = $row;
 }
 
-// Close the events statement and DB connection
+// Close the event statements and DB connection
+$stmt_events->close();
 $stmt_my_events->close();
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
