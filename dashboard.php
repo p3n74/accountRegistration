@@ -70,8 +70,7 @@ while ($row = $result_my_events->fetch_assoc()) {
 }
 
 // Close the events statement and DB connection
-$stmt_events->close();
-$stmt_my_events->close();
+
 $conn->close();
 ?>
 <!DOCTYPE html>
