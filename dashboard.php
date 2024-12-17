@@ -133,6 +133,26 @@ $conn->close();
     .create-event-btn {
       margin-left: 10px;
     }
+    h3 {
+      color: #007BFF;
+    }
+    .btn-primary {
+      background-color: #007BFF;
+      border-color: #007BFF;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #004085;
+    }
+    .alert {
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .alert-info {
+      background-color: #d1ecf1;
+      border-color: #bee5eb;
+      color: #0c5460;
+    }
   </style>
 </head>
 <body>
@@ -168,9 +188,9 @@ $conn->close();
         
         <!-- Left Column (Attended Events) -->
         <div class="table-container-left">
-			<div class="d-flex justify-content-between align-items-center">
-				<h3>Attended Events</h3>
-				<a href="badges.php" class="btn btn-primary">View Collected Badges</a>
+          <div class="d-flex justify-content-between align-items-center">
+            <h3>Attended Events</h3>
+            <a href="badges.php" class="btn btn-primary">View Collected Badges</a>
           </div>
  
           <table class="table table-bordered table-striped">
