@@ -1,4 +1,4 @@
-<?php
+<<?php
 // Start the session
 session_start();
 
@@ -25,11 +25,12 @@ if ($stmt_user->fetch()) {
     // Use a default image if profile picture is not set
     $profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
 } else {
-    // Handle error if no data is found (this block might not be needed in your case)
+    // Handle error if no data is found
     die("User not found.");
 }
 
-// Do not close the user statement just yet; we'll use it later if needed
+// Close the user statement after fetching the results
+$stmt_user->close();
 
 // Prepare the SQL query to fetch attended events
 $sql_events = "
@@ -50,7 +51,9 @@ while ($row = $result_events->fetch_assoc()) {
     $attendedEvents[] = $row;
 }
 
-// **Do not close the statement yet** as we need the result set
+// Close the result set and statement for attended events
+$result_events->free();  // Free the result set
+$stmt_events->close();   // Close the statement
 
 // Prepare the SQL query to fetch My Events (events created by the user)
 $sql_my_events = "
@@ -70,12 +73,12 @@ while ($row = $result_my_events->fetch_assoc()) {
     $myEvents[] = $row;
 }
 
-// **Do not close the statements just yet**
+// Close the result set and statement for my events
+$result_my_events->free();  // Free the result set
+$stmt_my_events->close();   // Close the statement
 
-$stmt_user->close(); // Close the user statement after all queries are done
-$stmt_events->close(); // Close the event statements only after you're done fetching
-$stmt_my_events->close();
-$conn->close(); // Close the database connection last
+// Close the database connection
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
