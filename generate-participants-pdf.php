@@ -1,33 +1,33 @@
 <?php
-// Start output buffering and clean any unexpected output
-ob_start();  // Start output buffering
-ob_end_clean();  // Clean any previous output
+// Start output buffering to prevent unexpected output
+ob_start();
+ob_end_clean();  // Clean any accidental output
 
 // Include TCPDF library
 require_once('tcpdf/tcpdf.php');
 
-// Include database connection
+// Include the database connection
 require_once 'includes/db.php';
 
-// Check if eventid is passed
+// Ensure that eventid is passed
 if (!isset($_GET['eventid'])) {
     die('Event ID is required.');
 }
 
-$eventid = htmlspecialchars($_GET['eventid']);
+$eventid = htmlspecialchars($_GET['eventid']); // Get eventid safely
 
 // Create a new PDF instance
 $pdf = new TCPDF();
 $pdf->AddPage();
 
-// Set document title
+// Set the document title
 $pdf->SetTitle('Participants List');
 
-// Set content
+// Set content font and title
 $pdf->SetFont('helvetica', '', 12);
 $pdf->Cell(0, 10, 'Participants List for Event ID: ' . $eventid, 0, 1, 'C');
 
-// Connect to your database to fetch participant details
+// SQL query to fetch participants from the database
 $sql_participants = "SELECT u.fname, u.lname, u.email, e.join_time, e.leave_time 
                      FROM event_participants e 
                      JOIN user_credentials u ON e.uid = u.uid 
@@ -37,9 +37,9 @@ $stmt->bind_param("i", $eventid);
 $stmt->execute();
 $result_participants = $stmt->get_result();
 
-// Check if there are participants
+// Check if participants are found
 if ($result_participants->num_rows > 0) {
-    // Generate HTML table content for participants
+    // Generate the HTML table content for participants
     $html = '
     <table border="1" cellpadding="5">
         <tr>
@@ -48,8 +48,8 @@ if ($result_participants->num_rows > 0) {
             <th><b>Join Time</b></th>
             <th><b>Leave Time</b></th>
         </tr>';
-    
-    // Loop through participants and add rows to the table
+
+    // Loop through participants and create table rows
     while ($row = $result_participants->fetch_assoc()) {
         $html .= '
         <tr>
@@ -68,11 +68,11 @@ if ($result_participants->num_rows > 0) {
 $pdf->writeHTML($html, true, false, true, false, '');
 
 // Ensure the folder exists and is writable
-$folder_path = __DIR__ . '/eventpdfs/'; 
+$folder_path = __DIR__ . '/eventpdfs/'; // Path to save the PDF
 
-// Check if the folder exists, if not, create it
+// Check if folder exists, and create it if it doesn't
 if (!file_exists($folder_path)) {
-    mkdir($folder_path, 0777, true); // 0777 for full permissions (for testing purposes, use 0755 for production)
+    mkdir($folder_path, 0777, true); // Use 0777 for full permissions (testing), change to 0755 for production
 }
 
 // Check if the folder is writable
@@ -80,14 +80,15 @@ if (!is_writable($folder_path)) {
     die('The folder is not writable. Please check folder permissions.');
 }
 
-// Define the filename using eventid and timestamp
+// Define the filename for the PDF
 $filename = $folder_path . 'participants_' . $eventid . '_' . time() . '.pdf';
 
-// Save PDF to the folder
-$pdf->Output($filename, 'F'); // 'F' means saving to file system
+// Save the PDF to the server
+$pdf->Output($filename, 'F');  // 'F' means save the file to the file system
 
-// Optionally, also output the PDF to the browser for download
-$pdf->Output(basename($filename), 'D'); // 'D' means download to user
+// Provide the download link
+echo 'The PDF has been generated. <a href="eventpdfs/' . basename($filename) . '" download>Click here to download the PDF.</a>';
+
 exit;
 ?>
 
