@@ -167,8 +167,8 @@ $conn->close();
     }
     .sidebar {
       min-height: 100vh;
-      background-color: #343a40;
-      color: white;
+      background-color: #f8f9fa;
+      color: black;
       padding-top: 20px;
     }
     .sidebar img {
@@ -181,11 +181,11 @@ $conn->close();
       margin-bottom: 15px;
     }
     .sidebar .nav-link {
-      color: white;
+      color: black;
       font-weight: bold;
     }
     .sidebar .nav-link:hover {
-      color: #ffc107;
+      color: #007bff;
     }
     .main-content {
       padding: 30px;
@@ -276,7 +276,7 @@ $conn->close();
             <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
           </div>
 
-          <button type="submit" class="btn btn-warning btn-custom">Update Email</button>
+          <button type="submit" class="btn btn-primary btn-custom">Update Email</button>
         </form>
       </div>
 
@@ -284,18 +284,19 @@ $conn->close();
       <div class="form-container">
         <form action="settings.php" method="POST" enctype="multipart/form-data">
           <div class="mb-3">
-            <label for="profilepicture" class="form-label">Profile Picture</label>
-            <input type="file" class="form-control" id="profilepicture" name="profilepicture" accept="image/*">
+            <label for="profilepicture" class="form-label">Upload Profile Picture</label>
+            <input type="file" class="form-control" id="profilepicture" name="profilepicture">
           </div>
 
-          <button type="submit" class="btn btn-info btn-custom">Upload Picture</button>
+          <button type="submit" class="btn btn-primary btn-custom">Upload Picture</button>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
 
