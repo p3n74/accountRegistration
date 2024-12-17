@@ -181,7 +181,7 @@ $conn->close();
               <input type="text" class="form-control" id="eventkey" name="eventkey" required>
             </div>
             <div class="col-md-6">
-              <label for="eventshortinfo" class="form-label">Event Short Info</label>
+              <label for="eventshortinfo" class="form-label">Event Link</label>
               <input type="text" class="form-control" id="eventshortinfo" name="eventshortinfo" required>
             </div>
           </div>
@@ -192,7 +192,7 @@ $conn->close();
           </div>
 
           <div class="mb-3">
-            <label for="eventinfo" class="form-label">Event Info (PDF or file)</label>
+            <label for="eventinfo" class="form-label">Event Cetrificate(PDF or file)</label>
             <input type="file" class="form-control" id="eventinfo" name="eventinfo">
           </div>
 
