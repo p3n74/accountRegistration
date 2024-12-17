@@ -54,30 +54,45 @@ if (isset($_GET['token']) && isset($_GET['event'])) {
                     // The user is already in the event, check if join_time and leave_time are NULL
                     $event_row = $event_result->fetch_assoc();
 
-                    if (is_null($event_row['join_time']) && is_null($event_row['leave_time'])) {
-                        // If both join_time and leave_time are NULL, insert the current timestamp into join_time
-                        $update_sql = "UPDATE event_participants SET join_time = NOW() WHERE eventid = ? AND uid = ?";
-                        $update_stmt = $conn->prepare($update_sql);
-                        $update_stmt->bind_param("ii", $eventid, $uid);
-                        $update_stmt->execute();
-                        echo "<div class='alert alert-success mt-4'>Join time recorded successfully! You are now officially part of the event.</div>";
-                    } elseif (!is_null($event_row['join_time']) && is_null($event_row['leave_time'])) {
-                        // If join_time exists and leave_time is NULL, insert the current timestamp into leave_time
-                        $update_sql = "UPDATE event_participants SET leave_time = NOW() WHERE eventid = ? AND uid = ?";
-                        $update_stmt = $conn->prepare($update_sql);
-                        $update_stmt->bind_param("ii", $eventid, $uid);
-                        $update_stmt->execute();
-                        echo "<div class='alert alert-success mt-4'>Leave time recorded successfully! You have successfully left the event.</div>";
+                    if (isset($_POST['action']) && $_POST['action'] == 'leave') {
+                        // If the user clicked 'Leave', check if the user has joined but not yet left
+                        if (!is_null($event_row['join_time']) && is_null($event_row['leave_time'])) {
+                            // Insert the current timestamp into leave_time
+                            $update_sql = "UPDATE event_participants SET leave_time = NOW() WHERE eventid = ? AND uid = ?";
+                            $update_stmt = $conn->prepare($update_sql);
+                            $update_stmt->bind_param("ii", $eventid, $uid);
+                            $update_stmt->execute();
+                            echo "<div class='alert alert-success mt-4'>Leave time recorded successfully! You have successfully left the event.</div>";
+                        } else {
+                            echo "<div class='alert alert-info mt-4'>You have not joined the event or already left the event.</div>";
+                        }
                     } else {
-                        echo "<div class='alert alert-info mt-4'>You have already recorded both your join and leave times.</div>";
+                        // If the user clicked 'Join', check if join_time is NULL
+                        if (is_null($event_row['join_time']) && is_null($event_row['leave_time'])) {
+                            // Insert the current timestamp into join_time
+                            $update_sql = "UPDATE event_participants SET join_time = NOW() WHERE eventid = ? AND uid = ?";
+                            $update_stmt = $conn->prepare($update_sql);
+                            $update_stmt->bind_param("ii", $eventid, $uid);
+                            $update_stmt->execute();
+                            echo "<div class='alert alert-success mt-4'>Join time recorded successfully! You are now officially part of the event.</div>";
+                        } elseif (!is_null($event_row['join_time']) && is_null($event_row['leave_time'])) {
+                            echo "<div class='alert alert-info mt-4'>You have already joined the event but not left it.</div>";
+                        } else {
+                            echo "<div class='alert alert-info mt-4'>You have already joined and left the event.</div>";
+                        }
                     }
                 } else {
-                    // User is not in the event, insert a new record with join_time
-                    $insert_sql = "INSERT INTO event_participants (eventid, uid, join_time, token) VALUES (?, ?, NOW(), ?)";
-                    $insert_stmt = $conn->prepare($insert_sql);
-                    $insert_stmt->bind_param("iis", $eventid, $uid, $token);
-                    $insert_stmt->execute();
-                    echo "<div class='alert alert-success mt-4'>Welcome! You've successfully joined the event.</div>";
+                    // User is not in the event, check if action is 'join'
+                    if (isset($_POST['action']) && $_POST['action'] == 'join') {
+                        // Insert a new record with join_time
+                        $insert_sql = "INSERT INTO event_participants (eventid, uid, join_time, token) VALUES (?, ?, NOW(), ?)";
+                        $insert_stmt = $conn->prepare($insert_sql);
+                        $insert_stmt->bind_param("iis", $eventid, $uid, $token);
+                        $insert_stmt->execute();
+                        echo "<div class='alert alert-success mt-4'>Welcome! You've successfully joined the event.</div>";
+                    } else {
+                        echo "<div class='alert alert-info mt-4'>You are not part of the event yet. You need to join first.</div>";
+                    }
                 }
 
                 // Generate a new token and update currboundtoken and creationtime
@@ -104,7 +119,7 @@ if (isset($_GET['token']) && isset($_GET['event'])) {
                     <div class="col-12 col-sm-8 col-md-6 col-lg-4">
                         <div class="card">
                             <div class="card-header">
-                                <h3>Enter Password to Join Event</h3>
+                                <h3>Enter Password to Join or Leave Event</h3>
                             </div>
                             <div class="card-body">
                                 <form method="POST">
@@ -112,7 +127,10 @@ if (isset($_GET['token']) && isset($_GET['event'])) {
                                         <label for="password">Password</label>
                                         <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                                    <div class="form-group mt-3">
+                                        <button type="submit" name="action" value="join" class="btn btn-primary btn-block">Join Event</button>
+                                        <button type="submit" name="action" value="leave" class="btn btn-danger btn-block mt-2">Leave Event</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
