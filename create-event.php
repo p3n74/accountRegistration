@@ -34,7 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $startdate = $_POST['startdate'];
     $enddate = $_POST['enddate'];
     $location = $_POST['location'];
-    $eventdetails = $_POST['eventdetails'];
     $eventkey = $_POST['eventkey'];
     $eventshortinfo = $_POST['eventshortinfo'];
 
@@ -68,11 +67,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
+    // Set participantcount to 0 if not set
+    $participantcount = 0;
+
     // Insert the event into the database
-    $sql = "INSERT INTO events (eventname, startdate, enddate, location, eventinfopath, eventbadgepath, eventcreator, eventkey, eventshortinfo)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO events (eventname, startdate, enddate, location, eventinfopath, eventbadgepath, eventcreator, eventkey, eventshortinfo, participantcount)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("ssssssiss", $eventname, $startdate, $enddate, $location, $eventinfopath, $eventbadgepath, $uid, $eventkey, $eventshortinfo);
+        $stmt->bind_param("ssssssissi", $eventname, $startdate, $enddate, $location, $eventinfopath, $eventbadgepath, $uid, $eventkey, $eventshortinfo, $participantcount);
         if ($stmt->execute()) {
             // Redirect to the dashboard or another page after successful creation
             header("Location: dashboard.php");
@@ -87,7 +89,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Close DB connection
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
