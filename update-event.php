@@ -88,8 +88,7 @@ $conn->close();
     /* Sidebar and form styling */
     .sidebar {
       min-height: 100vh;
-      background-color: #343a40;
-      color: white;
+      background-color: #f8f9fa;
       padding-top: 20px;
     }
     .sidebar img {
@@ -97,13 +96,6 @@ $conn->close();
       height: 60px;
       border-radius: 50%;
       margin-bottom: 20px;
-    }
-    .sidebar .nav-link {
-      color: white;
-      font-weight: bold;
-    }
-    .sidebar .nav-link:hover {
-      color: #ffc107;
     }
     .main-content {
       padding: 30px;
