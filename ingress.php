@@ -1,7 +1,9 @@
 <?php
-
 // Include the database connection file
 require 'includes/db.php'; // This will include the db.php file with the $conn variable
+
+// Add Bootstrap CSS (if not already included)
+echo '<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">';
 
 // Check if 'token' and 'event' are passed in the URL query string
 if (isset($_GET['token']) && isset($_GET['event'])) {
@@ -27,7 +29,7 @@ if (isset($_GET['token']) && isset($_GET['event'])) {
 
         // Check if the token is older than 10 minutes
         if (($current_time - $creationtime) > 600) { // 600 seconds = 10 minutes
-            echo "Token Is Expired";
+            echo "<div class='alert alert-danger mt-4'>The token has expired. Please try again.</div>";
             exit(); // Stop further script execution
         }
 
@@ -55,16 +57,16 @@ if (isset($_GET['token']) && isset($_GET['event'])) {
                         $update_stmt = $conn->prepare($update_sql);
                         $update_stmt->bind_param("ii", $eventid, $uid);
                         $update_stmt->execute();
-                        echo "Join time recorded successfully.";
+                        echo "<div class='alert alert-success mt-4'>Join time recorded successfully! You are now officially part of the event.</div>";
                     } elseif (!is_null($event_row['join_time']) && is_null($event_row['leave_time'])) {
                         // If join_time exists and leave_time is NULL, insert the current timestamp into leave_time
                         $update_sql = "UPDATE event_participants SET leave_time = NOW() WHERE eventid = ? AND uid = ?";
                         $update_stmt = $conn->prepare($update_sql);
                         $update_stmt->bind_param("ii", $eventid, $uid);
                         $update_stmt->execute();
-                        echo "Leave time recorded successfully.";
+                        echo "<div class='alert alert-success mt-4'>Leave time recorded successfully! You have successfully left the event.</div>";
                     } else {
-                        echo "Event participant already updated.";
+                        echo "<div class='alert alert-info mt-4'>You have already recorded both your join and leave times.</div>";
                     }
                 } else {
                     // User is not in the event, insert a new record with join_time
@@ -72,7 +74,7 @@ if (isset($_GET['token']) && isset($_GET['event'])) {
                     $insert_stmt = $conn->prepare($insert_sql);
                     $insert_stmt->bind_param("iis", $eventid, $uid, $token);
                     $insert_stmt->execute();
-                    echo "User added to the event with join time.";
+                    echo "<div class='alert alert-success mt-4'>Welcome! You've successfully joined the event.</div>";
                 }
 
                 // Generate a new token and update currboundtoken and creationtime
@@ -86,24 +88,36 @@ if (isset($_GET['token']) && isset($_GET['event'])) {
                 $update_user_stmt->execute();
 
                 // Optionally, you can return the new token to the user
-                echo "<br>New Token: " . $localToken;
+                echo "<div class='alert alert-info mt-4'>A new token has been generated: " . $localToken . "</div>";
             } else {
                 // Incorrect password
-                echo "Incorrect password.";
+                echo "<div class='alert alert-danger mt-4'>Incorrect password. Please try again.</div>";
             }
         } else {
-            // Display the password form
-            echo '<form method="POST">
-                    <label for="password">Enter your password:</label>
-                    <input type="password" name="password" id="password" required>
-                    <input type="submit" value="Submit">
-                  </form>';
+            // Display the password form inside a card for a better user experience
+            echo '
+            <div class="container mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Enter Password to Join Event</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>';
         }
     } else {
-        echo "Token Invalid Or Expired";
+        echo "<div class='alert alert-danger mt-4'>The token is invalid or has expired. Please try again.</div>";
     }
 } else {
-    echo "Token or Event ID is missing";
+    echo "<div class='alert alert-danger mt-4'>Token or Event ID is missing from the URL. Please provide the required information.</div>";
 }
 
 ?>
