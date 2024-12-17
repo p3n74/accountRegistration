@@ -91,7 +91,7 @@ if (isset($_GET['token']) && isset($_GET['event'])) {
                 $update_user_stmt->execute();
 
                 // Optionally, you can return the new token to the user
-                echo "<div class='alert alert-info mt-4'>A new token has been generated: " . $localToken . "</div>";
+                echo "<div class='alert alert-info mt-4'>A new token has been generated: Return to the Registration desk to sign out</div>";
             } else {
                 // Incorrect password
                 echo "<div class='alert alert-danger mt-4'>Incorrect password. Please try again.</div>";
