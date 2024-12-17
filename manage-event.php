@@ -112,26 +112,26 @@ $result_participants = $stmt_participants->get_result();
       </ul>
     </div>
 
-    <!-- Main Content -->
-    <div class="col-md-9 col-lg-10 p-3">
-      <h2>Manage Event: <?php echo htmlspecialchars($eventname); ?></h2>
+		<!-- Main Content -->
+	<div class="col-md-9 col-lg-10 p-3">
+	  <h2>Manage Event: <?php echo htmlspecialchars($eventname); ?></h2>
 
-      <div class="two-columns">
-        <!-- Event Details -->
-        <div class="table-container">
-          <h4>Event Details</h4>
-          <table class="table table-bordered">
-            <tr><th>Name</th><td><?php echo htmlspecialchars($eventname); ?></td></tr>
-            <tr><th>Start Date</th><td><?php echo htmlspecialchars($startdate); ?></td></tr>
-            <tr><th>End Date</th><td><?php echo htmlspecialchars($enddate); ?></td></tr>
-            <tr><th>Location</th><td><?php echo htmlspecialchars($location); ?></td></tr>
-            <tr><th>Event Key</th><td><?php echo htmlspecialchars($eventkey); ?></td></tr>
-            <tr><th>Event Link</th><td><a href="<?php echo htmlspecialchars($eventshortinfo); ?>" target="_blank">Visit Link</a></td></tr>
-          </table>
-        </div>
-
-       <!-- Participants List Table -->
+	  <div class="two-columns d-flex gap-3">
+		<!-- Event Details -->
 		<div class="table-container">
+		  <h4>Event Details</h4>
+		  <table class="table table-bordered">
+			<tr><th>Name</th><td><?php echo htmlspecialchars($eventname); ?></td></tr>
+			<tr><th>Start Date</th><td><?php echo htmlspecialchars($startdate); ?></td></tr>
+			<tr><th>End Date</th><td><?php echo htmlspecialchars($enddate); ?></td></tr>
+			<tr><th>Location</th><td><?php echo htmlspecialchars($location); ?></td></tr>
+			<tr><th>Event Key</th><td><?php echo htmlspecialchars($eventkey); ?></td></tr>
+			<tr><th>Event Link</th><td><a href="<?php echo htmlspecialchars($eventshortinfo); ?>" target="_blank">Visit Link</a></td></tr>
+		  </table>
+		</div>
+
+		<!-- Participants List -->
+		<div class="table-container w-100">
 		  <h4>Participants</h4>
 		  <table class="table table-striped">
 			<thead>
@@ -153,24 +153,26 @@ $result_participants = $stmt_participants->get_result();
 			  <?php endwhile; ?>
 			</tbody>
 		  </table>
-		</div>
 
-		<!-- Download Button Outside the Two-Column Layout -->
-		<div class="mt-3 text-center">
-		  <form action="generate-participants-pdf.php" method="GET" target="_blank">
-			<input type="hidden" name="eventid" value="<?php echo htmlspecialchars($eventid); ?>">
-			<button type="submit" class="btn btn-primary">
-			  Download Participants List as PDF
-			</button>
-		  </form>
-		</div>     
-		<!-- Action Buttons -->
-		<div class="mt-4">
-		  <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning btn-custom">Edit Event</a>
-		  <form method="POST" class="d-inline">
-			<button type="submit" name="delete_event" class="btn btn-danger btn-custom">Delete Event</button>
-		  </form>
+		  <!-- Download Button Under the Table -->
+		  <div class="mt-3 text-center">
+			<form action="generate-participants-pdf.php" method="GET" target="_blank">
+			  <input type="hidden" name="eventid" value="<?php echo htmlspecialchars($eventid); ?>">
+			  <button type="submit" class="btn btn-primary">
+				Download Participants List as PDF
+			  </button>
+			</form>
+		  </div>
 		</div>
+	  </div>
+
+	  <!-- Action Buttons (Edit and Delete) -->
+	  <div class="mt-4">
+		<a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning btn-custom">Edit Event</a>
+		<form method="POST" class="d-inline">
+		  <button type="submit" name="delete_event" class="btn btn-danger btn-custom">Delete Event</button>
+		</form>
+	  </div>
 	</div>
   </div>
 
