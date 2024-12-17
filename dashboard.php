@@ -97,8 +97,7 @@ $conn->close();
       padding-top: 20px;
     }
     .sidebar img {
-  
-	  width: 60px;
+      width: 60px;
       height: 60px;
       border-radius: 50%;
       margin-bottom: 20px;
@@ -194,31 +193,31 @@ $conn->close();
             <a href="create-event.php" class="btn btn-primary">Create Event</a>
           </div>
           <!-- Table of Events -->
-			<table class="table table-striped">
-			  <thead>
-				<tr>
-				  <th scope="col">Event Name</th>
-				  <th scope="col">Start Date</th>
-				  <th scope="col">End Date</th>
-				  <th scope="col">Location</th>
-				  <th scope="col">Actions</th>
-				</tr>
-			  </thead>
-			  <tbody>
-				<?php while ($stmt_events->fetch()): ?>
-				  <tr>
-					<td><?php echo htmlspecialchars($eventname); ?></td>
-					<td><?php echo htmlspecialchars($startdate); ?></td>
-					<td><?php echo htmlspecialchars($enddate); ?></td>
-					<td><?php echo htmlspecialchars($location); ?></td>
-					<td>
-					  <a href="manage_event.php?eventid=<?php echo $eventid; ?>" class="btn btn-primary btn-sm">Manage</a>
-					</td>
-				  </tr>
-				<?php endwhile; ?>
-			  </tbody>
-			</table>
-		</div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Event Name</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Location</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($myEvents as $event): ?>
+                <tr>
+                  <td><?php echo htmlspecialchars($event['eventname']); ?></td>
+                  <td><?php echo htmlspecialchars($event['startdate']); ?></td>
+                  <td><?php echo htmlspecialchars($event['enddate']); ?></td>
+                  <td><?php echo htmlspecialchars($event['location']); ?></td>
+                  <td>
+                    <a href="manage_event.php?eventid=<?php echo $event['eventid']; ?>" class="btn btn-primary btn-sm">Manage</a>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
 
       </div>
 
