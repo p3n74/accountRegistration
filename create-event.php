@@ -183,7 +183,7 @@ $conn->close();
             </div>
             <div class="col-md-6">
               <label for="eventshortinfo" class="form-label">Event Link</label>
-              <input type="text" class="form-control" id="eventshortinfo" name="eventshortinfo" required>
+              <input type="text" class="form-control" id="eventshortinfo" name="eventshortinfo">
             </div>
           </div>
 
