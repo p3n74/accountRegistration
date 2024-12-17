@@ -1,6 +1,6 @@
 <?php
 // Include the database connection file
-require "../db.php"; // Replace with actual path to your db connection file
+require "includes/db.php"; // Replace with actual path to your db connection file
 
 // Initialize variables
 $searchError = "";
