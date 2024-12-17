@@ -1,195 +1,207 @@
 <?php
-// Include the database connection file
-require "includes/db.php"; // Replace with actual path to your db connection file
+// Start the session
+session_start();
 
-// Initialize variables
-$searchError = "";
-$userDetails = null; // To store the queried user details
-$selectedUserId = null;
-$eventStatusButton = ""; // Variable to hold the button status
-$userEventStatus = null; // Store user event status (0, 1, or 2)
-$localToken = ''; // Store the generated token (if any)
+// Check if user is logged in by checking session for UID
+if (!isset($_SESSION['uid'])) {
+    die("You must log in first.");
+}
 
-$eventid = $_SESSION['eventid'];  // Assuming you have the event ID stored in session
+// Include database connection
+require_once 'includes/db.php';
 
-// Handle the search query
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['searchName'])) {
-    // Sanitize user input
-    $searchInput = trim($_POST['searchName']);
-    $names = explode(" ", $searchInput);
+// Retrieve UID from session
+$uid = $_SESSION['uid'];
 
-    // Ensure at least first and last name are provided
-    if (count($names) < 2) {
-        $searchError = "Please enter both first and last name.";
+// Query to fetch user details (name, email, profile picture) based on UID
+$sql_user = "SELECT fname, mname, lname, email, profilepicture FROM user_credentials WHERE uid = ?";
+$stmt_user = $conn->prepare($sql_user);
+$stmt_user->bind_param("i", $uid);  // Bind UID to the query
+$stmt_user->execute();
+$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture);  // Bind the result to variables
+$stmt_user->fetch();  // Fetch the data into the variables
+
+// Use a default image if profile picture is not set
+$profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
+
+// Handle the form submission for profile update
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == 'update_settings') {
+    $new_fname = $_POST['fname'];
+    $new_mname = $_POST['mname'];
+    $new_lname = $_POST['lname'];
+    $new_email = $_POST['email'];
+    $new_password = $_POST['password'];
+
+    // Validate email
+    if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
+        $error_message = "Invalid email format.";
+    }
+
+    // If password is provided, hash it
+    if (!empty($new_password)) {
+        $new_password = password_hash($new_password, PASSWORD_BCRYPT);
     } else {
-        $fname = $names[0];
-        $lname = $names[1];
+        $new_password = null;  // Don't change password if not provided
+    }
 
-        // Query the user based on first and last name
-        $stmt = $conn->prepare("SELECT uid, fname, lname, email FROM user_credentials WHERE fname = ? AND lname = ?");
-        $stmt->bind_param("ss", $fname, $lname);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    if (!isset($error_message)) {
+        // Prepare the SQL query to update user details
+        $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ?, email = ?, password = ? WHERE uid = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bind_param("sssssi", $new_fname, $new_mname, $new_lname, $new_email, $new_password, $uid);
+        $stmt_update->execute();
 
-        if ($result && $result->num_rows > 0) {
-            $userDetails = $result->fetch_assoc();
-            $selectedUserId = $userDetails['uid'];  // Store selected user ID
-
-            // Query the event_participants table to check if the user has joined the event
-            $eventQuery = $conn->prepare("SELECT join_time, leave_time FROM event_participants WHERE uid = ? AND eventid = ?");
-            $eventQuery->bind_param("ii", $selectedUserId, $eventid);
-            $eventQuery->execute();
-            $eventResult = $eventQuery->get_result();
-
-            // Check if the user is part of the event participants
-            if ($eventResult && $eventResult->num_rows > 0) {
-                // User has joined the event, now check their join and leave times
-                $eventData = $eventResult->fetch_assoc();
-                $joinTime = $eventData['join_time'];
-                $leaveTime = $eventData['leave_time'];
-
-                if (is_null($joinTime) && is_null($leaveTime)) {
-                    // User has not joined yet
-                    $userEventStatus = 0; // Join Event
-                } elseif (!is_null($joinTime) && is_null($leaveTime)) {
-                    // User has joined but not left yet
-                    $userEventStatus = 1; // Leave Event
-                } else {
-                    // User has both joined and left
-                    $userEventStatus = 2; // Already attended
-                }
-            } else {
-                // User has not joined the event
-                $userEventStatus = 0; // Join Event
-            }
+        // Check if the update was successful
+        if ($stmt_update->affected_rows > 0) {
+            $success_message = "Your details have been updated successfully.";
         } else {
-            // User not found in the database
-            $searchError = "User not found.";
+            $error_message = "No changes were made or an error occurred.";
+        }
+
+        $stmt_update->close();
+    }
+}
+
+// Handle the file upload for profile picture
+if (isset($_FILES['profilepicture']) && $_FILES['profilepicture']['error'] == 0) {
+    $uploadDir = 'profilePictures/';
+    $fileName = $_FILES['profilepicture']['name'];
+    $fileTmpName = $_FILES['profilepicture']['tmp_name'];
+    $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+
+    // Create a new file name: uid_fname_mname_lname.extension
+    $newFileName = $uid . "_" . $fname . "_" . $mname . "_" . $lname . "." . $fileExtension;
+    $newFilePath = $uploadDir . $newFileName;
+
+    // Validate the file type (optional)
+    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+    if (!in_array($fileExtension, $allowedExtensions)) {
+        $error_message = "Invalid file type. Only JPG, PNG, and GIF are allowed.";
+    } else {
+        // Move the uploaded file to the profilePictures folder
+        if (move_uploaded_file($fileTmpName, $newFilePath)) {
+            // Update the profile picture in the database
+            $sql_update_pic = "UPDATE user_credentials SET profilepicture = ? WHERE uid = ?";
+            $stmt_update_pic = $conn->prepare($sql_update_pic);
+            $stmt_update_pic->bind_param("si", $newFilePath, $uid);
+            $stmt_update_pic->execute();
+
+            if ($stmt_update_pic->affected_rows > 0) {
+                $success_message = "Profile picture updated successfully.";
+            } else {
+                $error_message = "Error updating profile picture.";
+            }
+            $stmt_update_pic->close();
+        } else {
+            $error_message = "Error uploading the profile picture.";
         }
     }
 }
 
-// Logic to generate a token (for demonstration, it could be more complex)
-if ($userDetails && $userEventStatus !== null) {
-    $localToken = bin2hex(random_bytes(32)); 
-    $tokenCreationTime = date('Y-m-d H:i:s'); // Set the current time as token creation time
-
-    // Update the token and creation time in the database
-    $updateTokenStmt = $conn->prepare("UPDATE user_credentials SET currboundtoken = ?, creationtime = ? WHERE uid = ?");
-    $updateTokenStmt->bind_param("ssi", $localToken, $tokenCreationTime, $selectedUserId);
-    $updateTokenStmt->execute();
-}
+$conn->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search User</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../style.css" rel="stylesheet">
-
-    <!-- Include the necessary jQuery and Bootstrap JS for modal -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        // Function to open the modal with the QR code using the QR Server API
-        function showQRCode(eventid, token) {
-            event.preventDefault(); // Prevent form submission and page refresh
-
-            // Construct the URL with token and event parameters
-            const url = `https://accounts.dcism.org/accountRegistration/ingress.php?token=${token}&event=${eventid}`;
-
-            // Encode the URL to ensure proper handling of special characters
-            const encodedUrl = encodeURIComponent(url);
-
-            // Generate the QR code URL by passing the encoded URL
-            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodedUrl}`;
-
-            // Set the QR code URL to the image inside the modal
-            $('#qrCodeModal img').attr('src', qrCodeUrl);
-
-            // Show the modal
-            $('#qrCodeModal').modal('show');
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Custom CSS for the layout */
+    .sidebar {
+      min-height: 100vh;
+      background-color: #f8f9fa;
+      padding-top: 20px;
+    }
+    .sidebar img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+    }
+    .form-container {
+      padding: 20px;
+    }
+  </style>
 </head>
 <body>
-    <section class="vh-100 gradient-custom">
-        <div class="container py-5 h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                    <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                        <div class="card-body p-5 text-center">
-                            <h2 class="fw-bold mb-4 text-uppercase">Search User</h2>
-                            
-                            <!-- Search Form -->
-                            <form method="POST" action="">
-                                <div class="form-outline form-white mb-4">
-                                    <input type="text" name="searchName" class="form-control form-control-lg" placeholder="Enter First and Last Name" autocomplete="off" required />
-                                </div>
-                                <button class="btn btn-outline-light btn-lg px-5" type="submit">Search</button>
-                            </form>
-
-                            <!-- Error Message -->
-                            <?php if ($searchError): ?>
-                                <div class="alert alert-danger mt-3"><?php echo $searchError; ?></div>
-                            <?php endif; ?>
-
-                            <!-- Display User Details -->
-                            <?php if ($userDetails): ?>
-                                <div class="mt-4">
-                                    <h4>Is This You?:</h4>
-                                    <p><strong>Name:</strong> <?php echo htmlspecialchars($userDetails['fname'] . " " . $userDetails['lname']); ?></p>
-                                    <p><strong>Email:</strong> <?php echo htmlspecialchars($userDetails['email']); ?></p>
-                                    
-                                    <!-- Confirmation Form -->
-                                    <form method="POST" action="">
-                                        <input type="hidden" name="userId" value="<?php echo $userDetails['uid']; ?>" />
-
-                                        <!-- Button logic based on user event status -->
-                                        <?php if ($userEventStatus === 0): ?>
-                                            <button class="btn btn-primary" 
-                                                    onclick="showQRCode('<?php echo $eventid; ?>', '<?php echo $localToken; ?>')">Join Event</button>
-                                        <?php elseif ($userEventStatus === 1): ?>
-                                            <button class="btn btn-danger" 
-                                                    onclick="showQRCode('<?php echo $eventid?>', '<?php echo $localToken; ?>')">Leave Event</button>
-                                        <?php elseif ($userEventStatus === 2): ?>
-                                            <button class="btn btn-secondary" disabled>You have already attended</button>
-                                        <?php endif; ?>
-                                    </form>                                </div>
-                            <?php endif; ?>
-
-                            <!-- Display Local Token if available -->
-                            <?php if (!empty($localToken)): ?>
-                                <div class="alert alert-info mt-4">
-                                    <strong>Token:</strong> <?php echo htmlspecialchars($localToken); ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Modal for QR Code -->
-    <div class="modal fade" id="qrCodeModal" tabindex="-1" aria-labelledby="qrCodeModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="qrCodeModalLabel">QR Code for Registration</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <img src="" alt="QR Code" class="img-fluid" />
-                </div>
-            </div>
-        </div>
+  <div class="d-flex">
+    <!-- Sidebar with profile information -->
+    <div class="sidebar col-md-3 col-lg-2 p-3">
+      <div class="text-center">
+        <!-- Display profile picture -->
+        <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
+        <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
+        <p><?php echo htmlspecialchars($email); ?></p>
+      </div>
+      <hr>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.php">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="settings.php">Settings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="logout.php">Logout</a>
+        </li>
+      </ul>
     </div>
+
+    <!-- Main content (Settings form) -->
+    <div class="col-md-9 col-lg-10 p-3 form-container">
+      <h2>Settings</h2>
+      
+      <?php if (isset($error_message)): ?>
+        <div class="alert alert-danger"><?php echo $error_message; ?></div>
+      <?php elseif (isset($success_message)): ?>
+        <div class="alert alert-success"><?php echo $success_message; ?></div>
+      <?php endif; ?>
+      
+      <form action="settings.php" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="action" value="update_settings">
+
+        <div class="mb-3">
+          <label for="fname" class="form-label">First Name</label>
+          <input type="text" class="form-control" id="fname" name="fname" value="<?php echo htmlspecialchars($fname); ?>" required>
+        </div>
+        
+        <div class="mb-3">
+          <label for="mname" class="form-label">Middle Name</label>
+          <input type="text" class="form-control" id="mname" name="mname" value="<?php echo htmlspecialchars($mname); ?>">
+        </div>
+
+        <div class="mb-3">
+          <label for="lname" class="form-label">Last Name</label>
+          <input type="text" class="form-control" id="lname" name="lname" value="<?php echo htmlspecialchars($lname); ?>" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">New Password (Leave blank to keep current password)</label>
+          <input type="password" class="form-control" id="password" name="password">
+        </div>
+
+        <div class="mb-3">
+          <label for="profilepicture" class="form-label">Profile Picture</label>
+          <input type="file" class="form-control" id="profilepicture" name="profilepicture">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Update</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
-
 
