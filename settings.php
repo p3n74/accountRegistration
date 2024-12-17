@@ -38,29 +38,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == 'update_setting
         $error_message = "Invalid email format.";
     }
 
-    // If password is provided, hash it
+    // Initialize SQL to update user details
+    $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ?, email = ?";
+
+    // If password is provided, hash it and add to the query
     if (!empty($new_password)) {
         $new_password = password_hash($new_password, PASSWORD_BCRYPT);
-    } else {
-        $new_password = null;  // Don't change password if not provided
+        $sql_update .= ", password = ?";  // Add password field to update query
     }
 
-    if (!isset($error_message)) {
-        // Prepare the SQL query to update user details
-        $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ?, email = ?, password = ? WHERE uid = ?";
-        $stmt_update = $conn->prepare($sql_update);
+    $sql_update .= " WHERE uid = ?";  // Add WHERE clause to the query
+    $stmt_update = $conn->prepare($sql_update);
+
+    // Bind parameters (check if password exists)
+    if (!empty($new_password)) {
         $stmt_update->bind_param("sssssi", $new_fname, $new_mname, $new_lname, $new_email, $new_password, $uid);
-        $stmt_update->execute();
-
-        // Check if the update was successful
-        if ($stmt_update->affected_rows > 0) {
-            $success_message = "Your details have been updated successfully.";
-        } else {
-            $error_message = "No changes were made or an error occurred.";
-        }
-
-        $stmt_update->close();
+    } else {
+        $stmt_update->bind_param("ssssi", $new_fname, $new_mname, $new_lname, $new_email, $uid);
     }
+    $stmt_update->execute();
+
+    // Check if the update was successful
+    if ($stmt_update->affected_rows > 0) {
+        $success_message = "Your details have been updated successfully.";
+    } else {
+        $error_message = "No changes were made or an error occurred.";
+    }
+
+    $stmt_update->close();
 }
 
 // Handle the file upload for profile picture
