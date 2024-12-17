@@ -18,6 +18,7 @@ $sql_user = "SELECT fname, mname, lname, email, profilepicture FROM user_credent
 $stmt_user = $conn->prepare($sql_user);
 $stmt_user->bind_param("i", $uid);  // Bind UID to the query
 $stmt_user->execute();
+$stmt_user->store_result();  // Store the result set to avoid "Commands out of sync" error
 $stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture);  // Bind the result to variables
 $stmt_user->fetch();  // Fetch the data into the variables
 
