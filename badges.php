@@ -92,14 +92,19 @@ $conn->close();
       margin-bottom: 20px;
     }
     .badge-card {
-      width: 100%;
       margin-bottom: 20px;
+      margin-right: 20px;
     }
     .badge-img {
       width: 100%;
-      height: 200px;
-      object-fit: cover;
+      height: 500px; /* Set the height to 500px */
+      object-fit: contain; /* Ensure the image fits within the 500x500 space */
       border-bottom: 1px solid #ddd;
+    }
+    .badge-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
     }
   </style>
 </head>
@@ -132,7 +137,7 @@ $conn->close();
       <h2>Badges</h2>
 
       <!-- Display attended events as cards in two columns -->
-      <div class="row">
+      <div class="badge-container">
         <?php
         // Check if there are any attended events
         if (empty($attendedEvents)) {
@@ -140,9 +145,9 @@ $conn->close();
         } else {
             // Loop through the attended events array and display them as cards
             foreach ($attendedEvents as $event) {
-                echo '<div class="col-md-6 col-lg-4">';
-                echo '<div class="card badge-card">';
-                
+                echo '<div class="col-md-6 col-lg-4 badge-card">';
+                echo '<div class="card">';
+
                 // Display badge image (if available)
                 if (!empty($event['eventbadgepath'])) {
                     echo '<img src="' . htmlspecialchars($event['eventbadgepath']) . '" class="card-img-top badge-img" alt="Event Badge">';
@@ -156,7 +161,7 @@ $conn->close();
                 echo '<div class="card-body">';
                 echo '<h5 class="card-title">' . htmlspecialchars($event['eventname']) . '</h5>';
                 echo '</div>';
-                
+
                 echo '</div>';
                 echo '</div>';
             }
