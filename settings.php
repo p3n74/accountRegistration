@@ -165,7 +165,6 @@ $conn->close();
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-
     /* Custom CSS for the layout */
     .sidebar {
       min-height: 100vh;
@@ -178,51 +177,22 @@ $conn->close();
       border-radius: 50%;
       margin-bottom: 20px;
     }
-    .table-container {
-      padding: 20px;
-    }
-    .two-columns {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;  /* Adds space between the tables */
-    }
-    .table-container-left,
-    .table-container-right {
-      width: 48%;  /* Equal width for both tables */
-      padding: 20px;
+    .form-container {
+      padding: 30px;
+      margin: 30px auto;
+      max-width: 800px;
       background-color: #f8f9fa;
-      border-radius: 5px;
+      border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .create-event-btn {
-      margin-left: 10px;
-    }
-    h3 {
-      color: #007BFF;
-    }
-    .btn-primary {
-      background-color: #007BFF;
-      border-color: #007BFF;
-    }
-    .btn-primary:hover {
-      background-color: #0056b3;
-      border-color: #004085;
-    }
-    .alert {
-      padding: 15px;
-      border-radius: 5px;
-    }
-    .alert-info {
-      background-color: #d1ecf1;
-      border-color: #bee5eb;
-      color: #0c5460;
     }
   </style>
 </head>
 <body>
   <div class="d-flex">
-    <div class="sidebar sidebar-col col-md-3 col-lg-2 p-3">
+    <!-- Sidebar with profile information -->
+    <div class="sidebar col-md-3 col-lg-2 p-3">
       <div class="text-center">
+        <!-- Display profile picture -->
         <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
         <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
         <p><?php echo htmlspecialchars($email); ?></p>
@@ -241,19 +211,21 @@ $conn->close();
       </ul>
     </div>
 
-    <div class="main-col col-md-9 col-lg-10">
-      <h2>Settings</h2>
-
-      <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
-        <div class="alert alert-success">Your details have been updated successfully!</div>
-      <?php elseif (isset($error_message)): ?>
-        <div class="alert alert-danger"><?php echo $error_message; ?></div>
-      <?php endif; ?>
-
+    <!-- Main content for Settings -->
+    <div class="col-md-9 col-lg-10 p-3">
       <div class="form-container">
+        <h2>Update Profile</h2>
+
+        <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
+          <div class="alert alert-success">Your details have been updated successfully!</div>
+        <?php elseif (isset($error_message)): ?>
+          <div class="alert alert-danger"><?php echo htmlspecialchars($error_message); ?></div>
+        <?php endif; ?>
+
         <!-- Personal Info Update Form -->
         <form action="settings.php" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="action" value="update_settings">
+
           <div class="mb-3">
             <label for="fname" class="form-label">First Name</label>
             <input type="text" class="form-control" id="fname" name="fname" value="<?php echo htmlspecialchars($fname); ?>" required>
@@ -279,28 +251,30 @@ $conn->close();
             <input type="file" class="form-control" id="profilepicture" name="profilepicture">
           </div>
 
-          <button type="submit" class="btn btn-primary w-100">Update</button>
+          <button type="submit" class="btn btn-primary">Update</button>
         </form>
-      </div>
 
-      <!-- Email Update Form -->
-      <div class="form-container">
-        <h3>Change Email</h3>
-        <form action="settings.php" method="POST">
-          <input type="hidden" name="action" value="update_email">
-          
-          <div class="mb-3">
-            <label for="email" class="form-label">New Email Address</label>
-            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
-          </div>
+        <!-- Email Update Form -->
+        <div class="form-container mt-5">
+          <h3>Change Email</h3>
+          <form action="settings.php" method="POST">
+            <input type="hidden" name="action" value="update_email">
+            
+            <div class="mb-3">
+              <label for="email" class="form-label">New Email Address</label>
+              <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+            </div>
 
-          <button type="submit" class="btn btn-primary w-100">Update Email</button>
-        </form>
+            <button type="submit" class="btn btn-primary">Update Email</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- Bootstrap JS and dependencies -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
+
