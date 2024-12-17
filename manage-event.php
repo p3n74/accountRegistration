@@ -16,20 +16,16 @@ $uid = $_SESSION['uid'];
 // Query to fetch user details (name, email, profile picture) based on UID
 $sql_user = "SELECT fname, mname, lname, email, profilepicture FROM user_credentials WHERE uid = ?";
 $stmt_user = $conn->prepare($sql_user);
-$stmt_user->bind_param("i", $uid);  // Bind UID to the query
+$stmt_user->bind_param("i", $uid);
 $stmt_user->execute();
-$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture);  // Bind the result to variables
+$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture);
 
-// Fetch user data first
 if ($stmt_user->fetch()) {
-    // Use a default image if profile picture is not set
     $profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
 } else {
-    // Handle error if no data is found (this block might not be needed in your case)
     die("User not found.");
 }
 
-// Close the user details statement after fetching the results
 $stmt_user->close();
 
 // Get eventid from URL
@@ -39,7 +35,7 @@ if (isset($_GET['eventid'])) {
     die("Event ID is missing.");
 }
 
-// Query to fetch event details for the specified eventid
+// Query to fetch event details
 $sql_event = "SELECT eventid, eventname, startdate, enddate, location, eventkey, eventshortinfo, eventinfopath, eventbadgepath FROM events WHERE eventid = ? AND eventcreator = ?";
 $stmt_event = $conn->prepare($sql_event);
 $stmt_event->bind_param("ii", $eventid, $uid);
@@ -47,29 +43,21 @@ $stmt_event->execute();
 $stmt_event->store_result();
 $stmt_event->bind_result($eventid, $eventname, $startdate, $enddate, $location, $eventkey, $eventshortinfo, $eventinfopath, $eventbadgepath);
 
-// Check if event exists
 if ($stmt_event->num_rows == 0) {
     die("Event not found or you do not have permission to manage it.");
 }
 
-$stmt_event->fetch();  // Fetch event details
+$stmt_event->fetch();
 
-// If the form is submitted to delete the event
-if (isset($_POST['delete_event'])) {
-    $sql_delete = "DELETE FROM events WHERE eventid = ?";
-    if ($stmt_delete = $conn->prepare($sql_delete)) {
-        $stmt_delete->bind_param("i", $eventid);
-        if ($stmt_delete->execute()) {
-            $success_message = "Event deleted successfully.";
-        } else {
-            $error_message = "Error deleting the event.";
-        }
-        $stmt_delete->close();
-    }
-}
-
-// Close DB connection
-$conn->close();
+// Query to fetch participants
+$sql_participants = "SELECT u.fname, u.lname, u.email, e.join_time, e.leave_time 
+                     FROM event_participants e 
+                     JOIN user_credentials u ON e.uid = u.uid 
+                     WHERE e.eventid = ?";
+$stmt_participants = $conn->prepare($sql_participants);
+$stmt_participants->bind_param("i", $eventid);
+$stmt_participants->execute();
+$result_participants = $stmt_participants->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -78,10 +66,8 @@ $conn->close();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manage Event</title>
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    /* Custom CSS for layout and table */
     .sidebar {
       min-height: 100vh;
       background-color: #f8f9fa;
@@ -95,22 +81,14 @@ $conn->close();
     }
     .two-columns {
       display: flex;
-      justify-content: space-between;
       gap: 20px;
     }
-    .table-container-left,
-    .table-container-right {
+    .table-container {
       width: 48%;
-      padding: 20px;
       background-color: #f8f9fa;
+      padding: 20px;
       border-radius: 5px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .table th, .table td {
-      vertical-align: middle;
-    }
-    .create-event-btn {
-      margin-left: 10px;
     }
     .btn-custom {
       margin-top: 10px;
@@ -119,83 +97,68 @@ $conn->close();
 </head>
 <body>
   <div class="d-flex">
-    <!-- Sidebar with profile information -->
+    <!-- Sidebar -->
     <div class="sidebar col-md-3 col-lg-2 p-3">
       <div class="text-center">
-        <!-- Display profile picture -->
         <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
         <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
         <p><?php echo htmlspecialchars($email); ?></p>
       </div>
       <hr>
       <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link" href="dashboard.php">Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="settings.php">Settings</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="logout.php">Logout</a>
-        </li>
+        <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="settings.php">Settings</a></li>
+        <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
       </ul>
     </div>
 
-    <!-- Main content for Manage Event -->
+    <!-- Main Content -->
     <div class="col-md-9 col-lg-10 p-3">
-      <h2 class="mb-4">Manage Event: <?php echo htmlspecialchars($eventname); ?></h2>
+      <h2>Manage Event: <?php echo htmlspecialchars($eventname); ?></h2>
 
-      <?php
-      if (isset($success_message)) {
-          echo "<div class='alert alert-success'>" . htmlspecialchars($success_message) . "</div>";
-      }
-      if (isset($error_message)) {
-          echo "<div class='alert alert-danger'>" . htmlspecialchars($error_message) . "</div>";
-      }
-      ?>
+      <div class="two-columns">
+        <!-- Event Details -->
+        <div class="table-container">
+          <h4>Event Details</h4>
+          <table class="table table-bordered">
+            <tr><th>Name</th><td><?php echo htmlspecialchars($eventname); ?></td></tr>
+            <tr><th>Start Date</th><td><?php echo htmlspecialchars($startdate); ?></td></tr>
+            <tr><th>End Date</th><td><?php echo htmlspecialchars($enddate); ?></td></tr>
+            <tr><th>Location</th><td><?php echo htmlspecialchars($location); ?></td></tr>
+            <tr><th>Event Key</th><td><?php echo htmlspecialchars($eventkey); ?></td></tr>
+            <tr><th>Event Link</th><td><a href="<?php echo htmlspecialchars($eventshortinfo); ?>" target="_blank">Visit Link</a></td></tr>
+          </table>
+        </div>
 
-      <!-- Event Details Table -->
-      <div class="table-container-left">
-        <table class="table table-striped table-bordered">
-          <tr>
-            <th>Event Name</th>
-            <td><?php echo htmlspecialchars($eventname); ?></td>
-          </tr>
-          <tr>
-            <th>Start Date</th>
-            <td><?php echo htmlspecialchars($startdate); ?></td>
-          </tr>
-          <tr>
-            <th>End Date</th>
-            <td><?php echo htmlspecialchars($enddate); ?></td>
-          </tr>
-          <tr>
-            <th>Location</th>
-            <td><?php echo htmlspecialchars($location); ?></td>
-          </tr>
-          <tr>
-            <th>Event Key</th>
-            <td><?php echo htmlspecialchars($eventkey); ?></td>
-          </tr>
-          <tr>
-            <th>Event Link</th>
-            <td><a href="<?php echo htmlspecialchars($eventshortinfo); ?>" target="_blank"><?php echo htmlspecialchars($eventshortinfo); ?></a></td>
-          </tr>
-          <tr>
-            <th>Event Badge</th>
-            <td><img src="<?php echo htmlspecialchars($eventbadgepath); ?>" alt="Event Badge" class="img-fluid" style="max-width: 200px;"></td>
-          </tr>
-          <tr>
-            <th>Event Info</th>
-            <td><a href="<?php echo htmlspecialchars($eventinfopath); ?>" target="_blank">Download Event Info</a></td>
-          </tr>
-        </table>
+        <!-- Participants List -->
+        <div class="table-container">
+          <h4>Participants</h4>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Join Time</th>
+                <th>Leave Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php while ($row = $result_participants->fetch_assoc()): ?>
+                <tr>
+                  <td><?php echo htmlspecialchars($row['fname'] . ' ' . $row['lname']); ?></td>
+                  <td><?php echo htmlspecialchars($row['email']); ?></td>
+                  <td><?php echo htmlspecialchars($row['join_time']); ?></td>
+                  <td><?php echo htmlspecialchars($row['leave_time'] ?? 'N/A'); ?></td>
+                </tr>
+              <?php endwhile; ?>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Action Buttons -->
       <div class="mt-4">
         <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning btn-custom">Edit Event</a>
-
         <form method="POST" class="d-inline">
           <button type="submit" name="delete_event" class="btn btn-danger btn-custom">Delete Event</button>
         </form>
@@ -203,7 +166,6 @@ $conn->close();
     </div>
   </div>
 
-  <!-- Bootstrap JS and dependencies -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
 </body>
