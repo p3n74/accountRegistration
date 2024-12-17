@@ -34,15 +34,18 @@ $stmt_user->close();
 
 // Prepare the SQL query to fetch attended events
 $sql_events = "
-    SELECT e.eventid, e.eventname, e.startdate, e.enddate, e.location, e.eventshortinfo
-    FROM events e 
-    WHERE e.eventid IN (
-        SELECT JSON_UNQUOTE(JSON_EXTRACT(attendedevents, CONCAT('$[', n.n, ']')))
-        FROM user_credentials, 
-             (SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 
-              UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS n
-        WHERE uid = ?
-    );
+   WITH user_events AS (
+    SELECT eventid
+    FROM user_credentials u,
+         JSON_TABLE(
+             u.attendedevents,
+             "$[*]" COLUMNS (eventid INT PATH "$")
+         ) AS jt
+    WHERE u.uid = ?
+)
+SELECT e.eventid, e.eventname, e.startdate, e.enddate, e.location, e.eventshortinfo
+FROM events e
+JOIN user_events ue ON e.eventid = ue.eventid;
 ";
 
 $stmt_events = $conn->prepare($sql_events);
