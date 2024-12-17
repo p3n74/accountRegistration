@@ -26,9 +26,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "reset-password
         $update_stmt->bind_param("ss", $hashedPassword, $email);
         $update_stmt->execute();
 
-        echo "Your password has been successfully updated.";
+        // Redirect to the login page after successful password reset to avoid resubmission
+        header("Location: login.php");
+        exit; // Ensure no further code is executed
     } else {
-        echo "Invalid or expired token.";
+        // Handle invalid or expired token (if needed)
+        // You can set an error message or log the attempt
     }
 
     $stmt->close();

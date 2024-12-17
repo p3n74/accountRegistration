@@ -32,12 +32,13 @@
             <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
 
-        <!-- Forgot Password Button -->
+        
+
+		<a href="regpage.php" class="btn btn-primary mt-2 w-100">No account? Register here</a>
+		<!-- Forgot Password Button -->
         <div class="mt-3 text-center">
             <a href="reset-request.php" class="btn btn-link">Forgot Password?</a>
         </div>
-
-        <a href="regpage.php" class="btn btn-primary mt-2 w-100">No account? Register here</a>
     </div>
 
     <!-- Modal for Error Message -->
