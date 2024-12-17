@@ -220,7 +220,7 @@ $conn->close();
             <li><strong>Event Key:</strong> Provide a code for the onsite terminals to use for your event. Use <strong>palisade.dcism.org</strong> for onsite registration and attendee tracking</li>
             <li><strong>Event Short Info:</strong> Put a link to your page or event page.</li>
             <li><strong>Event Badge:</strong> Optionally, upload a badge for you attendees to collect </li>
-            <li><strong>Event Info (PDF):</strong> Optionally, upload any additional event info, such as a PDF.</li>
+            <li><strong>Event Certificate(PDF):</strong> Optionally, upload a certificate for your attendees.</li>
           </ol>
           <p>Once you're done, click "Create Event" to finalize.</p>
         </div>
