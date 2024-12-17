@@ -67,10 +67,27 @@ if ($result_participants->num_rows > 0) {
 
 $pdf->writeHTML($html, true, false, true, false, '');
 
-// Save PDF in the "eventpdfs" folder
-$filename = 'eventpdfs/participants_' . $eventid . '_' . time() . '.pdf';
-$pdf->Output($filename, 'F'); // Save to file system
-$pdf->Output(basename($filename), 'D'); // Download to user browser
+// Ensure the folder exists and is writable
+$folder_path = __DIR__ . '/eventpdfs/'; 
+
+// Check if the folder exists, if not, create it
+if (!file_exists($folder_path)) {
+    mkdir($folder_path, 0777, true); // 0777 for full permissions (for testing purposes, use 0755 for production)
+}
+
+// Check if the folder is writable
+if (!is_writable($folder_path)) {
+    die('The folder is not writable. Please check folder permissions.');
+}
+
+// Define the filename using eventid and timestamp
+$filename = $folder_path . 'participants_' . $eventid . '_' . time() . '.pdf';
+
+// Save PDF to the folder
+$pdf->Output($filename, 'F'); // 'F' means saving to file system
+
+// Optionally, also output the PDF to the browser for download
+$pdf->Output(basename($filename), 'D'); // 'D' means download to user
 exit;
 ?>
 
