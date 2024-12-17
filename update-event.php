@@ -85,9 +85,11 @@ $conn->close();
   <title>Update Event</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    /* Sidebar and form styling */
     .sidebar {
       min-height: 100vh;
-      background-color: #f8f9fa;
+      background-color: #343a40;
+      color: white;
       padding-top: 20px;
     }
     .sidebar img {
@@ -96,84 +98,117 @@ $conn->close();
       border-radius: 50%;
       margin-bottom: 20px;
     }
-    .form-container {
+    .sidebar .nav-link {
+      color: white;
+      font-weight: bold;
+    }
+    .sidebar .nav-link:hover {
+      color: #ffc107;
+    }
+    .main-content {
       padding: 30px;
-      margin: 30px auto;
-      max-width: 800px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .form-container {
+      margin-top: 30px;
       background-color: #f8f9fa;
+      padding: 30px;
       border-radius: 8px;
+    }
+    .form-container h2 {
+      margin-bottom: 30px;
+    }
+    .btn-custom {
+      margin-top: 10px;
+    }
+    .alert {
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-<div class="d-flex">
-  <!-- Sidebar -->
-  <div class="sidebar col-md-3 col-lg-2 p-3">
-    <div class="text-center">
-      <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile">
-      <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
-      <p><?php echo htmlspecialchars($email); ?></p>
+  <div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar col-md-3 col-lg-2 p-3">
+      <div class="text-center">
+        <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile">
+        <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
+        <p><?php echo htmlspecialchars($email); ?></p>
+      </div>
+      <hr>
+      <ul class="nav flex-column">
+        <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="settings.php">Settings</a></li>
+        <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
+      </ul>
     </div>
-    <hr>
-    <ul class="nav flex-column">
-      <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
-      <li class="nav-item"><a class="nav-link" href="settings.php">Settings</a></li>
-      <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
-    </ul>
+
+    <!-- Main Content -->
+    <div class="main-content col-md-9 col-lg-10 p-3">
+      <div class="form-container">
+        <h2>Update Event</h2>
+
+        <!-- Success and error messages -->
+        <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
+          <div class="alert alert-success">Event updated successfully!</div>
+        <?php endif; ?>
+        <?php if (isset($error_message)): ?>
+          <div class="alert alert-danger"><?php echo $error_message; ?></div>
+        <?php endif; ?>
+
+        <!-- Update Event Form -->
+        <form method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="eventname" class="form-label">Event Name</label>
+            <input type="text" class="form-control" name="eventname" id="eventname" value="<?php echo htmlspecialchars($eventname); ?>" required>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="startdate" class="form-label">Start Date</label>
+              <input type="datetime-local" class="form-control" name="startdate" id="startdate" value="<?php echo $startdate; ?>" required>
+            </div>
+            <div class="col-md-6">
+              <label for="enddate" class="form-label">End Date</label>
+              <input type="datetime-local" class="form-control" name="enddate" id="enddate" value="<?php echo $enddate; ?>" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" name="location" id="location" value="<?php echo htmlspecialchars($location); ?>" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="eventkey" class="form-label">Event Key</label>
+            <input type="text" class="form-control" name="eventkey" id="eventkey" value="<?php echo htmlspecialchars($eventkey); ?>" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="eventshortinfo" class="form-label">Event Link</label>
+            <input type="text" class="form-control" name="eventshortinfo" id="eventshortinfo" value="<?php echo htmlspecialchars($eventshortinfo); ?>" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="eventbadge" class="form-label">Event Badge</label>
+            <input type="file" class="form-control" name="eventbadge" id="eventbadge">
+          </div>
+
+          <div class="mb-3">
+            <label for="eventinfo" class="form-label">Event Certificate</label>
+            <input type="file" class="form-control" name="eventinfo" id="eventinfo">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-custom w-100">Update Event</button>
+        </form>
+      </div>
+    </div>
   </div>
 
-  <!-- Main Content -->
-  <div class="col-md-9 col-lg-10 p-3">
-    <div class="form-container">
-      <h2>Update Event</h2>
-      <?php if (isset($_GET['status']) && $_GET['status'] == 'success') {
-        echo "<div class='alert alert-success'>Event updated successfully!</div>";
-      } ?>
-      <?php if (isset($error_message)) echo "<div class='alert alert-danger'>$error_message</div>"; ?>
-      
-      <form method="POST" enctype="multipart/form-data">
-        <div class="mb-3">
-          <label class="form-label">Event Name</label>
-          <input type="text" class="form-control" name="eventname" value="<?php echo htmlspecialchars($eventname); ?>" required>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label class="form-label">Start Date</label>
-            <input type="datetime-local" class="form-control" name="startdate" value="<?php echo $startdate; ?>" required>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">End Date</label>
-            <input type="datetime-local" class="form-control" name="enddate" value="<?php echo $enddate; ?>" required>
-          </div>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Location</label>
-          <input type="text" class="form-control" name="location" value="<?php echo htmlspecialchars($location); ?>" required>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Event Key</label>
-          <input type="text" class="form-control" name="eventkey" value="<?php echo htmlspecialchars($eventkey); ?>" required>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Event Link</label>
-          <input type="text" class="form-control" name="eventshortinfo" value="<?php echo htmlspecialchars($eventshortinfo); ?>" required>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Event Badge</label>
-          <input type="file" class="form-control" name="eventbadge">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Event Certificate</label>
-          <input type="file" class="form-control" name="eventinfo">
-        </div>
-        <button type="submit" class="btn btn-primary">Update Event</button>
-      </form>
-    </div>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
 

@@ -116,6 +116,7 @@ $conn->close();
       max-width: 800px;
       background-color: #f8f9fa;
       border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
   </style>
 </head>
@@ -220,7 +221,7 @@ $conn->close();
             <li><strong>Location:</strong> Enter the location of the event.</li>
             <li><strong>Event Key:</strong> Provide a code for the onsite terminals to use for your event. Use <strong>palisade.dcism.org</strong> for onsite registration and attendee tracking</li>
             <li><strong>Event Short Info:</strong> Put a link to your page or event page.</li>
-            <li><strong>Event Badge:</strong> Optionally, upload a badge for you attendees to collect </li>
+            <li><strong>Event Badge:</strong> Optionally, upload a badge for your attendees to collect.</li>
             <li><strong>Event Certificate (PDF):</strong> Optionally, upload a certificate for your attendees.</li>
           </ol>
           <p>Once you're done, click "Create Event" to finalize.</p>
@@ -234,15 +235,4 @@ $conn->close();
 
   <!-- Bootstrap JS and dependencies -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
-  
-  <script>
-    // Show the modal when the page loads
-    window.onload = function() {
-      var tutorialModal = new bootstrap.Modal(document.getElementById('tutorialModal'));
-      tutorialModal.show();
-    };
-  </script>
-</body>
-</html>
 

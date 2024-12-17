@@ -68,9 +68,14 @@ $result_participants = $stmt_participants->get_result();
   <title>Manage Event</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    /* New Styles */
+    body {
+      background-color: #f4f6f9;
+    }
     .sidebar {
       min-height: 100vh;
-      background-color: #f8f9fa;
+      background-color: #343a40;
+      color: white;
       padding-top: 20px;
     }
     .sidebar img {
@@ -79,19 +84,59 @@ $result_participants = $stmt_participants->get_result();
       border-radius: 50%;
       margin-bottom: 20px;
     }
+    .sidebar .nav-item {
+      margin-bottom: 15px;
+    }
+    .sidebar .nav-link {
+      color: white;
+      font-weight: bold;
+    }
+    .sidebar .nav-link:hover {
+      color: #ffc107;
+    }
+    .content-area {
+      padding: 30px;
+    }
+    .content-area h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
     .two-columns {
       display: flex;
       gap: 20px;
     }
     .table-container {
       width: 48%;
-      background-color: #f8f9fa;
+      background-color: #ffffff;
       padding: 20px;
-      border-radius: 5px;
+      border-radius: 10px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     .btn-custom {
       margin-top: 10px;
+      border-radius: 5px;
+    }
+    .btn-custom:hover {
+      opacity: 0.9;
+    }
+    .table th, .table td {
+      vertical-align: middle;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .btn-warning {
+      background-color: #ffc107;
+      border-color: #ffc107;
+    }
+    .btn-danger {
+      background-color: #dc3545;
+      border-color: #dc3545;
+    }
+    .text-center form {
+      display: inline-block;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -112,70 +157,68 @@ $result_participants = $stmt_participants->get_result();
       </ul>
     </div>
 
-		<!-- Main Content -->
-	<div class="col-md-9 col-lg-10 p-3">
-	  <h2>Manage Event: <?php echo htmlspecialchars($eventname); ?></h2>
+    <!-- Main Content -->
+    <div class="content-area col-md-9 col-lg-10">
+      <h2>Manage Event: <?php echo htmlspecialchars($eventname); ?></h2>
 
-	  <div class="two-columns d-flex gap-3">
-		<!-- Event Details -->
-		<div class="table-container">
-		  <h4>Event Details</h4>
-		  <table class="table table-bordered">
-			<tr><th>Name</th><td><?php echo htmlspecialchars($eventname); ?></td></tr>
-			<tr><th>Start Date</th><td><?php echo htmlspecialchars($startdate); ?></td></tr>
-			<tr><th>End Date</th><td><?php echo htmlspecialchars($enddate); ?></td></tr>
-			<tr><th>Location</th><td><?php echo htmlspecialchars($location); ?></td></tr>
-			<tr><th>Event Key</th><td><?php echo htmlspecialchars($eventkey); ?></td></tr>
-			<tr><th>Event Link</th><td><a href="<?php echo htmlspecialchars($eventshortinfo); ?>" target="_blank">Visit Link</a></td></tr>
-		  </table>
-		</div>
+      <div class="two-columns">
+        <!-- Event Details -->
+        <div class="table-container">
+          <h4>Event Details</h4>
+          <table class="table table-bordered">
+            <tr><th>Name</th><td><?php echo htmlspecialchars($eventname); ?></td></tr>
+            <tr><th>Start Date</th><td><?php echo htmlspecialchars($startdate); ?></td></tr>
+            <tr><th>End Date</th><td><?php echo htmlspecialchars($enddate); ?></td></tr>
+            <tr><th>Location</th><td><?php echo htmlspecialchars($location); ?></td></tr>
+            <tr><th>Event Key</th><td><?php echo htmlspecialchars($eventkey); ?></td></tr>
+            <tr><th>Event Link</th><td><a href="<?php echo htmlspecialchars($eventshortinfo); ?>" target="_blank">Visit Link</a></td></tr>
+          </table>
+        </div>
 
-		<!-- Participants List -->
-		<div class="table-container w-100">
-		  <h4>Participants</h4>
-		  <table class="table table-striped">
-			<thead>
-			  <tr>
-				<th>Name</th>
-				<th>Email</th>
-				<th>Join Time</th>
-				<th>Leave Time</th>
-			  </tr>
-			</thead>
-			<tbody>
-			  <?php while ($row = $result_participants->fetch_assoc()): ?>
-				<tr>
-				  <td><?php echo htmlspecialchars($row['fname'] . ' ' . $row['lname']); ?></td>
-				  <td><?php echo htmlspecialchars($row['email']); ?></td>
-				  <td><?php echo htmlspecialchars($row['join_time']); ?></td>
-				  <td><?php echo htmlspecialchars($row['leave_time'] ?? 'N/A'); ?></td>
-				</tr>
-			  <?php endwhile; ?>
-			</tbody>
-		  </table>
+        <!-- Participants List -->
+        <div class="table-container">
+          <h4>Participants</h4>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Join Time</th>
+                <th>Leave Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php while ($row = $result_participants->fetch_assoc()): ?>
+                <tr>
+                  <td><?php echo htmlspecialchars($row['fname'] . ' ' . $row['lname']); ?></td>
+                  <td><?php echo htmlspecialchars($row['email']); ?></td>
+                  <td><?php echo htmlspecialchars($row['join_time']); ?></td>
+                  <td><?php echo htmlspecialchars($row['leave_time'] ?? 'N/A'); ?></td>
+                </tr>
+              <?php endwhile; ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-		  <!-- Download Button Under the Table -->
-		</div>
+      <!-- Action Buttons (Edit and Delete) -->
+      <div class="mt-4">
+        <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning btn-custom">Edit Event</a>
+        <form method="POST" class="d-inline">
+          <button type="submit" name="delete_event" class="btn btn-danger btn-custom">Delete Event</button>
+        </form>
+      </div>
 
-		</div>
-
-
-	  <!-- Action Buttons (Edit and Delete) -->
-	  <div class="mt-4">
-		<a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning btn-custom">Edit Event</a>
-		<form method="POST" class="d-inline">
-		  <button type="submit" name="delete_event" class="btn btn-danger btn-custom">Delete Event</button>
-		</form>
-	  </div>
-				 <div class="mt-3 text-center">
-			<form action="generate-participants-pdf.php" method="GET" target="_blank">
-			  <input type="hidden" name="eventid" value="<?php echo htmlspecialchars($eventid); ?>">
-			  <button type="submit" class="btn btn-primary">
-				Download Participants List as PDF
-			  </button>
-			</form>
-		  </div>
-	</div>
+      <!-- Download Participants List -->
+      <div class="mt-3 text-center">
+        <form action="generate-participants-pdf.php" method="GET" target="_blank">
+          <input type="hidden" name="eventid" value="<?php echo htmlspecialchars($eventid); ?>">
+          <button type="submit" class="btn btn-primary">
+            Download Participants List as PDF
+          </button>
+        </form>
+      </div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

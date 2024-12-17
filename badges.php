@@ -106,6 +106,13 @@ $conn->close();
       flex-wrap: wrap;
       justify-content: space-between;
     }
+    .badge-card .card-body {
+      text-align: center;
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -114,7 +121,7 @@ $conn->close();
     <div class="sidebar col-md-3 col-lg-2 p-3">
       <div class="text-center">
         <!-- Display profile picture -->
-        <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
+        <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid rounded-circle mb-3">
         <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
         <p><?php echo htmlspecialchars($email); ?></p>
       </div>
@@ -134,7 +141,7 @@ $conn->close();
 
     <!-- Main content (Badges) -->
     <div class="col-md-9 col-lg-10 p-3">
-      <h2>Badges</h2>
+      <h2 class="mb-4">Badges</h2>
 
       <!-- Display attended events as cards in two columns -->
       <div class="badge-container">
@@ -146,7 +153,7 @@ $conn->close();
             // Loop through the attended events array and display them as cards
             foreach ($attendedEvents as $event) {
                 echo '<div class="col-md-6 col-lg-4 badge-card">';
-                echo '<div class="card">';
+                echo '<div class="card shadow-sm">';
 
                 // Display badge image (if available)
                 if (!empty($event['eventbadgepath'])) {
