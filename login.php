@@ -5,11 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log-in</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom Styling for the Login Page */
+        .container {
+            max-width: 500px;
+            margin-top: 100px;
+        }
+        .modal-content {
+            border-radius: 15px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h2 class="text-center">Log-in</h2>
-        <form action="auth.php" method="POST" class="mt-4">
+    <div class="container">
+        <h2 class="text-center mb-4">Log-in</h2>
+        <form action="auth.php" method="POST">
             <input type="hidden" id="action" name="action" value="login">
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
@@ -29,7 +39,38 @@
 
         <a href="regpage.php" class="btn btn-primary mt-2 w-100">No account? Register here</a>
     </div>
+
+    <!-- Modal for Error Message -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Login Error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="errorMessage">
+                    <!-- Error message will be injected here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Check if there is an error message passed via URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorMessage = urlParams.get('error');
+        if (errorMessage) {
+            // Show modal with error message
+            document.getElementById('errorMessage').innerText = errorMessage;
+            var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+            errorModal.show();
+        }
+    </script>
 </body>
 </html>
 
