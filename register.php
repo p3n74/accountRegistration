@@ -75,7 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "register") {
                            <p><a href='$confirmationLink'>Confirm My Account</a></p>";
 
             $mail->send();
-            echo "Registration successful. A confirmation email has been sent to $email.";
+
+            // Redirect to avoid form resubmission
+            header("Location: register.php?status=success");
+            exit; // Make sure to exit after the redirect
         } catch (Exception $e) {
             echo "Error sending email: " . $mail->ErrorInfo;
         }
