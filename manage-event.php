@@ -131,7 +131,15 @@ $result_participants = $stmt_participants->get_result();
     <div class="col-md-9 col-lg-10 p-3">
       <h2>Manage Event: <?php echo htmlspecialchars($eventname); ?></h2>
 
-      <div class="row">
+      <!-- Action Buttons (Edit and Delete) moved to the top -->
+      <div class="mt-4">
+        <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning btn-custom">Edit Event</a>
+        <form method="POST" class="d-inline">
+          <button type="submit" name="delete_event" class="btn btn-danger btn-custom">Delete Event</button>
+        </form>
+      </div>
+
+      <div class="row mt-4">
         <!-- Event Details -->
         <div class="col-md-6 table-container">
           <h4>Event Details</h4>
@@ -169,14 +177,6 @@ $result_participants = $stmt_participants->get_result();
             </tbody>
           </table>
         </div>
-      </div>
-
-      <!-- Action Buttons (Edit and Delete) -->
-      <div class="mt-4">
-        <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning btn-custom">Edit Event</a>
-        <form method="POST" class="d-inline">
-          <button type="submit" name="delete_event" class="btn btn-danger btn-custom">Delete Event</button>
-        </form>
       </div>
 
       <!-- Download Participants List -->

@@ -117,7 +117,7 @@ $conn->close();
 </head>
 <body>
   <div class="d-flex">
-    <!-- Sidebar with profile information -->
+    <!-- Sidebar with profile information (matching previous style) -->
     <div class="sidebar col-md-3 col-lg-2 p-3">
       <div class="text-center">
         <!-- Display profile picture -->
