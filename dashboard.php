@@ -179,7 +179,7 @@ $conn->close();
         <div class="table-container-right">
           <div class="d-flex justify-content-between align-items-center">
             <h3>My Events</h3>
-            <a href="create_event.php" class="btn btn-primary">Create Event</a>
+            <a href="create-event.php" class="btn btn-primary">Create Event</a>
           </div>
           <table class="table table-bordered table-striped">
             <thead>
