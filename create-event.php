@@ -13,6 +13,20 @@ require_once 'includes/db.php';
 // Retrieve UID from session
 $uid = $_SESSION['uid'];
 
+// Query to fetch user details (name, email, profile picture) based on UID
+$sql_user = "SELECT fname, mname, lname, email, profilepicture FROM user_credentials WHERE uid = ?";
+$stmt_user = $conn->prepare($sql_user);
+$stmt_user->bind_param("i", $uid);  // Bind UID to the query
+$stmt_user->execute();
+$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture);  // Bind the result to variables
+$stmt_user->fetch();  // Fetch the data into the variables
+
+// Use a default image if profile picture is not set
+$profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
+
+// Close the user details statement to avoid issues with subsequent queries
+$stmt_user->close();
+
 // If the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize and collect form data
@@ -120,7 +134,7 @@ $conn->close();
       }
       ?>
 
-      <form method="POST" action="create_event.php" enctype="multipart/form-data">
+      <form method="POST" action="create-event.php" enctype="multipart/form-data">
         <div class="mb-3">
           <label for="eventname" class="form-label">Event Name</label>
           <input type="text" class="form-control" id="eventname" name="eventname" required>
