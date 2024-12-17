@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $verification_code = bin2hex(random_bytes(16)); // Generate a 32-character random code
             
             // Update the database with the new email and verification code
-            $sql_update_email = "UPDATE user_credentials SET new_email = ?, verification_code = ? WHERE uid = ?, emailverified = 0";
+            $sql_update_email = "UPDATE user_credentials SET new_email = ?, verification_code = ?, emailverified = 0 WHERE uid = ?";
             $stmt_update_email = $conn->prepare($sql_update_email);
             $stmt_update_email->bind_param("ssi", $new_email, $verification_code, $uid);
             $stmt_update_email->execute();
