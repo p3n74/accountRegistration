@@ -69,10 +69,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "reset-request"
 }
 ?>
 
-<form method="POST">
-    <input type="hidden" name="action" value="reset-request">
-    <label for="email">Enter your email to reset your password:</label>
-    <input type="email" name="email" id="email" required>
-    <input type="submit" value="Send Reset Link">
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset Request</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom Styling for the Reset Page */
+        .container {
+            max-width: 500px;
+            margin-top: 100px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #007BFF;
+            border: none;
+        }
+        h2 {
+            color: #007BFF;
+        }
+        label {
+            font-weight: bold;
+        }
+        .btn-link {
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">Reset Your Password</h2>
+        <form method="POST">
+            <input type="hidden" name="action" value="reset-request">
+            <div class="mb-3">
+                <label for="email" class="form-label">Enter your email to reset your password:</label>
+                <input type="email" name="email" id="email" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Send Reset Link</button>
+        </form>
+
+        <!-- Link to the Login page -->
+        <div class="mt-3 text-center">
+            <a href="login.php" class="btn btn-link">Remembered your password? Login here</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
 
