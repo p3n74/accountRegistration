@@ -181,38 +181,32 @@ $conn->close();
             <h3>My Events</h3>
             <a href="create-event.php" class="btn btn-primary">Create Event</a>
           </div>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Event Name</th>
-                <th>Date</th>
-                <th>Location</th>
-                <th>Manage</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              // Check if there are any events created by the user
-              if (empty($myEvents)) {
-                echo "<tr><td colspan='5'>No events created.</td></tr>";
-              } else {
-                // Loop through the user's events array and display them
-                $count = 1;
-                foreach ($myEvents as $event) {
-                    echo "<tr>";
-                    echo "<td>" . $count++ . "</td>";
-                    echo "<td>" . htmlspecialchars($event['eventname']) . "</td>";
-                    echo "<td>" . htmlspecialchars($event['startdate']) . "</td>";
-                    echo "<td>" . htmlspecialchars($event['location']) . "</td>";
-                    echo "<td><a href='manage_event.php?eventid=" . $event['eventid'] . "'>Manage</a></td>";
-                    echo "</tr>";
-                }
-              }
-              ?>
-            </tbody>
-          </table>
-        </div>
+          <!-- Table of Events -->
+			<table class="table table-striped">
+			  <thead>
+				<tr>
+				  <th scope="col">Event Name</th>
+				  <th scope="col">Start Date</th>
+				  <th scope="col">End Date</th>
+				  <th scope="col">Location</th>
+				  <th scope="col">Actions</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				<?php while ($stmt_events->fetch()): ?>
+				  <tr>
+					<td><?php echo htmlspecialchars($eventname); ?></td>
+					<td><?php echo htmlspecialchars($startdate); ?></td>
+					<td><?php echo htmlspecialchars($enddate); ?></td>
+					<td><?php echo htmlspecialchars($location); ?></td>
+					<td>
+					  <a href="manage_event.php?eventid=<?php echo $eventid; ?>" class="btn btn-primary btn-sm">Manage</a>
+					</td>
+				  </tr>
+				<?php endwhile; ?>
+			  </tbody>
+			</table>
+		</div>
 
       </div>
 
