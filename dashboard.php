@@ -93,7 +93,7 @@ $conn->close();
           <a class="nav-link active" href="#">Dashboard</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Settings</a>
+          <a class="nav-link" href="settings.php">Settings</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="logout.php">Logout</a>
@@ -109,8 +109,7 @@ $conn->close();
           <tr>
             <th>#</th>
             <th>Event Name</th>
-            <th>Start Date</th>
-            <th>End Date</th>
+            <th>Date</th>
             <th>Location</th>
             <th>Details</th>
           </tr>
@@ -128,7 +127,6 @@ $conn->close();
                 echo "<td>" . $count++ . "</td>";
                 echo "<td>" . htmlspecialchars($event['eventname']) . "</td>";
                 echo "<td>" . htmlspecialchars($event['startdate']) . "</td>";
-                echo "<td>" . htmlspecialchars($event['enddate']) . "</td>";
                 echo "<td>" . htmlspecialchars($event['location']) . "</td>";
                 echo "<td><a href='" . htmlspecialchars($event['eventinfopath']) . "' target='_blank'>Details</a></td>";
                 echo "</tr>";
