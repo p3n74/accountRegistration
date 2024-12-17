@@ -34,25 +34,35 @@ $stmt_user->close();
 
 // Prepare the SQL query to fetch attended events
 $sql_events = "
+WITH user_events AS (
+    SELECT
+        JSON_UNQUOTE(JSON_EXTRACT(attendedevents, CONCAT('$[', n.n, ']'))) AS eventid
+    FROM user_credentials u
+    JOIN (
+        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 
+        UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 
+        UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 
+        UNION ALL SELECT 9
+    ) AS n
+    WHERE u.uid = ?
+    AND JSON_UNQUOTE(JSON_EXTRACT(u.attendedevents, CONCAT('$[', n.n, ']'))) IS NOT NULL
+)
 SELECT e.eventid, e.eventname, e.startdate, e.enddate, e.location, e.eventshortinfo
 FROM events e
-JOIN user_credentials u ON u.uid = ?
-JOIN JSON_TABLE(
-    u.attendedevents,
-    '$[*]' COLUMNS (eventid INT PATH '$')
-) AS jt ON e.eventid = jt.eventid;
+JOIN user_events ue ON e.eventid = ue.eventid;
 ";
 
 $stmt_events = $conn->prepare($sql_events);
-$stmt_events->bind_param("i", $uid);  // Bind the UID to the query
+$stmt_events->bind_param("i", $uid);  // Bind UID to the query
 $stmt_events->execute();
 $result_events = $stmt_events->get_result(); // Get result set
 
-// Fetch all events
-$events = [];
+// Fetch the results for attended events
+$attendedEvents = [];
 while ($row = $result_events->fetch_assoc()) {
-    $events[] = $row;
+    $attendedEvents[] = $row;
 }
+
 // Close the result set and statement for attended events
 $result_events->free();  // Free the result set
 $stmt_events->close();   // Close the statement
