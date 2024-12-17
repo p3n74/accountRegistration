@@ -6,6 +6,9 @@ ob_end_clean();
 // Include TCPDF library
 require_once('tcpdf/tcpdf.php');
 
+// Includ database connection
+require_once 'includes/db.php';
+
 // Check if eventid is passed
 if (!isset($_GET['eventid'])) {
     die('Event ID is required.');
