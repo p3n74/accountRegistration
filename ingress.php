@@ -97,18 +97,22 @@ if (isset($_GET['token']) && isset($_GET['event'])) {
             // Display the password form inside a card for a better user experience
             echo '
             <div class="container mt-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Enter Password to Join Event</h3>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST">
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
+                <div class="row justify-content-center">
+                    <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Enter Password to Join Event</h3>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
-                        </form>
+                            <div class="card-body">
+                                <form method="POST">
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>';
@@ -119,6 +123,5 @@ if (isset($_GET['token']) && isset($_GET['event'])) {
 } else {
     echo "<div class='alert alert-danger mt-4'>Token or Event ID is missing from the URL. Please provide the required information.</div>";
 }
-
 ?>
 
