@@ -8,7 +8,9 @@ require 'includes/db.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Confirmation</title>
+	<title>Email Confirmation</title>
+	 <!-- Favicon -->
+ <link rel="icon" href="icon.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         /* Custom Styling for the Confirmation Page */
