@@ -75,7 +75,7 @@ if (isset($_GET['token']) && isset($_GET['event'])) {
                             $attendedEvents[] = $eventid; // Add the event ID if it's not already in the list
                             $updatedAttendedevents = json_encode($attendedEvents); // Convert it back to JSON
 
-                            // Update the attendedevents field
+                            // Update the attendedevents field without enclosing in quotes
                             $update_user_sql = "UPDATE user_credentials SET attendedevents = ? WHERE uid = ?";
                             $update_user_stmt = $conn->prepare($update_user_sql);
                             $update_user_stmt->bind_param("si", $updatedAttendedevents, $uid);
@@ -170,5 +170,5 @@ if (isset($_GET['token']) && isset($_GET['event'])) {
 
 <!-- Add Bootstrap JS (required for some functionality) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist
 
