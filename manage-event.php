@@ -61,63 +61,119 @@ $conn->close();
   <title>Manage Event</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Custom CSS for the layout */
+    .sidebar {
+      min-height: 100vh;
+      background-color: #f8f9fa;
+      padding-top: 20px;
+    }
+    .sidebar img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+    }
+    .two-columns {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;  /* Adds space between the tables */
+    }
+    .table-container-left,
+    .table-container-right {
+      width: 48%;  /* Equal width for both tables */
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .create-event-btn {
+      margin-left: 10px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container mt-5">
-    <h2>Manage Event: <?php echo htmlspecialchars($eventname); ?></h2>
+  <div class="d-flex">
+    <!-- Sidebar with profile information -->
+    <div class="sidebar col-md-3 col-lg-2 p-3">
+      <div class="text-center">
+        <!-- Display profile picture -->
+        <img src="<?php echo htmlspecialchars($profilepicture); ?>" alt="User Profile" class="img-fluid">
+        <h4><?php echo htmlspecialchars($fname . ' ' . $lname); ?></h4>
+        <p><?php echo htmlspecialchars($email); ?></p>
+      </div>
+      <hr>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.php">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="settings.php">Settings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="logout.php">Logout</a>
+        </li>
+      </ul>
+    </div>
 
-    <?php
-    if (isset($success_message)) {
-        echo "<div class='alert alert-success'>" . htmlspecialchars($success_message) . "</div>";
-    }
-    if (isset($error_message)) {
-        echo "<div class='alert alert-danger'>" . htmlspecialchars($error_message) . "</div>";
-    }
-    ?>
+    <!-- Main content for Manage Event -->
+    <div class="col-md-9 col-lg-10 p-3">
+      <h2>Manage Event: <?php echo htmlspecialchars($eventname); ?></h2>
 
-    <!-- Event Details -->
-    <table class="table table-bordered">
-      <tr>
-        <th>Event Name</th>
-        <td><?php echo htmlspecialchars($eventname); ?></td>
-      </tr>
-      <tr>
-        <th>Start Date</th>
-        <td><?php echo htmlspecialchars($startdate); ?></td>
-      </tr>
-      <tr>
-        <th>End Date</th>
-        <td><?php echo htmlspecialchars($enddate); ?></td>
-      </tr>
-      <tr>
-        <th>Location</th>
-        <td><?php echo htmlspecialchars($location); ?></td>
-      </tr>
-      <tr>
-        <th>Event Key</th>
-        <td><?php echo htmlspecialchars($eventkey); ?></td>
-      </tr>
-      <tr>
-        <th>Event Link</th>
-        <td><a href="<?php echo htmlspecialchars($eventshortinfo); ?>" target="_blank"><?php echo htmlspecialchars($eventshortinfo); ?></a></td>
-      </tr>
-      <tr>
-        <th>Event Badge</th>
-        <td><img src="<?php echo htmlspecialchars($eventbadgepath); ?>" alt="Event Badge" class="img-fluid" style="max-width: 200px;"></td>
-      </tr>
-      <tr>
-        <th>Event Info</th>
-        <td><a href="<?php echo htmlspecialchars($eventinfopath); ?>" target="_blank">Download Event Info</a></td>
-      </tr>
-    </table>
+      <?php
+      if (isset($success_message)) {
+          echo "<div class='alert alert-success'>" . htmlspecialchars($success_message) . "</div>";
+      }
+      if (isset($error_message)) {
+          echo "<div class='alert alert-danger'>" . htmlspecialchars($error_message) . "</div>";
+      }
+      ?>
 
-    <!-- Button to Edit Event (Redirect to a page to update the event) -->
-    <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning">Edit Event</a>
+      <!-- Event Details -->
+      <table class="table table-bordered">
+        <tr>
+          <th>Event Name</th>
+          <td><?php echo htmlspecialchars($eventname); ?></td>
+        </tr>
+        <tr>
+          <th>Start Date</th>
+          <td><?php echo htmlspecialchars($startdate); ?></td>
+        </tr>
+        <tr>
+          <th>End Date</th>
+          <td><?php echo htmlspecialchars($enddate); ?></td>
+        </tr>
+        <tr>
+          <th>Location</th>
+          <td><?php echo htmlspecialchars($location); ?></td>
+        </tr>
+        <tr>
+          <th>Event Key</th>
+          <td><?php echo htmlspecialchars($eventkey); ?></td>
+        </tr>
+        <tr>
+          <th>Event Link</th>
+          <td><a href="<?php echo htmlspecialchars($eventshortinfo); ?>" target="_blank"><?php echo htmlspecialchars($eventshortinfo); ?></a></td>
+        </tr>
+        <tr>
+          <th>Event Badge</th>
+          <td><img src="<?php echo htmlspecialchars($eventbadgepath); ?>" alt="Event Badge" class="img-fluid" style="max-width: 200px;"></td>
+        </tr>
+        <tr>
+          <th>Event Info</th>
+          <td><a href="<?php echo htmlspecialchars($eventinfopath); ?>" target="_blank">Download Event Info</a></td>
+        </tr>
+      </table>
 
-    <!-- Form to Delete Event -->
-    <form method="POST" class="mt-3">
-      <button type="submit" name="delete_event" class="btn btn-danger">Delete Event</button>
-    </form>
+      <!-- Button to Edit Event (Redirect to a page to update the event) -->
+      <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning">Edit Event</a>
+
+      <!-- Form to Delete Event -->
+      <form method="POST" class="mt-3">
+        <button type="submit" name="delete_event" class="btn btn-danger">Delete Event</button>
+      </form>
+    </div>
+
   </div>
 
   <!-- Bootstrap JS and dependencies -->
