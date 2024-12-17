@@ -1,97 +1,153 @@
 <?php
+// Start the session
+session_start();
+
+// Check if user is logged in by checking session for UID
+if (!isset($_SESSION['uid'])) {
+    die("You must log in first.");
+}
+
+// Include database connection
+require_once 'includes/db.php';
+
+// Include PHPMailer
 require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
-require 'includes/db.php'; // Include the database connection
-require 'includes/apikey.php'; // Include the API key
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+// Retrieve UID from session
+$uid = $_SESSION['uid'];
 
-// Check if form is submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "register") {
-    // Sanitize and validate inputs
-    $fname = htmlspecialchars($_POST['fname']);
-    $mname = htmlspecialchars($_POST['mname']);
-    $lname = htmlspecialchars($_POST['lname']);
+// Query to fetch user details (name, email, profile picture) based on UID
+$sql_user = "SELECT fname, mname, lname, email, profilepicture, verification_code FROM user_credentials WHERE uid = ?";
+$stmt_user = $conn->prepare($sql_user);
+$stmt_user->bind_param("i", $uid);  // Bind UID to the query
+$stmt_user->execute();
+$stmt_user->store_result();  // Store the result set to avoid "Commands out of sync" error
+$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture, $verification_code);  // Bind the result to variables
+$stmt_user->fetch();  // Fetch the data into the variables
 
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $password = $_POST['password'];
+// Use a default image if profile picture is not set
+$profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        die("Invalid email format.");
-    }
+// Handle the form submission for profile update
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Handle personal info update
+    if (isset($_POST['action']) && $_POST['action'] == 'update_settings') {
+        $new_fname = $_POST['fname'];
+        $new_mname = $_POST['mname'];
+        $new_lname = $_POST['lname'];
+        $new_password = $_POST['password'];
 
-    if (strlen($password) < 8) {
-        die("Password must be at least 8 characters long.");
-    }
-
-    // Hash the password
-    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-    // Check if the email already exists in the database
-    $checkEmailSql = "SELECT * FROM user_credentials WHERE email = ?";
-    $stmt = $conn->prepare($checkEmailSql);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows > 0) {
-        die("Error: This email address is already registered.");
-    }
-
-    // Generate a unique token for email confirmation
-    $token = bin2hex(random_bytes(32));
-
-    // Insert user into the database
-    $insertSql = "INSERT INTO user_credentials (fname, mname, lname, email, password, currboundtoken, emailverified) VALUES (?, ?, ?, ?, ?, ?, 0)";
-    $stmt = $conn->prepare($insertSql);
-    $stmt->bind_param("ssssss", $fname, $mname, $lname, $email, $hashedPassword, $token);
-
-    if ($stmt->execute()) {
-        // Send confirmation email
-        $mail = new PHPMailer(true);
-
-        try {
-            // Server settings
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com'; // Gmail SMTP server
-            $mail->SMTPAuth = true;
-            $mail->Username = '21102134@usc.edu.ph'; // Replace with your Gmail email
-            $mail->Password = $apikey; // API Key from 'includes/apikey.php'
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
-
-            // Recipients
-            $mail->setFrom('211021342@usc.edu.ph', 'Nikolai'); // Replace with your sender name and email
-            $mail->addAddress($email, $fname);
-
-            // Content
-            $mail->isHTML(true);
-            $mail->Subject = 'Confirm Your Account';
-            $confirmationLink = "http://accounts.dcism.org/accountRegistration/confirm.php?token=$token"; // Replace with your domain URL
-            $mail->Body = "<p>Hi $fname,</p>
-                           <p>Thank you for registering. Please click the link below to confirm your email:</p>
-                           <p><a href='$confirmationLink'>Confirm My Account</a></p>";
-
-            $mail->send();
-
-            // Redirect to avoid form resubmission
-            header("Location: register.php?status=success");
-            exit; // Make sure to exit after the redirect
-        } catch (Exception $e) {
-            echo "Error sending email: " . $mail->ErrorInfo;
+        // Update the personal info (excluding email)
+        $sql_update = "UPDATE user_credentials SET fname = ?, mname = ?, lname = ? WHERE uid = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bind_param("sssi", $new_fname, $new_mname, $new_lname, $uid);
+        $stmt_update->execute();
+        if ($stmt_update->affected_rows > 0) {
+            echo "<p>Your details have been updated successfully!</p>";
+        } else {
+            $error_message = "No changes were made or an error occurred.";
         }
-    } else {
-        echo "Error: " . $stmt->error;
+        $stmt_update->close();
     }
 
-    $stmt->close();
-    $conn->close();
+    // Handle email update request
+    if (isset($_POST['action']) && $_POST['action'] == 'update_email') {
+        $new_email = $_POST['email'];
+
+        // Validate the new email
+        if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
+            $error_message = "Invalid email format.";
+        } else {
+            // Generate a new verification code
+            $verification_code = bin2hex(random_bytes(16)); // Generate a 32-character random code
+            
+            // Update the database with the new email and verification code
+            $sql_update_email = "UPDATE user_credentials SET new_email = ?, verification_code = ? WHERE uid = ?";
+            $stmt_update_email = $conn->prepare($sql_update_email);
+            $stmt_update_email->bind_param("ssi", $new_email, $verification_code, $uid);
+            $stmt_update_email->execute();
+
+            // Check if the update was successful
+            if ($stmt_update_email->affected_rows > 0) {
+                // Send verification email using PHPMailer
+                $verification_link = "http://accounts.dcism.com/accountRegistration/verify_email.php?code=" . urlencode($verification_code);
+
+                // Set up PHPMailer
+                $mail = new PHPMailer(true);
+                try {
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.mailtrap.io';  // Set your SMTP server (replace with actual server)
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'your_mailtrap_username';  // Replace with Mailtrap SMTP username
+                    $mail->Password = 'your_mailtrap_password';  // Replace with Mailtrap SMTP password
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                    $mail->Port = 587;
+
+                    // Recipients
+                    $mail->setFrom('no-reply@yourdomain.com', 'Your Website');
+                    $mail->addAddress($new_email);  // Recipient's email address
+
+                    // Content
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Email Verification';
+                    $mail->Body    = "Please verify your email by clicking the following link:<br><br><a href='$verification_link'>Verify Email</a>";
+
+                    // Send the email
+                    $mail->send();
+                    echo "<p>A verification email has been sent to your new email address. Please check your inbox.</p>";
+                } catch (Exception $e) {
+                    $error_message = "Failed to send verification email. Error: " . $mail->ErrorInfo;
+                }
+            } else {
+                $error_message = "Failed to update your email request.";
+            }
+            $stmt_update_email->close();
+        }
+    }
 }
+
+// Handle the file upload for profile picture
+if (isset($_FILES['profilepicture']) && $_FILES['profilepicture']['error'] == 0) {
+    $uploadDir = 'profilePictures/';
+    $fileName = $_FILES['profilepicture']['name'];
+    $fileTmpName = $_FILES['profilepicture']['tmp_name'];
+    $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+
+    // Create a new file name: uid_fname_mname_lname.extension
+    $newFileName = $uid . "_" . $fname . "_" . $mname . "_" . $lname . "." . $fileExtension;
+    $newFilePath = $uploadDir . $newFileName;
+
+    // Validate the file type (optional)
+    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+    if (!in_array($fileExtension, $allowedExtensions)) {
+        $error_message = "Invalid file type. Only JPG, PNG, and GIF are allowed.";
+    } else {
+        // Move the uploaded file to the profilePictures folder
+        if (move_uploaded_file($fileTmpName, $newFilePath)) {
+            // Update the profile picture in the database
+            $sql_update_pic = "UPDATE user_credentials SET profilepicture = ? WHERE uid = ?";
+            $stmt_update_pic = $conn->prepare($sql_update_pic);
+            $stmt_update_pic->bind_param("si", $newFilePath, $uid);
+            $stmt_update_pic->execute();
+
+            if ($stmt_update_pic->affected_rows > 0) {
+                // Redirect after successful profile picture update
+                header("Location: settings.php?status=success");
+                exit();
+            } else {
+                $error_message = "Error updating profile picture.";
+            }
+            $stmt_update_pic->close();
+        } else {
+            $error_message = "Error uploading the profile picture.";
+        }
+    }
+}
+
+$conn->close();
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
