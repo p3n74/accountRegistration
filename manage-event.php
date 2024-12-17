@@ -153,7 +153,13 @@ $result_participants = $stmt_participants->get_result();
               <?php endwhile; ?>
             </tbody>
           </table>
-        </div>
+		</div>
+		<div class="mt-3 text-center">
+		  <form action="generate_participants_pdf.php" method="GET" target="_blank">
+			<input type="hidden" name="eventid" value="<?php echo htmlspecialchars($eventid); ?>">
+			<button type="submit" class="btn btn-primary">Download Participants List as PDF</button>
+		  </form>
+		</div>
       </div>
 
       <!-- Action Buttons -->
