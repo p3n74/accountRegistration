@@ -10,6 +10,22 @@
         .container {
             max-width: 500px;
             margin-top: 100px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #007BFF;
+            border: none;
+        }
+        h2 {
+            color: #007BFF;
+        }
+        label {
+            font-weight: bold;
+        }
+        .btn-link {
+            color: #007BFF;
         }
         .modal-content {
             border-radius: 15px;
@@ -32,10 +48,9 @@
             <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
 
-        
+        <a href="regpage.php" class="btn btn-primary mt-2 w-100">No account? Register here</a>
 
-		<a href="regpage.php" class="btn btn-primary mt-2 w-100">No account? Register here</a>
-		<!-- Forgot Password Button -->
+        <!-- Forgot Password Button -->
         <div class="mt-3 text-center">
             <a href="reset-request.php" class="btn btn-link">Forgot Password?</a>
         </div>
