@@ -71,12 +71,14 @@ $result_participants = $stmt_participants->get_result();
     /* New Styles */
     body {
       background-color: #f4f6f9;
+      font-family: 'Arial', sans-serif;
     }
     .sidebar {
       min-height: 100vh;
       background-color: #343a40;
       color: white;
       padding-top: 20px;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     }
     .sidebar img {
       width: 60px;
@@ -90,8 +92,103 @@ $result_participants = $stmt_participants->get_result();
     .sidebar .nav-link {
       color: white;
       font-weight: bold;
-	}
-	</style>
+      font-size: 16px;
+    }
+    .sidebar .nav-link:hover {
+      background-color: #495057;
+      border-radius: 4px;
+    }
+
+    .content-area {
+      background-color: white;
+      padding: 30px;
+      margin-left: 250px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .content-area h2 {
+      font-size: 30px;
+      color: #333;
+    }
+
+    .content-area .table-container h4 {
+      margin-bottom: 20px;
+      font-size: 22px;
+      color: #555;
+    }
+
+    .table-container table {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .table-container table th {
+      background-color: #f8f9fa;
+      color: #495057;
+      font-weight: bold;
+    }
+
+    .table-container table td {
+      color: #6c757d;
+    }
+
+    .btn-custom {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+
+    .btn-warning {
+      background-color: #ffc107;
+      border-color: #ffc107;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      border-color: #dc3545;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    .btn-warning:hover, .btn-danger:hover, .btn-primary:hover {
+      filter: brightness(85%);
+    }
+
+    .two-columns {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .two-columns .table-container {
+      flex: 1;
+      min-width: 48%;
+    }
+
+    .mt-4 {
+      margin-top: 40px;
+    }
+
+    .mt-3 {
+      margin-top: 30px;
+    }
+
+    /* For Mobile Devices */
+    @media (max-width: 768px) {
+      .two-columns {
+        flex-direction: column;
+      }
+      .content-area {
+        margin-left: 0;
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="d-flex">
