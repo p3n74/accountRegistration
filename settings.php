@@ -84,13 +84,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $mail->isSMTP();
                     $mail->Host = 'smtp.mailtrap.io';  // Set your SMTP server (replace with actual server)
                     $mail->SMTPAuth = true;
-                    $mail->Username = 'your_mailtrap_username';  // Replace with Mailtrap SMTP username
-                    $mail->Password = 'your_mailtrap_password';  // Replace with Mailtrap SMTP password
+                    $mail->Username = '21102134@usc.edu.ph';  // Replace with Mailtrap SMTP username
+                    $mail->Password = $apikey;  // Replace with Mailtrap SMTP password
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                     $mail->Port = 587;
 
                     // Recipients
-                    $mail->setFrom('no-reply@yourdomain.com', 'Your Website');
+                    $mail->setFrom('21102134@usc.edu.ph', 'Nikolai');
                     $mail->addAddress($new_email);  // Recipient's email address
 
                     // Content
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     // Send the email
                     $mail->send();
-                    echo "<p>A verification email has been sent to your new email address. Please check your inbox.</p>";
+                    //echo "<p>A verification email has been sent to your new email address. Please check your inbox.</p>";
                 } catch (Exception $e) {
                     $error_message = "Failed to send verification email. Error: " . $mail->ErrorInfo;
                 }
