@@ -45,6 +45,8 @@ $stmt_events->bind_param("i", $uid);  // Bind UID to the query
 $stmt_events->execute();
 $result_events = $stmt_events->get_result();
 
+$stmt_events->close();
+
 // Fetch the results for attended events
 $attendedEvents = [];
 while ($row = $result_events->fetch_assoc()) {
@@ -70,7 +72,7 @@ while ($row = $result_my_events->fetch_assoc()) {
 }
 
 // Close the events statement and DB connection
-
+$stmt_my_events->close();
 $conn->close();
 ?>
 <!DOCTYPE html>
