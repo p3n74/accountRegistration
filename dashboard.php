@@ -1,4 +1,4 @@
-<<?php
+<?php
 // Start the session
 session_start();
 
@@ -25,11 +25,11 @@ if ($stmt_user->fetch()) {
     // Use a default image if profile picture is not set
     $profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
 } else {
-    // Handle error if no data is found
+    // Handle error if no data is found (this block might not be needed in your case)
     die("User not found.");
 }
 
-// Close the user statement after fetching the results
+// Close the user details statement after fetching the results
 $stmt_user->close();
 
 // Prepare the SQL query to fetch attended events
@@ -80,6 +80,7 @@ $stmt_my_events->close();   // Close the statement
 // Close the database connection
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
