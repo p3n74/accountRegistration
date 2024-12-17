@@ -67,8 +67,8 @@ if ($result_participants->num_rows > 0) {
 
 $pdf->writeHTML($html, true, false, true, false, '');
 
-// Save PDF in the "pdfreports" folder
-$filename = 'pdfreports/participants_' . $eventid . '_' . time() . '.pdf';
+// Save PDF in the "eventpdfs" folder
+$filename = 'eventpdfs/participants_' . $eventid . '_' . time() . '.pdf';
 $pdf->Output($filename, 'F'); // Save to file system
 $pdf->Output(basename($filename), 'D'); // Download to user browser
 exit;
