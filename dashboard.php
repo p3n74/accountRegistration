@@ -211,7 +211,7 @@ $conn->close();
                   <td><?php echo htmlspecialchars($event['enddate']); ?></td>
                   <td><?php echo htmlspecialchars($event['location']); ?></td>
                   <td>
-                    <a href="manage_event.php?eventid=<?php echo $event['eventid']; ?>" class="btn btn-primary btn-sm">Manage</a>
+                    <a href="manage-event.php?eventid=<?php echo $event['eventid']; ?>" class="btn btn-primary btn-sm">Manage</a>
                   </td>
                 </tr>
               <?php endforeach; ?>
