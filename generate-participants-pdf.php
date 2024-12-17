@@ -16,6 +16,21 @@ if (!isset($_GET['eventid'])) {
 
 $eventid = htmlspecialchars($_GET['eventid']); // Get eventid safely
 
+// Fetch the event name from the database
+$sql_event = "SELECT eventname FROM events WHERE eventid = ?";
+$stmt_event = $conn->prepare($sql_event);
+$stmt_event->bind_param("i", $eventid);
+$stmt_event->execute();
+$result_event = $stmt_event->get_result();
+
+// Check if the event exists
+if ($result_event->num_rows > 0) {
+    $event = $result_event->fetch_assoc();
+    $eventname = $event['eventname'];
+} else {
+    die('Event not found.');
+}
+
 // Create a new PDF instance
 $pdf = new TCPDF();
 $pdf->AddPage();
@@ -25,7 +40,9 @@ $pdf->SetTitle('Participants List');
 
 // Set content font and title
 $pdf->SetFont('helvetica', '', 12);
-$pdf->Cell(0, 10, 'Participants List for Event ID: ' . $eventid, 0, 1, 'C');
+
+// Change header to display event name
+$pdf->Cell(0, 10, 'Participants List for Event: ' . $eventname, 0, 1, 'C');
 
 // SQL query to fetch participants from the database
 $sql_participants = "SELECT u.fname, u.lname, u.email, e.join_time, e.leave_time 
