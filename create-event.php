@@ -88,36 +88,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 ?>
 
-<?php
-// Start the session
-session_start();
-
-// Check if user is logged in by checking session for UID
-if (!isset($_SESSION['uid'])) {
-    die("You must log in first.");
-}
-
-// Include database connection
-require_once 'includes/db.php';
-
-// Retrieve UID from session
-$uid = $_SESSION['uid'];
-
-// Query to fetch user details (name, email, profile picture) based on UID
-$sql_user = "SELECT fname, mname, lname, email, profilepicture FROM user_credentials WHERE uid = ?";
-$stmt_user = $conn->prepare($sql_user);
-$stmt_user->bind_param("i", $uid);  // Bind UID to the query
-$stmt_user->execute();
-$stmt_user->bind_result($fname, $mname, $lname, $email, $profilepicture);  // Bind the result to variables
-$stmt_user->fetch();  // Fetch the data into the variables
-
-// Use a default image if profile picture is not set
-$profilepicture = $profilepicture ? $profilepicture : 'profilePictures/default.png';
-
-// Close the user details statement to avoid issues with subsequent queries
-$stmt_user->close();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
