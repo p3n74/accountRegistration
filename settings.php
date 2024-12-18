@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_update->execute();
         if ($stmt_update->affected_rows > 0) {
             // Redirect after successful update
-            header('Location: ' . $_SERVER['PHP_SELF']);
+            header("Location: settings.php?status=success");
             exit();
         } else {
             $error_message = "No changes were made or an error occurred.";
