@@ -36,7 +36,8 @@ if (isset($_GET['eventid'])) {
 }
 
 // Query to fetch event details
-$sql_event = "SELECT eventid, eventname, startdate, enddate, location, eventkey, eventshortinfo, eventinfopath, eventbadgepath FROM events WHERE eventid = ? AND eventcreator = ?";
+$sql_event = "SELECT eventid, eventname, startdate, enddate, location, eventkey, eventshortinfo, eventinfopath, eventbadgepath 
+              FROM events WHERE eventid = ? AND eventcreator = ?";
 $stmt_event = $conn->prepare($sql_event);
 $stmt_event->bind_param("ii", $eventid, $uid);
 $stmt_event->execute();
@@ -58,6 +59,9 @@ $stmt_participants = $conn->prepare($sql_participants);
 $stmt_participants->bind_param("i", $eventid);
 $stmt_participants->execute();
 $result_participants = $stmt_participants->get_result();
+
+// Count the total number of participants
+$participant_count = $result_participants->num_rows;
 ?>
 
 <!DOCTYPE html>
@@ -66,8 +70,8 @@ $result_participants = $stmt_participants->get_result();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manage Event</title>
-<!-- Favicon -->
-<link rel="icon" href="icon.png" type="image/png">
+  <!-- Favicon -->
+  <link rel="icon" href="icon.png" type="image/png">
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -133,8 +137,9 @@ $result_participants = $stmt_participants->get_result();
     <!-- Main content for Manage Event -->
     <div class="col-md-9 col-lg-10 p-3">
       <h2>Manage Event: <?php echo htmlspecialchars($eventname); ?></h2>
+      <p>Total Participants: <strong><?php echo $participant_count; ?></strong></p>
 
-      <!-- Action Buttons (Edit and Delete) moved to the top -->
+      <!-- Action Buttons (Edit and Delete) -->
       <div class="mt-4">
         <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning btn-custom">Edit Event</a>
         <form method="POST" class="d-inline">
