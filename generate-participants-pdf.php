@@ -54,8 +54,14 @@ $stmt->bind_param("i", $eventid);
 $stmt->execute();
 $result_participants = $stmt->get_result();
 
+// Count the number of participants
+$participant_count = $result_participants->num_rows;
+
+// Add a participant count heading
+$pdf->Cell(0, 10, 'Total Participants: ' . $participant_count, 0, 1, 'C');
+
 // Check if participants are found
-if ($result_participants->num_rows > 0) {
+if ($participant_count > 0) {
     // Generate the HTML table content for participants
     $html = '
     <table border="1" cellpadding="5">
