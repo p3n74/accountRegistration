@@ -71,7 +71,8 @@ $stmt_events->close();   // Close the statement
 $sql_my_events = "
     SELECT eventid, eventname, startdate, enddate, location
     FROM events
-    WHERE eventcreator = ?
+	WHERE eventcreator = ?
+	order by eventid desc;
 ";
 
 $stmt_my_events = $conn->prepare($sql_my_events);
