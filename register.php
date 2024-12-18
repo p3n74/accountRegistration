@@ -26,6 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "register") {
         die("Password must be at least 8 characters long.");
     }
 
+    // Create the fullname variable by concatenating first, middle, and last names
+    $fullname = trim("$fname $mname $lname");
+
     // Hash the password
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
@@ -44,9 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "register") {
     $token = bin2hex(random_bytes(32));
 
     // Insert user into the database
-    $insertSql = "INSERT INTO user_credentials (fname, mname, lname, email, password, currboundtoken, emailverified) VALUES (?, ?, ?, ?, ?, ?, 0)";
+    $insertSql = "INSERT INTO user_credentials (fname, mname, lname, fullname, email, password, currboundtoken, emailverified) VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
     $stmt = $conn->prepare($insertSql);
-    $stmt->bind_param("ssssss", $fname, $mname, $lname, $email, $hashedPassword, $token);
+    $stmt->bind_param("sssssss", $fname, $mname, $lname, $fullname, $email, $hashedPassword, $token);
 
     if ($stmt->execute()) {
         // Send confirmation email
