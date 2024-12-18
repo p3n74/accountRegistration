@@ -144,18 +144,16 @@ $participant_count = $result_participants->num_rows;
         <a href="update-event.php?eventid=<?php echo $eventid; ?>" class="btn btn-warning btn-custom">Edit Event</a>
         <form method="POST" class="d-inline">
           <button type="submit" name="delete_event" class="btn btn-danger btn-custom">Delete Event</button>
-        </form>
-	  </div>
-	<!-- Download Participants List -->
-      <div class="mt-3 text-center">
-        <form action="generate-participants-pdf.php" method="GET" target="_blank">
+		</form>
+		<form action="generate-participants-pdf.php" method="GET" target="_blank">
           <input type="hidden" name="eventid" value="<?php echo htmlspecialchars($eventid); ?>">
           <button type="submit" class="btn btn-primary">
             Download Participants List as PDF
           </button>
         </form>
-      </div>
 
+	  </div>
+	
       <div class="row mt-4">
         <!-- Event Details -->
         <div class="col-md-6 table-container">
