@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "reset-request"
                 // Content
                 $mail->isHTML(true);
                 $mail->Subject = 'Password Reset Request';
-                $resetLink = "http://accounts.dcism.org/accountRegistration/reset-password.php?token=$token"; // Include token in URL
+                $resetLink = "http://accounts.dcism.org/accounts/reset-password.php?token=$token"; // Include token in URL
                 $mail->Body = "<p>We received a request to reset your password. Please click the link below to reset your password:</p>
                                <p><a href='$resetLink'>Reset My Password</a></p>";
 
