@@ -1,6 +1,6 @@
 <?php
 // Include the database connection file
-require 'includes/db.php';
+require '../includes/db.php';
 
 // Initialize variables
 $error_message = '';

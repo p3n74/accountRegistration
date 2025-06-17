@@ -1,9 +1,9 @@
 <?php
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
-require 'includes/db.php'; // Include the database connection
-require 'includes/apikey.php'; // Include the API key
+require '../phpmailer/Exception.php';
+require '../phpmailer/PHPMailer.php';
+require '../phpmailer/SMTP.php';
+require '../includes/db.php'; // Include the database connection
+require '../includes/apikey.php'; // Include the API key
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

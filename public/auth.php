@@ -1,7 +1,7 @@
 <?php
 session_start(); // Start the session
 
-require 'includes/db.php'; // Include database connection
+require '../includes/db.php'; // Include database connection
 
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'login') {

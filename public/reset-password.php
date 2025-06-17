@@ -1,5 +1,5 @@
 <?php
-require 'includes/db.php'; // Include the database connection
+require '../includes/db.php'; // Include the database connection
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "reset-password") {
     // Get the token and new password from the form

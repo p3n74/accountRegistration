@@ -6,8 +6,8 @@ ob_end_clean();  // Clean any accidental output
 // Include TCPDF library
 require_once('tcpdf/tcpdf.php');
 
-// Include the database connection
-require_once 'includes/db.php';
+// Include database connection
+require_once '../includes/db.php';
 
 // Ensure that eventid is passed
 if (!isset($_GET['eventid'])) {

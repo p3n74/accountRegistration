@@ -8,13 +8,13 @@ if (!isset($_SESSION['uid'])) {
 }
 
 // Include database connection
-require_once 'includes/db.php';
+require_once '../includes/db.php';
 
 // Include PHPMailer
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
-require 'includes/apikey.php'; // Include the API key
+require '../phpmailer/Exception.php';
+require '../phpmailer/PHPMailer.php';
+require '../phpmailer/SMTP.php';
+require '../includes/apikey.php'; // Include the API key
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

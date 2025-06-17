@@ -3,7 +3,7 @@
 session_start();
 
 // Include database connection
-require_once 'includes/db.php';
+require_once '../includes/db.php';
 
 // Check if the verification code is provided
 if (isset($_GET['code']) && !empty($_GET['code'])) {

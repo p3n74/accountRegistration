@@ -6,8 +6,8 @@ if (!isset($_SESSION['uid'])) {
     die("You must log in first.");
 }
 
-// Include the database connection
-require_once 'includes/db.php';
+// Include database connection
+require_once '../includes/db.php';
 
 $uid = $_SESSION['uid'];
 

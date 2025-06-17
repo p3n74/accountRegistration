@@ -8,7 +8,7 @@ if (!isset($_SESSION['uid'])) {
 }
 
 // Include database connection
-require_once 'includes/db.php';
+require_once '../includes/db.php';
 
 // Retrieve UID from session
 $uid = $_SESSION['uid'];
