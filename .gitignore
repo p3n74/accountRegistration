@@ -1,3 +1,7 @@
 includes/db.php
 includes/apikey.php
 TCPDF/
+gitpull.php
+phpmailer/Exception.php
+phpmailer/PHPMailer.php
+phpmailer/SMTP.php
