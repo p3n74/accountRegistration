@@ -1,0 +1,26 @@
+<?php
+// Database configuration
+define('DB_HOST', 'localhost');
+define('DB_USER', '');
+define('DB_PASS', '');
+define('DB_NAME', '');
+
+// Application configuration
+define('APP_NAME', 'Event Management System');
+define('APP_URL', 'http://localhost/accounts');
+define('APP_ROOT', dirname(dirname(__FILE__)));
+
+// Email configuration
+define('SMTP_HOST', 'smtp.gmail.com');
+define('SMTP_PORT', 587);
+define('SMTP_USER', '21102134@usc.edu.ph');
+define('SMTP_PASS', ''); // Your API key here
+
+// File upload paths (relative to public directory)
+define('UPLOAD_PATH', 'uploads/');
+define('PROFILE_PICTURES_PATH', 'profilePictures/');
+define('EVENT_BADGES_PATH', 'eventbadges/');
+
+// Security
+define('TOKEN_EXPIRY', 600); // 10 minutes in seconds
+define('PASSWORD_MIN_LENGTH', 8); 

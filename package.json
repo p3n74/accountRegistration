@@ -1,0 +1,12 @@
+{
+  "name": "accounts-app",
+  "version": "1.0.0",
+  "description": "PHP Accounts Application with Tailwind CSS",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+    "build-prod": "tailwindcss -i ./src/input.css -o ./dist/output.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+} 
