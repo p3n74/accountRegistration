@@ -22,5 +22,5 @@ define('PROFILE_PICTURES_PATH', 'profilePictures/');
 define('EVENT_BADGES_PATH', 'eventbadges/');
 
 // Security
-define('TOKEN_EXPIRY', 600); // 10 minutes in seconds
+define('TOKEN_EXPIRY', 3600); // 1 hour
 define('PASSWORD_MIN_LENGTH', 8); 

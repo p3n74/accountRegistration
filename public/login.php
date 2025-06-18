@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Log-in</title>
+	<?php require_once '../includes/config.php'; ?>
 	 <!-- Favicon -->
  <link rel="icon" href="icon.png" type="image/png">
     <!-- Tailwind CSS -->

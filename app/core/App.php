@@ -19,8 +19,13 @@ class App {
         $publicRoutes = [
             'auth/login',
             'auth/register',
+            'auth/reset-password',
             'auth/forgot-password',
-            'auth/reset-password'
+            'auth/resetrequest',
+            'auth/reset',
+            'auth/resetpassword',
+            'auth/verify',
+            'auth/verifyemail'
         ];
 
         // Parse the URL

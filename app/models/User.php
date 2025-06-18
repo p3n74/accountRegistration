@@ -2,28 +2,28 @@
 
 class User extends Model {
     protected $table = 'user_credentials';
-    private $fileStorage;
 
     public function __construct() {
         parent::__construct();
-        require_once '../app/core/FileStorage.php';
-        $this->fileStorage = new FileStorage();
+    }
+
+    private function generateGUID() {
+        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0x0fff) | 0x4000,
+            mt_rand(0, 0x3fff) | 0x8000,
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+        );
     }
 
     public function getUserById($uid) {
         $sql = "SELECT uid, fname, mname, lname, email, profilepicture, emailverified FROM {$this->table} WHERE uid = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("i", $uid);
+        $stmt->bind_param("s", $uid);
         $stmt->execute();
         $result = $stmt->get_result();
-        $user = $result->fetch_assoc();
-        
-        // Sync user data to file storage for future migration
-        if ($user) {
-            $this->syncUserToFile($uid, $user);
-        }
-        
-        return $user;
+        return $result->fetch_assoc();
     }
 
     public function getUserByEmail($email) {
@@ -36,9 +36,13 @@ class User extends Model {
     }
 
     public function createUser($data) {
-        $sql = "INSERT INTO {$this->table} (fname, mname, lname, fullname, email, password, currboundtoken, emailverified) VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
+        // Generate GUID for new user
+        $uid = $this->generateGUID();
+        
+        $sql = "INSERT INTO {$this->table} (uid, fname, mname, lname, fullname, email, password, currboundtoken, emailverified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("sssssss", 
+        $stmt->bind_param("ssssssss", 
+            $uid,
             $data['fname'], 
             $data['mname'], 
             $data['lname'], 
@@ -49,10 +53,7 @@ class User extends Model {
         );
         
         if ($stmt->execute()) {
-            $uid = $this->db->getLastId();
-            // Create user file for future migration
-            $this->syncUserToFile($uid, $data);
-            return true;
+            return $uid; // Return the generated GUID
         }
         return false;
     }
@@ -60,11 +61,9 @@ class User extends Model {
     public function updateUser($uid, $data) {
         $sql = "UPDATE {$this->table} SET fname = ?, mname = ?, lname = ? WHERE uid = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("sssi", $data['fname'], $data['mname'], $data['lname'], $uid);
+        $stmt->bind_param("ssss", $data['fname'], $data['mname'], $data['lname'], $uid);
         
         if ($stmt->execute()) {
-            // Update file storage
-            $this->syncUserToFile($uid, $data);
             return true;
         }
         return false;
@@ -73,19 +72,18 @@ class User extends Model {
     public function updatePassword($uid, $password) {
         $sql = "UPDATE {$this->table} SET password = ? WHERE uid = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("si", $password, $uid);
+        $stmt->bind_param("ss", $password, $uid);
         return $stmt->execute();
     }
 
     public function updateProfilePicture($uid, $path) {
         $sql = "UPDATE {$this->table} SET profilepicture = ? WHERE uid = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("si", $path, $uid);
+        $stmt->bind_param("ss", $path, $uid);
         
         if ($stmt->execute()) {
             // Update file storage
             $userData = $this->getUserById($uid);
-            $this->syncUserToFile($uid, $userData);
             return true;
         }
         return false;
@@ -98,77 +96,61 @@ class User extends Model {
         if (!$user) return false;
         
         // Add to file storage (new system)
-        $this->fileStorage->addParticipantToEvent($eventId, $uid, [
-            'name' => trim($user['fname'] . ' ' . $user['lname']),
-            'email' => $user['email']
-        ]);
+        // $this->fileStorage->addParticipantToEvent($eventId, $uid, [
+        //     'name' => trim($user['fname'] . ' ' . $user['lname']),
+        //     'email' => $user['email']
+        // ]);
         
         // Also update database for backward compatibility
         $sql = "UPDATE {$this->table} SET attendedevents = JSON_ARRAY_APPEND(COALESCE(attendedevents, '[]'), '$', ?) WHERE uid = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("si", $eventId, $uid);
+        $stmt->bind_param("ss", $eventId, $uid);
         return $stmt->execute();
     }
 
     public function getAttendedEvents($uid) {
         // Use file storage for event participation (new system)
-        $userEvents = $this->fileStorage->getUserEvents($uid);
+        // $userEvents = $this->fileStorage->getUserEvents($uid);
         $attendedEvents = [];
         
-        foreach ($userEvents as $userEvent) {
-            $eventId = $userEvent['event_id'];
-            // Get event details from database
-            $sql = "SELECT eventid, eventname, startdate, enddate, location, eventshortinfo, eventbadgepath FROM events WHERE eventid = ?";
-            $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("i", $eventId);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $event = $result->fetch_assoc();
+        // foreach ($userEvents as $userEvent) {
+        //     $eventId = $userEvent['event_id'];
+        //     // Get event details from database
+        //     $sql = "SELECT eventid, eventname, startdate, enddate, location, eventshortinfo, eventbadgepath FROM events WHERE eventid = ?";
+        //     $stmt = $this->db->prepare($sql);
+        //     $stmt->bind_param("i", $eventId);
+        //     $stmt->execute();
+        //     $result = $stmt->get_result();
+        //     $event = $result->fetch_assoc();
             
-            if ($event) {
-                $attendedEvents[] = $event;
-            }
-        }
+        //     if ($event) {
+        //         $attendedEvents[] = $event;
+        //     }
+        // }
         
         return $attendedEvents;
-    }
-
-    // Private method to sync user data to file storage
-    private function syncUserToFile($uid, $userData) {
-        $fileData = [
-            'uid' => $uid,
-            'fname' => $userData['fname'] ?? '',
-            'mname' => $userData['mname'] ?? '',
-            'lname' => $userData['lname'] ?? '',
-            'email' => $userData['email'] ?? '',
-            'profilepicture' => $userData['profilepicture'] ?? '',
-            'emailverified' => $userData['emailverified'] ?? 0,
-            'last_updated' => date('Y-m-d H:i:s'),
-            'created_at' => $userData['creationtime'] ?? date('Y-m-d H:i:s')
-        ];
-        
-        $this->fileStorage->saveUserData($uid, $fileData);
     }
 
     // Legacy methods for backward compatibility
     public function updateEmail($uid, $email, $verificationCode) {
         $sql = "UPDATE {$this->table} SET new_email = ?, verification_code = ?, emailverified = 0 WHERE uid = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("ssi", $email, $verificationCode, $uid);
+        $stmt->bind_param("sss", $email, $verificationCode, $uid);
         return $stmt->execute();
     }
 
     public function verifyEmail($verificationCode) {
-        $sql = "UPDATE {$this->table} SET email = new_email, verification_code = NULL, emailverified = 1 WHERE verification_code = ?";
+        $sql = "UPDATE {$this->table} SET emailverified = 1, currboundtoken = NULL WHERE currboundtoken = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("s", $verificationCode);
-        return $stmt->execute();
+        return $stmt->execute() && $stmt->affected_rows > 0;
     }
 
-    public function setPasswordResetToken($email, $token, $expiry) {
-        $sql = "UPDATE {$this->table} SET password_reset_token = ?, password_reset_expiry = ? WHERE email = ?";
+    public function setPasswordResetToken($email, $token, $expirySeconds) {
+        // Let MySQL handle the timestamp math to avoid PHP/server timezone discrepancies
+        $sql = "UPDATE {$this->table} SET password_reset_token = ?, password_reset_expiry = DATE_ADD(NOW(), INTERVAL ? SECOND) WHERE email = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("sss", $token, $expiry, $email);
+        $stmt->bind_param("sis", $token, $expirySeconds, $email);
         return $stmt->execute();
     }
 
@@ -191,7 +173,7 @@ class User extends Model {
     public function updateToken($uid, $token) {
         $sql = "UPDATE {$this->table} SET currboundtoken = ?, creationtime = NOW() WHERE uid = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("si", $token, $uid);
+        $stmt->bind_param("ss", $token, $uid);
         return $stmt->execute();
     }
 

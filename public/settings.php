@@ -15,6 +15,7 @@ require '../phpmailer/Exception.php';
 require '../phpmailer/PHPMailer.php';
 require '../phpmailer/SMTP.php';
 require '../includes/apikey.php'; // Include the API key
+require_once '../includes/config.php'; // Include configuration (BASE_URL)
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -89,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Check if the update was successful
             if ($stmt_update_email->affected_rows > 0) {
                 // Send verification email using PHPMailer
-                $verification_link = "http://accounts.dcism.org/accountRegistration/verify_email.php?code=" . urlencode($verification_code);
+                $verification_link = BASE_URL . "verify_email.php?code=" . urlencode($verification_code);
 
                 // Set up PHPMailer
                 $mail = new PHPMailer(true);

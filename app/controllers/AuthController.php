@@ -7,6 +7,11 @@ class AuthController extends Controller {
         $this->userModel = $this->model('User');
     }
     
+    public function index() {
+        // Default method - redirect to login
+        $this->redirect('/auth/login');
+    }
+    
     public function login() {
         // If already logged in, redirect to dashboard
         if (isset($_SESSION['uid'])) {
@@ -29,25 +34,41 @@ class AuthController extends Controller {
             try {
                 $user = $this->userModel->getUserByEmail($email);
                 
-                if ($user && password_verify($password, $user['password'])) {
-                    // Set session variables
-                    $_SESSION['uid'] = $user['uid'];
-                    $_SESSION['email'] = $user['email'];
-                    $_SESSION['fname'] = $user['fname'] ?? '';
-                    $_SESSION['lname'] = $user['lname'] ?? '';
-                    $_SESSION['last_activity'] = time();
-                    
-                    // Regenerate session ID for security
-                    session_regenerate_id(true);
-                    
-                    // Redirect to dashboard
-                    header('Location: /dashboard');
-                    exit;
-                } else {
+                if (!$user) {
+                    // Email not found
                     $this->view('auth/login', [
-                        'error' => 'Invalid email or password'
+                        'error' => 'Email not registered'
                     ]);
+                    return;
                 }
+
+                if ((int)($user['emailverified'] ?? 0) !== 1) {
+                    // Email not verified
+                    $this->view('auth/login', [
+                        'error' => 'Email not verified. Please check your inbox.'
+                    ]);
+                    return;
+                }
+
+                if (!password_verify($password, $user['password'])) {
+                    // Password incorrect
+                    $this->view('auth/login', [
+                        'error' => 'Incorrect password'
+                    ]);
+                    return;
+                }
+
+                // Successful login
+                $_SESSION['uid'] = $user['uid'];
+                $_SESSION['email'] = $user['email'];
+                $_SESSION['fname'] = $user['fname'] ?? '';
+                $_SESSION['lname'] = $user['lname'] ?? '';
+                $_SESSION['last_activity'] = time();
+
+                session_regenerate_id(true);
+
+                header('Location: /dashboard');
+                exit;
             } catch (Exception $e) {
                 error_log("Login error: " . $e->getMessage());
                 $this->view('auth/login', [
@@ -113,21 +134,15 @@ class AuthController extends Controller {
                 ]);
                 
                 if ($isCreated) {
-                    // Retrieve the newly created user to fetch uid
-                    $user = $this->userModel->getUserByEmail($email);
-                    $uid = $user['uid'];
-                    // Set session variables
-                    $_SESSION['uid'] = $uid;
-                    $_SESSION['email'] = $email;
-                    $_SESSION['fname'] = $fname;
-                    $_SESSION['lname'] = $lname;
-                    $_SESSION['last_activity'] = time();
+                    // createUser now returns the GUID
+                    $uid = $isCreated;
                     
-                    // Regenerate session ID for security
-                    session_regenerate_id(true);
+                    // Send email verification instead of direct login
+                    $this->sendVerificationEmail($email, $token);
                     
-                    header('Location: /dashboard');
-                    exit;
+                    $this->view('auth/register', [
+                        'success' => 'Registration successful! Please check your email for a verification link before logging in.'
+                    ]);
                 } else {
                     $this->view('auth/register', [
                         'error' => 'Registration failed'
@@ -178,7 +193,7 @@ class AuthController extends Controller {
                 $token = bin2hex(random_bytes(32));
                 $expiry = date('Y-m-d H:i:s', time() + TOKEN_EXPIRY);
                 
-                if ($userModel->setPasswordResetToken($email, $token, $expiry)) {
+                if ($userModel->setPasswordResetToken($email, $token, TOKEN_EXPIRY)) {
                     $this->sendPasswordResetEmail($email, $token);
                 }
             }
@@ -192,7 +207,8 @@ class AuthController extends Controller {
     }
     
     public function resetPassword($token = null) {
-        if (!$token) {
+        $token = trim((string)$token);
+        if ($token === '') {
             $this->redirect('/auth/login');
         }
         
@@ -251,39 +267,133 @@ class AuthController extends Controller {
         $this->redirect('/auth/login');
     }
     
+    public function verify($token = null) {
+        if (!$token || strlen($token) !== 64) {
+            $this->setFlash('error', 'Invalid token provided.');
+            $this->redirect('/auth/login');
+            return;
+        }
+        
+        // Use legacy-compatible verification logic
+        require_once '../includes/db.php';
+        
+        $stmt = $conn->prepare("SELECT uid FROM user_credentials WHERE currboundtoken = ? AND emailverified = 0");
+        if (!$stmt) {
+            $this->setFlash('error', 'Database error occurred.');
+            $this->redirect('/auth/login');
+            return;
+        }
+        
+        $stmt->bind_param("s", $token);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows > 0) {
+            $updateStmt = $conn->prepare("UPDATE user_credentials SET emailverified = 1, currboundtoken = '0' WHERE currboundtoken = ?");
+            if (!$updateStmt) {
+                $this->setFlash('error', 'Database error occurred.');
+                $this->redirect('/auth/login');
+                return;
+            }
+            
+            $updateStmt->bind_param("s", $token);
+            if ($updateStmt->execute()) {
+                $this->setFlash('success', 'Your email has been successfully verified! You can now log in.');
+            } else {
+                $this->setFlash('error', 'Error during verification. Please try again.');
+            }
+            $updateStmt->close();
+        } else {
+            $this->setFlash('error', 'Invalid or expired verification token.');
+        }
+        
+        $stmt->close();
+        $this->redirect('/auth/login');
+    }
+    
     private function sendVerificationEmail($email, $token) {
-        $subject = "Email Verification - " . APP_NAME;
-        $verificationLink = APP_URL . "/auth/verify/" . $token;
-        
-        $message = "
-        <html>
-        <body>
-            <h2>Welcome to " . APP_NAME . "!</h2>
-            <p>Please click the link below to verify your email address:</p>
-            <p><a href='{$verificationLink}'>{$verificationLink}</a></p>
-            <p>If you didn't create an account, you can safely ignore this email.</p>
-        </body>
-        </html>";
-        
-        $this->sendEmail($email, $subject, $message);
+        require_once '../phpmailer/Exception.php';
+        require_once '../phpmailer/PHPMailer.php';
+        require_once '../phpmailer/SMTP.php';
+        require_once '../includes/apikey.php';
+        require_once '../includes/config.php';
+
+        $verificationLink = BASE_URL . 'auth/verify/' . $token;
+
+        $signature = "<br><br>--
+                      <br><strong>Nikolai Tristan E. Pazon</strong>
+                      <br>Vice-President for Finance | Computer and Information Sciences Council
+                      <br><a href='http://dcism.org'>Department of Computer, Information Sciences, and Mathematics</a>
+                      <br><span style='color: green;'>UNIVERSITY OF SAN CARLOS</span>
+                      <br><em style='color: green;'>The content of this email is confidential and is intended for the recipient specified in message only. It is strictly forbidden to share any part of this message with any third party without the express consent of the sender. If you received this message by mistake, please reply to this message and follow with its deletion, so that we can ensure such a mistake does not occur in the future.
+    </em>";
+
+        $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = '21102134@usc.edu.ph';
+            $mail->Password   = $apikey;
+            $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
+
+            $mail->setFrom('21102134@usc.edu.ph', 'DCISM Accounts');
+            $mail->addAddress($email);
+
+            $mail->isHTML(true);
+            $mail->Subject = 'Email Verification - DCISM Accounts';
+            $mail->Body    = "<p>Welcome to DCISM Accounts!</p>
+                               <p>Please click the link below to verify your email address:</p>
+                               <p><a href='$verificationLink'>Verify My Email</a></p>
+                               <p>If you didn't create an account, you can safely ignore this email.</p>" . $signature;
+
+            $mail->send();
+        } catch (\PHPMailer\PHPMailer\Exception $e) {
+            error_log('PHPMailer error: ' . $e->getMessage());
+        }
     }
     
     private function sendPasswordResetEmail($email, $token) {
-        $subject = "Password Reset - " . APP_NAME;
-        $resetLink = APP_URL . "/auth/reset/" . $token;
-        
-        $message = "
-        <html>
-        <body>
-            <h2>Password Reset Request</h2>
-            <p>You requested a password reset. Click the link below to reset your password:</p>
-            <p><a href='{$resetLink}'>{$resetLink}</a></p>
-            <p>This link will expire in 10 minutes.</p>
-            <p>If you didn't request a password reset, you can safely ignore this email.</p>
-        </body>
-        </html>";
-        
-        $this->sendEmail($email, $subject, $message);
+        require_once '../phpmailer/Exception.php';
+        require_once '../phpmailer/PHPMailer.php';
+        require_once '../phpmailer/SMTP.php';
+        require_once '../includes/apikey.php';
+        require_once '../includes/config.php';
+
+        $resetLink = BASE_URL . 'auth/reset/' . $token;
+
+        $signature = "<br><br>--
+                      <br><strong>Nikolai Tristan E. Pazon</strong>
+                      <br>Vice-President for Finance | Computer and Information Sciences Council
+                      <br><a href='http://dcism.org'>Department of Computer, Information Sciences, and Mathematics</a>
+                      <br><span style='color: green;'>UNIVERSITY OF SAN CARLOS</span>
+                      <br><em style='color: green;'>The content of this email is confidential and is intended for the recipient specified in message only. It is strictly forbidden to share any part of this message with any third party without the express consent of the sender. If you received this message by mistake, please reply to this message and follow with its deletion, so that we can ensure such a mistake does not occur in the future.
+    </em>";
+
+        $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = '21102134@usc.edu.ph';
+            $mail->Password   = $apikey;
+            $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
+
+            $mail->setFrom('21102134@usc.edu.ph', 'DCISM Accounts');
+            $mail->addAddress($email);
+
+            $mail->isHTML(true);
+            $mail->Subject = 'Password Reset Request';
+            $mail->Body    = "<p>You requested a password reset. Click the link below to reset your password:</p>
+                               <p><a href='$resetLink'>Reset My Password</a></p>
+                               <p>This link will expire in 1 hour.</p>" . $signature;
+
+            $mail->send();
+        } catch (\PHPMailer\PHPMailer\Exception $e) {
+            error_log('PHPMailer error: ' . $e->getMessage());
+        }
     }
     
     private function sendEmail($to, $subject, $message) {
@@ -292,5 +402,9 @@ class AuthController extends Controller {
         $headers .= "From: " . APP_NAME . " <" . SMTP_USER . ">" . "\r\n";
         
         mail($to, $subject, $message, $headers);
+    }
+
+    public function reset($token = null) {
+        return $this->resetPassword($token);
     }
 } 

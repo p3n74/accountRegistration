@@ -14,6 +14,21 @@
             </p>
         </div>
         
+        <?php if (isset($error)): ?>
+            <div class="bg-red-100 text-red-700 px-4 py-2 rounded">
+                <?= htmlspecialchars($error); ?>
+            </div>
+        <?php endif; ?>
+        <?php if (isset($flash) && $flash['type'] === 'error'): ?>
+            <div class="bg-red-100 text-red-700 px-4 py-2 rounded">
+                <?= htmlspecialchars($flash['message']); ?>
+            </div>
+        <?php elseif (isset($flash) && $flash['type'] === 'success'): ?>
+            <div class="bg-green-100 text-green-700 px-4 py-2 rounded">
+                <?= htmlspecialchars($flash['message']); ?>
+            </div>
+        <?php endif; ?>
+
         <form class="mt-8 space-y-6" method="POST">
             <div class="rounded-md shadow-sm -space-y-px">
                 <div>
@@ -32,7 +47,7 @@
 
             <div class="flex items-center justify-between">
                 <div class="text-sm">
-                    <a href="/auth/reset-request" class="font-medium text-indigo-600 hover:text-indigo-500">
+                    <a href="/auth/resetRequest" class="font-medium text-indigo-600 hover:text-indigo-500">
                         Forgot your password?
                     </a>
                 </div>

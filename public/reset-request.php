@@ -4,6 +4,7 @@ require '../phpmailer/PHPMailer.php';
 require '../phpmailer/SMTP.php';
 require '../includes/db.php'; // Include the database connection
 require '../includes/apikey.php'; // Include the API key
+require_once '../includes/config.php'; // Include configuration (BASE_URL)
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -52,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "reset-request"
                 // Content
                 $mail->isHTML(true);
                 $mail->Subject = 'Password Reset Request';
-                $resetLink = "http://accounts.dcism.org/accounts/reset-password.php?token=$token"; // Include token in URL
+                $resetLink = BASE_URL . "reset-password.php?token=$token"; // Include token in URL
                 $mail->Body = "<p>We received a request to reset your password. Please click the link below to reset your password:</p>
                                <p><a href='$resetLink'>Reset My Password</a></p>";
 
@@ -68,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "reset-request"
         $stmt->close();
         $conn->close();
         
-        // Redirect to the same page to prevent form resubmission on refresh
-        header("Location: " . $_SERVER['PHP_SELF']);
+        // Redirect to a success status page to prevent form resubmission
+        header("Location: reset-request.php?status=success");
         exit;
     }
 }
@@ -96,10 +97,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "reset-request"
             <?php endif; ?>
 
             <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
-                <div class="alert alert-success mb-6">Password reset email has been sent. Please check your inbox.</div>
+                <div class="alert alert-success mb-6">If an account with that email exists, a password reset link has been sent. Please check your inbox.</div>
             <?php endif; ?>
 
-            <form method="POST">
+            <form method="POST" action="reset-request.php">
                 <input type="hidden" name="action" value="reset-request">
                 
                 <div class="mb-6">

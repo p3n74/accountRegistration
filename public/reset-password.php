@@ -1,6 +1,11 @@
 <?php
 require '../includes/db.php'; // Include the database connection
 
+// Get token from URL parameter
+$token = isset($_GET['token']) ? $_GET['token'] : '';
+$message = '';
+$alert_class = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] == "reset-password") {
     // Get the token and new password from the form
     $token = $_POST['token'];
