@@ -1,0 +1,18 @@
+{
+    "eventid": "10",
+    "eventname": "App dev expo",
+    "startdate": "2025-06-19 07:50:00",
+    "enddate": "2025-06-19 09:50:00",
+    "location": "Cebu",
+    "eventshortinfo": "bla bla bla bla bal",
+    "eventcreator": 7,
+    "eventkey": "F5E6AF36",
+    "eventbadgepath": "eventbadges\/default.png",
+    "eventinfopath": "",
+    "last_updated": "2025-06-17 23:53:10",
+    "settings": {
+        "registration_open": true,
+        "max_participants": null,
+        "require_approval": false
+    }
+}

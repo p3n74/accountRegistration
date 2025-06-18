@@ -1,13 +1,13 @@
 <?php
 // Database configuration
-define('DB_HOST', 'localhost');
-define('DB_USER', '');
-define('DB_PASS', '');
-define('DB_NAME', '');
+define('DB_HOST', '127.0.0.1');
+define('DB_USER', 's21102134_palisade');
+define('DB_PASS', 'webwebwebweb');
+define('DB_NAME', 's21102134_palisade');
 
 // Application configuration
 define('APP_NAME', 'Event Management System');
-define('APP_URL', 'http://localhost/accounts');
+define('APP_URL', 'http://localhost:8000');
 define('APP_ROOT', dirname(dirname(__FILE__)));
 
 // Email configuration

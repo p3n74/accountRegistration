@@ -1,5 +1,5 @@
 <?php
-$servername = "localhost";
+$servername = "dbadmin.dcism.org";
 $username = "s21102134_palisade"; 
 $password = "webwebwebweb";
 $dbname = "s21102134_palisade";

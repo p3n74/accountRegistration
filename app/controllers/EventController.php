@@ -44,43 +44,18 @@ class EventController extends Controller {
             
             $eventModel = $this->model('Event');
             
-            // Check if event name already exists
-            if ($eventModel->getEventByName($eventname)) {
-                $this->setFlash('error', 'An event with this name already exists');
-                $this->view('events/create', [
-                    'eventname' => $eventname,
-                    'startdate' => $startdate,
-                    'enddate' => $enddate,
-                    'location' => $location,
-                    'eventshortinfo' => $eventshortinfo,
-                    'eventinfo' => $eventinfo
-                ]);
-                return;
-            }
-            
-            // Generate unique event key
-            $eventkey = $this->generateEventKey();
-            
-            // Handle file uploads
-            $eventinfopath = $this->handleEventInfoUpload($eventinfo);
-            $eventbadgepath = $this->handleBadgeUpload();
-            
-            $uid = $this->getCurrentUserId();
-            
             $eventData = [
                 'eventname' => $eventname,
                 'startdate' => $startdate,
                 'enddate' => $enddate,
                 'location' => $location,
-                'eventinfopath' => $eventinfopath,
-                'eventbadgepath' => $eventbadgepath,
-                'eventcreator' => $uid,
-                'eventkey' => $eventkey,
                 'eventshortinfo' => $eventshortinfo,
-                'participantcount' => 0
+                'eventcreator' => $_SESSION['uid'],
+                'eventkey' => $eventModel->generateEventKey()
             ];
             
-            if ($eventModel->createEvent($eventData)) {
+            $eventId = $eventModel->createEvent($eventData);
+            if ($eventId) {
                 $this->setFlash('success', 'Event created successfully!');
                 $this->redirect('/dashboard');
             } else {
@@ -139,26 +114,11 @@ class EventController extends Controller {
                 return;
             }
             
-            // Check if event name already exists (excluding current event)
-            $existingEvent = $eventModel->getEventByName($eventname);
-            if ($existingEvent && $existingEvent['eventid'] != $eventId) {
-                $this->setFlash('error', 'An event with this name already exists');
-                $this->view('events/edit', ['event' => $event]);
-                return;
-            }
-            
-            // Handle file uploads
-            $eventinfopath = $this->handleEventInfoUpload($eventinfo, $event['eventinfopath']);
-            $eventbadgepath = $this->handleBadgeUpload($event['eventbadgepath']);
-            
             $eventData = [
                 'eventname' => $eventname,
                 'startdate' => $startdate,
                 'enddate' => $enddate,
                 'location' => $location,
-                'eventinfopath' => $eventinfopath,
-                'eventbadgepath' => $eventbadgepath,
-                'eventkey' => $event['eventkey'],
                 'eventshortinfo' => $eventshortinfo
             ];
             
@@ -266,75 +226,5 @@ class EventController extends Controller {
         }
         
         $this->redirect('/dashboard');
-    }
-    
-    private function generateEventKey() {
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $key = '';
-        for ($i = 0; $i < 6; $i++) {
-            $key .= $characters[rand(0, strlen($characters) - 1)];
-        }
-        return $key;
-    }
-    
-    private function handleEventInfoUpload($eventinfo, $existingPath = null) {
-        if (empty($eventinfo)) {
-            return $existingPath;
-        }
-        
-        $uploadDir = UPLOAD_PATH;
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
-        
-        $filename = 'eventinfo_' . time() . '.html';
-        $filepath = $uploadDir . $filename;
-        
-        if (file_put_contents($filepath, $eventinfo)) {
-            // Delete old file if it exists
-            if ($existingPath && file_exists($existingPath)) {
-                unlink($existingPath);
-            }
-            return $filepath;
-        }
-        
-        return $existingPath;
-    }
-    
-    private function handleBadgeUpload($existingPath = null) {
-        if (!isset($_FILES['eventbadge']) || $_FILES['eventbadge']['error'] !== UPLOAD_ERR_OK) {
-            return $existingPath;
-        }
-        
-        $file = $_FILES['eventbadge'];
-        
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        if (!in_array($file['type'], $allowedTypes)) {
-            return $existingPath;
-        }
-        
-        $maxSize = 5 * 1024 * 1024; // 5MB
-        if ($file['size'] > $maxSize) {
-            return $existingPath;
-        }
-        
-        $uploadDir = EVENT_BADGES_PATH;
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
-        
-        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $filename = 'badge_' . time() . '.' . $extension;
-        $filepath = $uploadDir . $filename;
-        
-        if (move_uploaded_file($file['tmp_name'], $filepath)) {
-            // Delete old file if it exists
-            if ($existingPath && file_exists($existingPath)) {
-                unlink($existingPath);
-            }
-            return $filepath;
-        }
-        
-        return $existingPath;
     }
 } 

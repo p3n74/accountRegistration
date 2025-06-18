@@ -1,50 +1,71 @@
 <?php
 
 class Database {
-    private $host;
-    private $username;
-    private $password;
-    private $database;
+    private $host = '127.0.0.1';
+    private $user = 's21102134_palisade';
+    private $pass = 'webwebwebweb';
+    private $dbname = 's21102134_palisade';
     private $conn;
+    private $maxRetries = 3;
+    private $retryDelay = 1; // seconds
 
     public function __construct() {
-        $this->host = DB_HOST;
-        $this->username = DB_USER;
-        $this->password = DB_PASS;
-        $this->database = DB_NAME;
         $this->connect();
     }
 
     private function connect() {
-        $this->conn = new mysqli($this->host, $this->username, $this->password, $this->database);
-        
-        if ($this->conn->connect_error) {
-            die("Connection failed: " . $this->conn->connect_error);
+        $retries = 0;
+        while ($retries < $this->maxRetries) {
+            try {
+                $this->conn = new mysqli($this->host, $this->user, $this->pass, $this->dbname);
+                
+                if ($this->conn->connect_error) {
+                    throw new Exception("Connection failed: " . $this->conn->connect_error);
+                }
+                
+                // Set charset to utf8mb4
+                $this->conn->set_charset("utf8mb4");
+                
+                // Set connection timeout
+                $this->conn->options(MYSQLI_OPT_CONNECT_TIMEOUT, 5);
+                
+                return;
+            } catch (Exception $e) {
+                $retries++;
+                if ($retries >= $this->maxRetries) {
+                    throw new Exception("Database connection failed after {$this->maxRetries} attempts: " . $e->getMessage());
+                }
+                sleep($this->retryDelay);
+            }
         }
     }
 
-    public function getConnection() {
-        return $this->conn;
-    }
-
     public function query($sql) {
-        return $this->conn->query($sql);
+        try {
+            if (!$this->conn) {
+                $this->connect();
+            }
+            return $this->conn->query($sql);
+        } catch (Exception $e) {
+            // Try to reconnect once
+            $this->connect();
+            return $this->conn->query($sql);
+        }
     }
 
-    public function prepare($sql) {
-        return $this->conn->prepare($sql);
+    public function escape($value) {
+        if (!$this->conn) {
+            $this->connect();
+        }
+        return $this->conn->real_escape_string($value);
     }
 
-    public function escape($string) {
-        return $this->conn->real_escape_string($string);
+    public function getLastError() {
+        return $this->conn->error;
     }
 
-    public function getLastInsertId() {
+    public function getLastId() {
         return $this->conn->insert_id;
-    }
-
-    public function getAffectedRows() {
-        return $this->conn->affected_rows;
     }
 
     public function beginTransaction() {
@@ -59,7 +80,16 @@ class Database {
         $this->conn->rollback();
     }
 
-    public function close() {
-        $this->conn->close();
+    public function prepare($sql) {
+        if (!$this->conn) {
+            $this->connect();
+        }
+        return $this->conn->prepare($sql);
+    }
+
+    public function __destruct() {
+        if ($this->conn) {
+            $this->conn->close();
+        }
     }
 } 

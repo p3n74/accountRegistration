@@ -21,13 +21,13 @@
                         <a href="/events/create" class="text-gray-600 hover:text-gray-900">Create Event</a>
                         <a href="/dashboard/badges" class="text-gray-600 hover:text-gray-900">My Badges</a>
                         <div class="relative group">
-                            <button class="flex items-center text-gray-600 hover:text-gray-900">
+                            <button class="flex items-center text-gray-600 hover:text-gray-900" onclick="toggleDropdown(event)">
                                 <span><?= $_SESSION['fname'] ?></span>
                                 <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
-                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
+                            <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden">
                                 <a href="/dashboard/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
                                 <a href="/auth/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
                             </div>
@@ -40,8 +40,7 @@
 
     <!-- Flash Messages -->
     <?php 
-    $flash = $this->getFlash();
-    if ($flash): 
+    if (isset($flash) && $flash): 
     ?>
         <div class="max-w-7xl mx-auto px-4 mt-4">
             <div class="rounded-md p-4 <?= $flash['type'] === 'success' ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200' ?>">
@@ -78,5 +77,24 @@
             <p class="text-center text-gray-500">&copy; <?= date('Y') ?> <?= APP_NAME ?>. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+        function toggleDropdown(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            const button = event.target.closest('[onclick*="toggleDropdown"]');
+            
+            if (!button && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
 </body>
 </html> 

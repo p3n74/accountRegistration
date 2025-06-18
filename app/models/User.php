@@ -2,6 +2,13 @@
 
 class User extends Model {
     protected $table = 'user_credentials';
+    private $fileStorage;
+
+    public function __construct() {
+        parent::__construct();
+        require_once '../app/core/FileStorage.php';
+        $this->fileStorage = new FileStorage();
+    }
 
     public function getUserById($uid) {
         $sql = "SELECT uid, fname, mname, lname, email, profilepicture, emailverified FROM {$this->table} WHERE uid = ?";
@@ -9,7 +16,14 @@ class User extends Model {
         $stmt->bind_param("i", $uid);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->fetch_assoc();
+        $user = $result->fetch_assoc();
+        
+        // Sync user data to file storage for future migration
+        if ($user) {
+            $this->syncUserToFile($uid, $user);
+        }
+        
+        return $user;
     }
 
     public function getUserByEmail($email) {
@@ -33,14 +47,27 @@ class User extends Model {
             $data['password'], 
             $data['token']
         );
-        return $stmt->execute();
+        
+        if ($stmt->execute()) {
+            $uid = $this->db->getLastId();
+            // Create user file for future migration
+            $this->syncUserToFile($uid, $data);
+            return true;
+        }
+        return false;
     }
 
     public function updateUser($uid, $data) {
         $sql = "UPDATE {$this->table} SET fname = ?, mname = ?, lname = ? WHERE uid = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("sssi", $data['fname'], $data['mname'], $data['lname'], $uid);
-        return $stmt->execute();
+        
+        if ($stmt->execute()) {
+            // Update file storage
+            $this->syncUserToFile($uid, $data);
+            return true;
+        }
+        return false;
     }
 
     public function updatePassword($uid, $password) {
@@ -54,9 +81,76 @@ class User extends Model {
         $sql = "UPDATE {$this->table} SET profilepicture = ? WHERE uid = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("si", $path, $uid);
+        
+        if ($stmt->execute()) {
+            // Update file storage
+            $userData = $this->getUserById($uid);
+            $this->syncUserToFile($uid, $userData);
+            return true;
+        }
+        return false;
+    }
+
+    // New file-based event participation methods (replacing attendedevents JSON)
+    public function addAttendedEvent($uid, $eventId) {
+        // Get user data for file storage
+        $user = $this->getUserById($uid);
+        if (!$user) return false;
+        
+        // Add to file storage (new system)
+        $this->fileStorage->addParticipantToEvent($eventId, $uid, [
+            'name' => trim($user['fname'] . ' ' . $user['lname']),
+            'email' => $user['email']
+        ]);
+        
+        // Also update database for backward compatibility
+        $sql = "UPDATE {$this->table} SET attendedevents = JSON_ARRAY_APPEND(COALESCE(attendedevents, '[]'), '$', ?) WHERE uid = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("si", $eventId, $uid);
         return $stmt->execute();
     }
 
+    public function getAttendedEvents($uid) {
+        // Use file storage for event participation (new system)
+        $userEvents = $this->fileStorage->getUserEvents($uid);
+        $attendedEvents = [];
+        
+        foreach ($userEvents as $userEvent) {
+            $eventId = $userEvent['event_id'];
+            // Get event details from database
+            $sql = "SELECT eventid, eventname, startdate, enddate, location, eventshortinfo, eventbadgepath FROM events WHERE eventid = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("i", $eventId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $event = $result->fetch_assoc();
+            
+            if ($event) {
+                $attendedEvents[] = $event;
+            }
+        }
+        
+        return $attendedEvents;
+    }
+
+    // Private method to sync user data to file storage
+    private function syncUserToFile($uid, $userData) {
+        $fileData = [
+            'uid' => $uid,
+            'fname' => $userData['fname'] ?? '',
+            'mname' => $userData['mname'] ?? '',
+            'lname' => $userData['lname'] ?? '',
+            'email' => $userData['email'] ?? '',
+            'profilepicture' => $userData['profilepicture'] ?? '',
+            'emailverified' => $userData['emailverified'] ?? 0,
+            'last_updated' => date('Y-m-d H:i:s'),
+            'created_at' => $userData['creationtime'] ?? date('Y-m-d H:i:s')
+        ];
+        
+        $this->fileStorage->saveUserData($uid, $fileData);
+    }
+
+    // Legacy methods for backward compatibility
     public function updateEmail($uid, $email, $verificationCode) {
         $sql = "UPDATE {$this->table} SET new_email = ?, verification_code = ?, emailverified = 0 WHERE uid = ?";
         $stmt = $this->db->prepare($sql);
@@ -110,34 +204,31 @@ class User extends Model {
         return $result->fetch_assoc();
     }
 
-    public function addAttendedEvent($uid, $eventId) {
-        $sql = "UPDATE {$this->table} SET attendedevents = JSON_ARRAY_APPEND(attendedevents, '$', ?) WHERE uid = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("si", $eventId, $uid);
-        return $stmt->execute();
+    // Deprecated methods (keeping for backward compatibility)
+    public function findByEmail($email) {
+        return $this->getUserByEmail($email);
     }
 
-    public function getAttendedEvents($uid) {
-        $sql = "WITH user_events AS (
-            SELECT JSON_UNQUOTE(JSON_EXTRACT(attendedevents, CONCAT('$[', n.n, ']'))) AS eventid
-            FROM {$this->table} u
-            JOIN (
-                SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 
-                UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 
-                UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 
-                UNION ALL SELECT 9
-            ) AS n
-            WHERE u.uid = ?
-            AND JSON_UNQUOTE(JSON_EXTRACT(u.attendedevents, CONCAT('$[', n.n, ']'))) IS NOT NULL
-        )
-        SELECT e.eventid, e.eventname, e.startdate, e.enddate, e.location, e.eventshortinfo, e.eventbadgepath
-        FROM events e
-        JOIN user_events ue ON e.eventid = ue.eventid";
-        
-        $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("i", $uid);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
+    public function create($data) {
+        return $this->createUser($data);
+    }
+
+    public function update($id, $data) {
+        return $this->updateUser($id, $data);
+    }
+
+    public function delete($id) {
+        try {
+            $id = (int)$id;
+            $sql = "DELETE FROM users WHERE id = {$id}";
+            return $this->db->query($sql);
+        } catch (Exception $e) {
+            error_log("Error deleting user: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function findById($id) {
+        return $this->getUserById($id);
     }
 } 
