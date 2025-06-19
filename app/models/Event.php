@@ -13,17 +13,14 @@ class Event extends Model {
     public function getEventById($eventId) {
         $sql = "SELECT * FROM {$this->table} WHERE eventid = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("i", $eventId);
+        $stmt->bind_param("s", $eventId);
         $stmt->execute();
         $result = $stmt->get_result();
         $event = $result->fetch_assoc();
         
         if ($event) {
-            // Sync to file storage
-            $this->syncEventToFile($eventId, $event);
-            
-            // Get participant count from file storage (new system)
-            $participants = $this->fileStorage->getEventParticipants($eventId);
+            // Fetch participants from DB
+            $participants = $this->getEventParticipants($eventId);
             $event['participant_count_file'] = count($participants);
             $event['participants'] = $participants;
         }
@@ -34,14 +31,14 @@ class Event extends Model {
     public function getEventsByCreator($creatorId) {
         $sql = "SELECT * FROM {$this->table} WHERE eventcreator = ? ORDER BY startdate DESC";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("i", $creatorId);
+        $stmt->bind_param("s", $creatorId);
         $stmt->execute();
         $result = $stmt->get_result();
         $events = [];
         
         while ($row = $result->fetch_assoc()) {
-            // Get participant count from file storage
-            $participants = $this->fileStorage->getEventParticipants($row['eventid']);
+            // Fetch participants from DB
+            $participants = $this->getEventParticipants($row['eventid']);
             $row['participant_count_file'] = count($participants);
             $events[] = $row;
         }
@@ -50,9 +47,13 @@ class Event extends Model {
     }
 
     public function createEvent($data) {
-        $sql = "INSERT INTO {$this->table} (eventname, startdate, enddate, location, eventshortinfo, eventcreator, eventkey, participantcount) VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
+        // Generate GUID for the new event
+        $eventId = $this->generateGUID();
+
+        $sql = "INSERT INTO {$this->table} (eventid, eventname, startdate, enddate, location, eventshortinfo, eventcreator, eventkey, participantcount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("sssssss", 
+        $stmt->bind_param("ssssssss", 
+            $eventId,
             $data['eventname'], 
             $data['startdate'], 
             $data['enddate'], 
@@ -63,8 +64,6 @@ class Event extends Model {
         );
         
         if ($stmt->execute()) {
-            $eventId = $this->db->getLastId();
-            
             // Create event file for new storage system
             $eventFileData = [
                 'eventid' => $eventId,
@@ -93,7 +92,7 @@ class Event extends Model {
     public function updateEvent($eventId, $data) {
         $sql = "UPDATE {$this->table} SET eventname = ?, startdate = ?, enddate = ?, location = ?, eventshortinfo = ? WHERE eventid = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("sssssi", 
+        $stmt->bind_param("ssssss", 
             $data['eventname'], 
             $data['startdate'], 
             $data['enddate'], 
@@ -114,7 +113,7 @@ class Event extends Model {
     public function deleteEvent($eventId) {
         $sql = "DELETE FROM {$this->table} WHERE eventid = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("i", $eventId);
+        $stmt->bind_param("s", $eventId);
         
         if ($stmt->execute()) {
             // Clean up file storage
@@ -142,8 +141,8 @@ class Event extends Model {
         $event = $result->fetch_assoc();
         
         if ($event) {
-            // Get participant count from file storage
-            $participants = $this->fileStorage->getEventParticipants($event['eventid']);
+            // Fetch participants from DB
+            $participants = $this->getEventParticipants($event['eventid']);
             $event['participant_count_file'] = count($participants);
             $event['participants'] = $participants;
         }
@@ -154,70 +153,109 @@ class Event extends Model {
     public function incrementParticipantCount($eventId) {
         $sql = "UPDATE {$this->table} SET participantcount = participantcount + 1 WHERE eventid = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("i", $eventId);
+        $stmt->bind_param("s", $eventId);
         return $stmt->execute();
     }
 
     public function decrementParticipantCount($eventId) {
         $sql = "UPDATE {$this->table} SET participantcount = GREATEST(participantcount - 1, 0) WHERE eventid = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("i", $eventId);
+        $stmt->bind_param("s", $eventId);
         return $stmt->execute();
     }
 
-    // New file-based participant management (replaces event_participants table)
-    public function addParticipant($eventId, $uid) {
-        // Get user data
+    /* ---------------- participant management (DB) ---------------- */
+    public function addParticipant(string $eventId, ?string $uid = null, ?string $email = null, int $attendanceStatus = 1) {
+        // resolve email if uid provided
         require_once '../app/models/User.php';
         $userModel = new User();
-        $user = $userModel->getUserById($uid);
-        
-        if (!$user) return false;
-        
-        // Add to file storage
-        $success = $this->fileStorage->addParticipantToEvent($eventId, $uid, [
-            'name' => trim($user['fname'] . ' ' . $user['lname']),
-            'email' => $user['email'],
-            'profile_picture' => $user['profilepicture']
-        ]);
-        
-        if ($success) {
-            // Update participant count in database
-            $this->updateParticipantCount($eventId);
-            
-            // Also add to user's attended events
-            $userModel->addAttendedEvent($uid, $eventId);
+        $registered = 0;
+        if ($uid) {
+            $user = $userModel->getUserById($uid);
+            if (!$user) return false;
+            $email = $user['email'];
+            $registered = 1;
         }
-        
-        return $success;
-    }
+        if (!$email) return false;
 
-    public function removeParticipant($eventId, $uid) {
-        $success = $this->fileStorage->removeParticipantFromEvent($eventId, $uid);
-        
-        if ($success) {
-            // Update participant count in database
-            $this->updateParticipantCount($eventId);
-        }
-        
-        return $success;
-    }
-
-    public function getEventParticipants($eventId) {
-        return $this->fileStorage->getEventParticipants($eventId);
-    }
-
-    public function isUserParticipant($eventId, $uid) {
-        return $this->fileStorage->isUserParticipant($eventId, $uid);
-    }
-
-    private function updateParticipantCount($eventId) {
-        $participants = $this->fileStorage->getEventParticipants($eventId);
-        $count = count($participants);
-        
-        $sql = "UPDATE {$this->table} SET participantcount = ? WHERE eventid = ?";
+        $pid = $this->generateGUID();
+        $sql = "INSERT IGNORE INTO event_participants (participant_id, event_id, uid, email, registered, attendance_status) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("ii", $count, $eventId);
+        $stmt->bind_param("ssssii", $pid, $eventId, $uid, $email, $registered, $attendanceStatus);
+        $ok = $stmt->execute();
+
+        if ($ok && $stmt->affected_rows) {
+            $this->updateParticipantCount($eventId);
+            if ($registered) {
+                $userModel->addAttendedEvent($uid, $eventId);
+            }
+        }
+        return ($ok && $stmt->affected_rows) ? $pid : false;
+    }
+
+    public function removeParticipant(string $eventId, ?string $participantId = null, ?string $email = null): bool {
+        if (!$participantId && !$email) return false;
+        if ($participantId) {
+            $sql = "DELETE FROM event_participants WHERE event_id = ? AND participant_id = ? LIMIT 1";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("ss", $eventId, $participantId);
+        } else {
+            $sql = "DELETE FROM event_participants WHERE event_id = ? AND email = ? LIMIT 1";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("ss", $eventId, $email);
+        }
+        $stmt->execute();
+        if ($stmt->affected_rows) {
+            $this->updateParticipantCount($eventId);
+            return true;
+        }
+        return false;
+    }
+
+    public function getEventParticipants(string $eventId, ?int $statusFilter=null): array {
+        $sql = "SELECT ep.participant_id, ep.uid, ep.email, ep.registered, ep.joined_at, ep.attendance_status, u.fname, u.lname, u.profilepicture FROM event_participants ep LEFT JOIN user_credentials u ON u.uid = ep.uid WHERE ep.event_id = ?";
+        if($statusFilter !== null){
+            $sql .= " AND ep.attendance_status = ?";
+        }
+        $sql .= " ORDER BY ep.joined_at ASC";
+        if($statusFilter !== null){
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("si", $eventId, $statusFilter);
+        } else {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("s", $eventId);
+        }
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $out = [];
+        while ($row = $res->fetch_assoc()) {
+            $key = $row['uid'] ?: $row['email'];
+            $row['name'] = $row['fname'] ? trim($row['fname'].' '.$row['lname']) : $row['email'];
+            $out[$key] = [
+                'participant_id' => $row['participant_id'],
+                'name' => $row['name'],
+                'email' => $row['email'],
+                'profile_picture' => $row['profilepicture'] ?? '',
+                'joined_at' => $row['joined_at'],
+                'registered' => (bool)$row['registered'],
+                'attendance_status' => intval($row['attendance_status'])
+            ];
+        }
+        return $out;
+    }
+
+    public function isUserParticipant(string $eventId, string $uid): bool {
+        $sql = "SELECT 1 FROM event_participants WHERE event_id = ? AND uid = ? LIMIT 1";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("ss", $eventId, $uid);
+        $stmt->execute();
+        return (bool)$stmt->get_result()->num_rows;
+    }
+
+    private function updateParticipantCount(string $eventId): void {
+        $sql = "UPDATE events SET participantcount = (SELECT COUNT(*) FROM event_participants WHERE event_id = ?) WHERE eventid = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("ss", $eventId, $eventId);
         $stmt->execute();
     }
 
@@ -264,8 +302,8 @@ class Event extends Model {
         $events = [];
         
         while ($row = $result->fetch_assoc()) {
-            // Get participant count from file storage
-            $participants = $this->fileStorage->getEventParticipants($row['eventid']);
+            // Fetch participants from DB
+            $participants = $this->getEventParticipants($row['eventid']);
             $row['participant_count_file'] = count($participants);
             $events[] = $row;
         }
@@ -282,8 +320,8 @@ class Event extends Model {
         $events = [];
         
         while ($row = $result->fetch_assoc()) {
-            // Get participant count from file storage
-            $participants = $this->fileStorage->getEventParticipants($row['eventid']);
+            // Fetch participants from DB
+            $participants = $this->getEventParticipants($row['eventid']);
             $row['participant_count_file'] = count($participants);
             $events[] = $row;
         }
@@ -300,8 +338,8 @@ class Event extends Model {
         $events = [];
         
         while ($row = $result->fetch_assoc()) {
-            // Get participant count from file storage
-            $participants = $this->fileStorage->getEventParticipants($row['eventid']);
+            // Fetch participants from DB
+            $participants = $this->getEventParticipants($row['eventid']);
             $row['participant_count_file'] = count($participants);
             $events[] = $row;
         }
@@ -320,12 +358,37 @@ class Event extends Model {
         $events = [];
         
         while ($row = $result->fetch_assoc()) {
-            // Get participant count from file storage
-            $participants = $this->fileStorage->getEventParticipants($row['eventid']);
+            // Fetch participants from DB
+            $participants = $this->getEventParticipants($row['eventid']);
             $row['participant_count_file'] = count($participants);
             $events[] = $row;
         }
         
         return $events;
+    }
+
+    private function generateGUID() {
+        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0x0fff) | 0x4000,
+            mt_rand(0, 0x3fff) | 0x8000,
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+        );
+    }
+
+    public function updateAttendanceStatus(string $eventId, ?string $participantId = null, ?string $email = null, int $newStatus = 0): bool {
+        if (!$participantId && !$email) return false;
+        if ($participantId) {
+            $sql = "UPDATE event_participants SET attendance_status = ? WHERE event_id = ? AND participant_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("iss", $newStatus, $eventId, $participantId);
+        } else {
+            $sql = "UPDATE event_participants SET attendance_status = ? WHERE event_id = ? AND email = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("iss", $newStatus, $eventId, $email);
+        }
+        $stmt->execute();
+        return $stmt->affected_rows > 0;
     }
 } 

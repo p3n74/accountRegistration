@@ -37,8 +37,8 @@
                                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                                 </svg>
                                 <div>
-                                    <p class="text-sm font-medium">University Student Account</p>
-                                    <p class="text-sm mt-1">Your name information is managed by the university system and cannot be modified. If you need to update your name, please contact the registrar's office.</p>
+                                    <p class="text-sm font-medium">Department Managed Account</p>
+                                    <p class="text-sm mt-1">Your student information is managed by the department and is already filled out. For any changes, please contact your department office.</p>
                                 </div>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                                 <label for="fname" class="block text-sm font-semibold text-gray-700 mb-2">
                                     First Name
                                     <?php if ($isStudent): ?>
-                                        <span class="text-blue-600 text-xs font-normal">(University Managed)</span>
+                                        <span class="text-blue-600 text-xs font-normal">(Department Managed)</span>
                                     <?php endif; ?>
                                 </label>
                                 <div class="relative">
@@ -74,7 +74,7 @@
                                 <label for="lname" class="block text-sm font-semibold text-gray-700 mb-2">
                                     Last Name
                                     <?php if ($isStudent): ?>
-                                        <span class="text-blue-600 text-xs font-normal">(University Managed)</span>
+                                        <span class="text-blue-600 text-xs font-normal">(Department Managed)</span>
                                     <?php endif; ?>
                                 </label>
                                 <div class="relative">
@@ -99,7 +99,7 @@
                             <label for="mname" class="block text-sm font-semibold text-gray-700 mb-2">
                                 Middle Name <span class="text-gray-400 font-normal">(optional)</span>
                                 <?php if ($isStudent): ?>
-                                    <span class="text-blue-600 text-xs font-normal">(University Managed)</span>
+                                    <span class="text-blue-600 text-xs font-normal">(Department Managed)</span>
                                 <?php endif; ?>
                             </label>
                             <div class="relative">
@@ -137,7 +137,7 @@
                                     <svg class="h-4 w-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                                     </svg>
-                                    Name fields are locked for university students
+                                    Name fields are locked for department-managed accounts.
                                 </div>
                             </div>
                         <?php endif; ?>

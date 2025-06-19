@@ -9,11 +9,19 @@ This event management system uses a **hybrid architecture** combining traditiona
 **Primary Tables:**
 - `user_credentials` - Core user authentication and profile data
   - Added `is_student` field for university integration
-- `events` - Event metadata and basic information
-- `existing_student_info` - University student directory integration
+- `events` - Event metadata and basic information (participantcount is auto-maintained via trigger in `event_participants`)
+- `event_participants` - Normalized participant list per event
+  - `participant_id` CHAR(36) PRIMARY KEY (UUIDv4)
+  - `event_id` CHAR(36) FK → `events.eventid`
+  - `uid` CHAR(36) NULL FK → `user_credentials.uid`
+  - `email` VARCHAR(255) NOT NULL
+  - `registered` TINYINT(1) DEFAULT 0          -- 1 if the participant has an on-platform account
+  - `attendance_status` TINYINT(1) DEFAULT 0   -- see enum below
+  - `joined_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  - UNIQUE KEY `(event_id,email)` ensures no duplicate sign-ups
 
 **Deprecated Tables:**
-- `event_participants` - Being phased out in favor of file storage
+- `existing_student_info` - University student directory integration
 
 ### 2. File Storage Layer
 **Directory Structure:**
@@ -289,4 +297,19 @@ Monitor these database tables for student integration:
    - Student status checks require authenticated sessions
    - University data access limited to authorized processes
    - Input validation on all student-related endpoints
-   - Secure handling of university email validation 
+   - Secure handling of university email validation
+
+`attendance_status` enum (TINYINT)
+| Value | Meaning                       |
+|-------|--------------------------------|
+| 0     | Invited (hasn't responded)     |
+| 1     | Registered – pending payment   |
+| 2     | Registered & paid              |
+| 3     | Attended / present             |
+| 4     | Did not attend (no-show)       |
+| 5     | Payment awaiting verification  |
+
+The field lets organisers track a participant's journey from invite to actual presence and post-event analytics. Additional badges, reminders, or payment gateways can hook into these states without schema changes. 
+
+Additional API:
+• `GET /events/participants/{eventId}?status={int}` – returns JSON list filtered server-side by `attendance_status` for efficient UI dropdown filtering. 

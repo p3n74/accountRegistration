@@ -8,7 +8,20 @@ class ExistingStudent extends Model {
     }
 
     public function getStudentByEmail($email) {
-        $sql = "SELECT first_name as fname, middle_name as mname, last_name as lname, email FROM {$this->table} WHERE email = ?";
+        $sql = "SELECT 
+                    esi.first_name as fname, 
+                    esi.middle_name as mname, 
+                    esi.last_name as lname, 
+                    esi.email,
+                    esi.program_id,
+                    pl.program_name,
+                    d.department_name,
+                    s.school_name
+                FROM {$this->table} esi
+                LEFT JOIN program_list pl ON esi.program_id = pl.program_id
+                LEFT JOIN department d ON pl.department_id = d.department_id
+                LEFT JOIN school s ON d.school_id = s.school_id
+                WHERE esi.email = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("s", $email);
         $stmt->execute();

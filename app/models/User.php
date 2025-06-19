@@ -39,10 +39,14 @@ class User extends Model {
         // Generate GUID for new user
         $uid = $this->generateGUID();
         
-        $sql = "INSERT INTO {$this->table} (uid, fname, mname, lname, fullname, email, password, currboundtoken, emailverified, is_student) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?)";
+        $sql = "INSERT INTO {$this->table} (uid, fname, mname, lname, fullname, email, password, currboundtoken, emailverified, is_student, program_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?)";
         $stmt = $this->db->prepare($sql);
-        $isStudent = isset($data['is_student']) ? $data['is_student'] : 0;
-        $stmt->bind_param("ssssssssi", 
+        
+        $isStudent = isset($data['is_student']) ? (int)$data['is_student'] : 0;
+        $programId = isset($data['program_id']) && !empty($data['program_id']) ? (int)$data['program_id'] : 0;
+        
+        // Correct binding: 8 strings, 2 integers
+        $stmt->bind_param("ssssssssii", 
             $uid,
             $data['fname'], 
             $data['mname'], 
@@ -51,7 +55,8 @@ class User extends Model {
             $data['email'], 
             $data['password'], 
             $data['token'],
-            $isStudent
+            $isStudent,
+            $programId
         );
         
         if ($stmt->execute()) {
@@ -214,5 +219,23 @@ class User extends Model {
 
     public function findById($id) {
         return $this->getUserById($id);
+    }
+
+    public function searchUsers($query, $limit = 10) {
+        $like = '%' . $query . '%';
+        $sql = "SELECT uid, fname, lname, email, profilepicture FROM {$this->table} WHERE fname LIKE ? OR lname LIKE ? OR email LIKE ? ORDER BY fname ASC LIMIT ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("sssi", $like, $like, $like, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $users = [];
+        while ($row = $result->fetch_assoc()) {
+            // Ensure profile picture has a default
+            if (empty($row['profilepicture'])) {
+                $row['profilepicture'] = '/public/profilePictures/default.png';
+            }
+            $users[] = $row;
+        }
+        return $users;
     }
 } 

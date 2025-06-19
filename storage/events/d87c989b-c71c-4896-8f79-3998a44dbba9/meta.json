@@ -1,0 +1,18 @@
+{
+    "eventid": "d87c989b-c71c-4896-8f79-3998a44dbba9",
+    "eventname": "web dev activity",
+    "startdate": "2025-06-20 20:25:00",
+    "enddate": "2025-06-21 20:25:00",
+    "location": "2nd Street",
+    "eventshortinfo": "skibidy gyatt",
+    "eventcreator": "2a1d9fd8-0ef3-47f5-b45e-812eb8229016",
+    "eventkey": "71A36EF5",
+    "eventbadgepath": "eventbadges\/default.png",
+    "eventinfopath": "",
+    "last_updated": "2025-06-19 12:39:00",
+    "settings": {
+        "registration_open": true,
+        "max_participants": null,
+        "require_approval": false
+    }
+}

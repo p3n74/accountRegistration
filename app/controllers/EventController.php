@@ -153,6 +153,15 @@ class EventController extends Controller {
             $this->redirect('/dashboard');
         }
         
+        // Prevent deletion if protected participants exist
+        $participants = $eventModel->getEventParticipants($eventId);
+        foreach($participants as $par){
+            if(in_array($par['attendance_status'],[2,3,5])){
+                $this->setFlash('error','Cannot delete event: participants have paid/attended or awaiting verification.');
+                $this->redirect("/events/manage/{$eventId}");
+            }
+        }
+        
         if ($eventModel->deleteEvent($eventId)) {
             // Delete associated files
             if (!empty($event['eventinfopath']) && file_exists($event['eventinfopath'])) {
@@ -226,5 +235,159 @@ class EventController extends Controller {
         }
         
         $this->redirect('/dashboard');
+    }
+    
+    public function uploadPhotos($eventId = null) {
+        if (!$eventId) {
+            $this->redirect('/dashboard');
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_FILES['photos'])) {
+            $this->setFlash('error', 'No photos uploaded');
+            $this->redirect("/events/manage/{$eventId}");
+        }
+
+        $eventModel = $this->model('Event');
+        $event = $eventModel->getEventById($eventId);
+
+        if (!$event) {
+            $this->setFlash('error', 'Event not found');
+            $this->redirect('/dashboard');
+        }
+
+        // Authorize that the current user owns the event
+        $uid = $this->getCurrentUserId();
+        if ($event['eventcreator'] !== $uid) {
+            $this->setFlash('error', 'You can only upload documentation to your own events');
+            $this->redirect('/dashboard');
+        }
+
+        require_once '../app/core/FileStorage.php';
+        $fs = new FileStorage();
+
+        $uploaded = 0;
+        foreach ($_FILES['photos']['tmp_name'] as $index => $tmpPath) {
+            if ($_FILES['photos']['error'][$index] !== UPLOAD_ERR_OK) continue;
+
+            $originalName = $_FILES['photos']['name'][$index];
+            $resultPath = $fs->addEventPhoto($eventId, $tmpPath, $originalName);
+            if ($resultPath) {
+                $uploaded++;
+            }
+        }
+
+        if ($uploaded === 0) {
+            $this->setFlash('error', 'No photos were uploaded (size/type/limit issues?)');
+        } else {
+            $this->setFlash('success', "{$uploaded} photo(s) uploaded successfully");
+        }
+        $this->redirect("/events/manage/{$eventId}");
+    }
+
+    public function addParticipant($eventId = null) {
+        // Expect JSON POST {uid: "..."}
+        header('Content-Type: application/json; charset=utf-8');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Invalid request']);
+            exit;
+        }
+        $payload = json_decode(file_get_contents('php://input'), true);
+        if (!$eventId) {
+            $eventId = $payload['event_id'] ?? null;
+        }
+        if (!$eventId) {
+            echo json_encode(['success' => false, 'message' => 'Invalid request']);
+            return;
+        }
+        $eventModel = $this->model('Event');
+        $event = $eventModel->getEventById($eventId);
+        if (!$event) {
+            echo json_encode(['success' => false, 'message' => 'Event not found']);
+            return;
+        }
+        // Authorize
+        $currentUid = $this->getCurrentUserId();
+        if ($event['eventcreator'] !== $currentUid) {
+            echo json_encode(['success' => false, 'message' => 'Not allowed']);
+            return;
+        }
+        $attendanceStatus = isset($payload['status']) ? intval($payload['status']) : 1;
+        $pid = $eventModel->addParticipant($eventId, $payload['uid'] ?? null, $payload['email'] ?? null, $attendanceStatus);
+        if($pid){
+            echo json_encode(['success'=>true,'participant_id'=>$pid,'joined_at'=>date('Y-m-d H:i:s')]);
+        }else{
+            echo json_encode(['success'=>false]);
+        }
+        exit;
+    }
+
+    public function removeParticipant($eventId = null) {
+        header('Content-Type: application/json; charset=utf-8');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Invalid request']);
+            exit;
+        }
+        $payload = json_decode(file_get_contents('php://input'), true);
+        if (!$eventId) {
+            $eventId = $payload['event_id'] ?? null;
+        }
+        if (!$eventId) {
+            echo json_encode(['success' => false, 'message' => 'Invalid request']);
+            return;
+        }
+        $eventModel = $this->model('Event');
+        $event = $eventModel->getEventById($eventId);
+        if (!$event) {
+            echo json_encode(['success' => false, 'message' => 'Event not found']);
+            return;
+        }
+        $currentUid = $this->getCurrentUserId();
+        if ($event['eventcreator'] !== $currentUid) {
+            echo json_encode(['success' => false, 'message' => 'Not allowed']);
+            return;
+        }
+        $removed = $eventModel->removeParticipant($eventId, $payload['participant_id'] ?? null, $payload['email'] ?? null);
+        echo json_encode(['success' => $removed]);
+        exit;
+    }
+
+    public function updateParticipantStatus($eventId = null) {
+        header('Content-Type: application/json; charset=utf-8');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Invalid request']);
+            exit;
+        }
+        $payload = json_decode(file_get_contents('php://input'), true);
+        if (!$eventId) { $eventId = $payload['event_id'] ?? null; }
+        if (!$eventId) { echo json_encode(['success' => false, 'message' => 'Invalid event']); return; }
+
+        $eventModel = $this->model('Event');
+        $event = $eventModel->getEventById($eventId);
+        if (!$event) { echo json_encode(['success' => false, 'message' => 'Event not found']); return; }
+
+        $currentUid = $this->getCurrentUserId();
+        if ($event['eventcreator'] !== $currentUid) { echo json_encode(['success' => false, 'message' => 'Not allowed']); return; }
+
+        $status = isset($payload['status']) ? intval($payload['status']) : null;
+        if ($status === null) { echo json_encode(['success' => false, 'message' => 'Status required']); return; }
+        $participantId = $payload['participant_id'] ?? null;
+        $email = $payload['email'] ?? null;
+
+        $ok = $eventModel->updateAttendanceStatus($eventId, $participantId, $email, $status);
+        echo json_encode(['success' => $ok]);
+        exit;
+    }
+
+    public function participants($eventId = null){
+        header('Content-Type: application/json; charset=utf-8');
+        $status = isset($_GET['status']) && $_GET['status'] !== '' ? intval($_GET['status']) : null;
+        if(!$eventId){ echo json_encode(['success'=>false,'message'=>'Invalid event']); exit; }
+        $eventModel = $this->model('Event');
+        $event = $eventModel->getEventById($eventId);
+        if(!$event){ echo json_encode(['success'=>false,'message'=>'Not found']); exit; }
+        // owner check optional? allow anyone who can view manage page
+        $participants = $eventModel->getEventParticipants($eventId,$status);
+        echo json_encode(['success'=>true,'participants'=>$participants]);
+        exit;
     }
 } 

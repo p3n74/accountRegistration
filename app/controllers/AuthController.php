@@ -3,10 +3,12 @@
 class AuthController extends Controller {
     private $userModel;
     private $existingStudentModel;
+    private $programModel;
 
     public function __construct() {
         $this->userModel = $this->model('User');
         $this->existingStudentModel = $this->model('ExistingStudent');
+        $this->programModel = $this->model('Program');
     }
     
     public function index() {
@@ -90,6 +92,9 @@ class AuthController extends Controller {
             exit;
         }
 
+        // Get programs for the dropdown
+        $programs = $this->programModel->getAllPrograms();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $fname = $_POST['fname'] ?? '';
             $mname = $_POST['mname'] ?? '';
@@ -97,13 +102,15 @@ class AuthController extends Controller {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
             $confirm_password = $_POST['confirm_password'] ?? '';
+            $program_id = $_POST['program_id'] ?? '';
             
-            // Check if this is an existing student and override names if necessary
+            // Check if this is an existing student and override names/program if necessary
             $existingStudent = $this->existingStudentModel->getStudentByEmail($email);
             if ($existingStudent) {
                 $fname = $existingStudent['fname'];
                 $mname = $existingStudent['mname'] ?? '';
                 $lname = $existingStudent['lname'];
+                $program_id = $existingStudent['program_id'] ?? $program_id; // Use existing program if available
             }
             
             if (empty($fname) || empty($lname) || empty($email) || empty($password) || empty($confirm_password)) {
@@ -112,7 +119,9 @@ class AuthController extends Controller {
                     'fname' => $fname,
                     'mname' => $mname,
                     'lname' => $lname,
-                    'email' => $email
+                    'email' => $email,
+                    'program_id' => $program_id,
+                    'programs' => $programs
                 ]);
                 return;
             }
@@ -123,7 +132,9 @@ class AuthController extends Controller {
                     'fname' => $fname,
                     'mname' => $mname,
                     'lname' => $lname,
-                    'email' => $email
+                    'email' => $email,
+                    'program_id' => $program_id,
+                    'programs' => $programs
                 ]);
                 return;
             }
@@ -135,7 +146,9 @@ class AuthController extends Controller {
                         'fname' => $fname,
                         'mname' => $mname,
                         'lname' => $lname,
-                        'email' => $email
+                        'email' => $email,
+                        'program_id' => $program_id,
+                        'programs' => $programs
                     ]);
                     return;
                 }
@@ -156,7 +169,8 @@ class AuthController extends Controller {
                     'email' => $email,
                     'password' => $hashedPassword,
                     'token' => $token,
-                    'is_student' => $isStudent
+                    'is_student' => $isStudent,
+                    'program_id' => $program_id ? (int)$program_id : null
                 ]);
                 
                 if ($isCreated) {
@@ -167,15 +181,19 @@ class AuthController extends Controller {
                     $this->sendVerificationEmail($email, $token);
                     
                     $this->view('auth/register', [
-                        'success' => 'Registration successful! Please check your email for a verification link before logging in.'
+                        'success' => 'Registration successful! Please check your email for a verification link before logging in.',
+                        'programs' => $programs
                     ]);
+                    return;
                 } else {
                     $this->view('auth/register', [
                         'error' => 'Registration failed',
                         'fname' => $fname,
                         'mname' => $mname,
                         'lname' => $lname,
-                        'email' => $email
+                        'email' => $email,
+                        'program_id' => $program_id,
+                        'programs' => $programs
                     ]);
                 }
             } catch (Exception $e) {
@@ -185,11 +203,13 @@ class AuthController extends Controller {
                     'fname' => $fname,
                     'mname' => $mname,
                     'lname' => $lname,
-                    'email' => $email
+                    'email' => $email,
+                    'program_id' => $program_id,
+                    'programs' => $programs
                 ]);
             }
         } else {
-            $this->view('auth/register');
+            $this->view('auth/register', ['programs' => $programs]);
         }
     }
     
@@ -285,63 +305,19 @@ class AuthController extends Controller {
         }
     }
     
-    public function verifyEmail($token = null) {
-        if (!$token) {
+    public function verify($token = null) {
+        if (empty($token)) {
+            $this->setFlash('error', 'Verification token is missing.');
             $this->redirect('/auth/login');
         }
-        
+
         $userModel = $this->model('User');
-        
         if ($userModel->verifyEmail($token)) {
             $this->setFlash('success', 'Email verified successfully! You can now login.');
-        } else {
-            $this->setFlash('error', 'Invalid verification token');
-        }
-        
-        $this->redirect('/auth/login');
-    }
-    
-    public function verify($token = null) {
-        if (!$token || strlen($token) !== 64) {
-            $this->setFlash('error', 'Invalid token provided.');
-            $this->redirect('/auth/login');
-            return;
-        }
-        
-        // Use legacy-compatible verification logic
-        require_once '../includes/db.php';
-        
-        $stmt = $conn->prepare("SELECT uid FROM user_credentials WHERE currboundtoken = ? AND emailverified = 0");
-        if (!$stmt) {
-            $this->setFlash('error', 'Database error occurred.');
-            $this->redirect('/auth/login');
-            return;
-        }
-        
-        $stmt->bind_param("s", $token);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result->num_rows > 0) {
-            $updateStmt = $conn->prepare("UPDATE user_credentials SET emailverified = 1, currboundtoken = '0' WHERE currboundtoken = ?");
-            if (!$updateStmt) {
-                $this->setFlash('error', 'Database error occurred.');
-                $this->redirect('/auth/login');
-                return;
-            }
-            
-            $updateStmt->bind_param("s", $token);
-            if ($updateStmt->execute()) {
-                $this->setFlash('success', 'Your email has been successfully verified! You can now log in.');
-            } else {
-                $this->setFlash('error', 'Error during verification. Please try again.');
-            }
-            $updateStmt->close();
         } else {
             $this->setFlash('error', 'Invalid or expired verification token.');
         }
         
-        $stmt->close();
         $this->redirect('/auth/login');
     }
     
@@ -470,7 +446,9 @@ class AuthController extends Controller {
                     'data' => [
                         'fname' => $existingStudent['fname'],
                         'mname' => $existingStudent['mname'] ?? '',
-                        'lname' => $existingStudent['lname']
+                        'lname' => $existingStudent['lname'],
+                        'program_id' => $existingStudent['program_id'] ?? '',
+                        'program_name' => $existingStudent['program_name'] ?? ''
                     ],
                     'debug' => 'Student found'
                 ]);

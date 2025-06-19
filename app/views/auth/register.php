@@ -49,7 +49,7 @@
                     </svg>
                     <div>
                         <p class="text-sm font-medium">Student record found!</p>
-                        <p class="text-sm mt-1">Your name information has been pre-filled and locked because you are already in our system.</p>
+                        <p class="text-sm mt-1">Your name and program information have been pre-filled and locked because you are already in our system.</p>
                     </div>
                 </div>
             </div>
@@ -119,6 +119,48 @@
                     </div>
                 </div>
 
+                <!-- Program Selection -->
+                <div>
+                    <label for="program_id" class="block text-sm font-semibold text-gray-700 mb-2">Program <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <p class="text-xs text-gray-500 -mt-1 mb-2">Selecting your program will tailor your content to show events and activities from your department first.</p>
+                    <div class="relative">
+                        <select id="program_id" name="program_id" 
+                                class="block w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white">
+                            <option value="">Select a program (optional)</option>
+                            <?php if (isset($programs) && is_array($programs)): ?>
+                                <?php 
+                                $currentSchool = '';
+                                $currentDepartment = '';
+                                foreach ($programs as $program): 
+                                    if ($currentSchool !== $program['school_name']):
+                                        if ($currentSchool !== ''): echo '</optgroup>'; endif;
+                                        $currentSchool = $program['school_name'];
+                                        echo '<optgroup label="' . htmlspecialchars($currentSchool) . '">';
+                                        $currentDepartment = '';
+                                    endif;
+                                    
+                                    if ($currentDepartment !== $program['department_name']):
+                                        $currentDepartment = $program['department_name'];
+                                        echo '<option disabled>── ' . htmlspecialchars($currentDepartment) . ' ──</option>';
+                                    endif;
+                                    
+                                    $selected = (isset($program_id) && $program_id == $program['program_id']) ? 'selected' : '';
+                                ?>
+                                    <option value="<?= $program['program_id'] ?>" <?= $selected ?>>
+                                        <?= htmlspecialchars($program['program_name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                                <?php if ($currentSchool !== ''): echo '</optgroup>'; endif; ?>
+                            <?php endif; ?>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Password Fields -->
                 <div>
                     <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
@@ -173,10 +215,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const fnameField = document.getElementById('fname');
     const mnameField = document.getElementById('mname');
     const lnameField = document.getElementById('lname');
+    const programField = document.getElementById('program_id');
     const existingStudentNotice = document.getElementById('existing-student-notice');
     
     // Null check for all elements
-    if (!emailField || !fnameField || !mnameField || !lnameField || !existingStudentNotice) {
+    if (!emailField || !fnameField || !mnameField || !lnameField || !programField || !existingStudentNotice) {
         console.error('Required form elements not found');
         return;
     }
@@ -243,7 +286,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     mnameField.value = data.data.mname || '';
                     lnameField.value = data.data.lname;
                     
-                    // Disable the fields
+                    // Pre-fill and lock program field if available
+                    if (data.data.program_id) {
+                        programField.value = data.data.program_id;
+                        programField.disabled = true;
+                        programField.classList.add('bg-gray-100', 'cursor-not-allowed');
+                    }
+                    
+                    // Disable the name fields
                     fnameField.disabled = true;
                     mnameField.disabled = true;
                     lnameField.disabled = true;
@@ -286,6 +336,10 @@ document.addEventListener('DOMContentLoaded', function() {
             lnameField.disabled = false;
             lnameField.classList.remove('bg-gray-100', 'cursor-not-allowed');
         }
+        if (programField) {
+            programField.disabled = false;
+            programField.classList.remove('bg-gray-100', 'cursor-not-allowed');
+        }
         
         // Hide notification
         if (existingStudentNotice && existingStudentNotice.classList) {
@@ -297,6 +351,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (fnameField) fnameField.value = '';
             if (mnameField) mnameField.value = '';
             if (lnameField) lnameField.value = '';
+            if (programField) programField.value = '';
         }
     }
 });
