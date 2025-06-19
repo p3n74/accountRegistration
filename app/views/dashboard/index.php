@@ -29,7 +29,7 @@
         <div class="px-4 py-5 sm:p-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <a href="/events/create" class="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                <a href="<?= url('/events/create') ?>" class="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                     <div>
                         <span class="rounded-lg inline-flex p-3 bg-indigo-50 text-indigo-700 ring-4 ring-white">
                             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,7 +46,7 @@
                     </div>
                 </a>
 
-                <a href="/dashboard/badges" class="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                <a href="<?= url('/dashboard/badges') ?>" class="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                     <div>
                         <span class="rounded-lg inline-flex p-3 bg-green-50 text-green-700 ring-4 ring-white">
                             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,7 +63,7 @@
                     </div>
                 </a>
 
-                <a href="/dashboard/profile" class="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                <a href="<?= url('/dashboard/profile') ?>" class="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                     <div>
                         <span class="rounded-lg inline-flex p-3 bg-purple-50 text-purple-700 ring-4 ring-white">
                             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -111,9 +111,9 @@
                                 <?= htmlspecialchars($event['location']) ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="/events/edit/<?= $event['eventid'] ?>" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
-                                <a href="/events/manage/<?= $event['eventid'] ?>" class="text-green-600 hover:text-green-900 mr-3">Manage</a>
-                                <a href="/events/delete/<?= $event['eventid'] ?>" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this event?')">Delete</a>
+                                <a href="<?= url('/events/edit/' . $event['eventid']) ?>" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
+                                <a href="<?= url('/events/manage/' . $event['eventid']) ?>" class="text-green-600 hover:text-green-900 mr-3">Manage</a>
+                                <a href="<?= url('/events/delete/' . $event['eventid']) ?>" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this event?')">Delete</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>

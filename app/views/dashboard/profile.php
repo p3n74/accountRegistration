@@ -2,7 +2,7 @@
 
 <div class="space-y-6">
     <h1 class="text-2xl font-bold text-gray-900">Edit Profile</h1>
-    <form action="/dashboard/profile" method="POST" class="space-y-4">
+    <form action="<?= url('/dashboard/profile') ?>" method="POST" class="space-y-4">
         <div>
             <label for="fname" class="block text-sm font-medium text-gray-700">First Name</label>
             <input type="text" name="fname" id="fname" value="<?= htmlspecialchars($user['fname']) ?>" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
@@ -21,7 +21,7 @@
     </form>
 
     <h2 class="text-xl font-bold text-gray-900 mt-8">Change Password</h2>
-    <form action="/dashboard/changePassword" method="POST" class="space-y-4">
+    <form action="<?= url('/dashboard/changePassword') ?>" method="POST" class="space-y-4">
         <div>
             <label for="current_password" class="block text-sm font-medium text-gray-700">Current Password</label>
             <input type="password" name="current_password" id="current_password" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
@@ -40,7 +40,7 @@
     </form>
 
     <h2 class="text-xl font-bold text-gray-900 mt-8">Upload Profile Picture</h2>
-    <form action="/dashboard/uploadProfilePicture" method="POST" enctype="multipart/form-data" class="space-y-4">
+    <form action="<?= url('/dashboard/uploadProfilePicture') ?>" method="POST" enctype="multipart/form-data" class="space-y-4">
         <div>
             <label for="profile_picture" class="block text-sm font-medium text-gray-700">Profile Picture</label>
             <input type="file" name="profile_picture" id="profile_picture" accept="image/jpeg,image/png,image/gif" required class="mt-1 block w-full">

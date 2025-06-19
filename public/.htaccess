@@ -1,4 +1,12 @@
 RewriteEngine On
+
+# For production deployment in subdirectory
+# Remove the base path from the URL before passing to index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.+)$ index.php?url=$1 [QSA,L] 
+RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
+
+# Handle requests to the base directory (accounts/)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^$ index.php [QSA,L] 

@@ -6,11 +6,13 @@ class HomeController extends Controller {
             session_start();
         }
         
+        $basePath = $this->getBasePath();
+        
         if (isset($_SESSION['uid'])) {
-            header('Location: /dashboard');
+            header('Location: ' . $basePath . '/dashboard');
             exit;
         }
-        header('Location: /auth/login');
+        header('Location: ' . $basePath . '/auth/login');
         exit;
     }
 } 

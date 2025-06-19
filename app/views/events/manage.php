@@ -39,8 +39,8 @@
                 </div>
 
                 <div class="mt-6 flex space-x-4">
-                    <a href="/events/edit/<?= $event['eventid'] ?>" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700">Edit Event</a>
-                    <a href="/events/delete/<?= $event['eventid'] ?>" onclick="return confirm('Are you sure you want to delete this event?');" class="bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700">Delete Event</a>
+                    <a href="<?= url('/events/edit/<?= $event['eventid'] ?>') ?>" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700">Edit Event</a>
+                    <a href="<?= url('/events/delete/<?= $event['eventid'] ?>') ?>" onclick="return confirm('Are you sure you want to delete this event?');" class="bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700">Delete Event</a>
                 </div>
             <?php endif; ?>
         </div>

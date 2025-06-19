@@ -6,7 +6,7 @@ class Event extends Model {
 
     public function __construct() {
         parent::__construct();
-        require_once '../app/core/FileStorage.php';
+        require_once 'app/core/FileStorage.php';
         $this->fileStorage = new FileStorage();
     }
 
@@ -168,7 +168,7 @@ class Event extends Model {
     // New file-based participant management (replaces event_participants table)
     public function addParticipant($eventId, $uid) {
         // Get user data
-        require_once '../app/models/User.php';
+        require_once 'app/models/User.php';
         $userModel = new User();
         $user = $userModel->getUserById($uid);
         

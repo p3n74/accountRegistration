@@ -18,7 +18,7 @@
             </div>
         <?php endif; ?>
 
-        <form class="mt-8 space-y-6" method="POST" action="/auth/resetPassword/<?= htmlspecialchars($token ?? '') ?>">
+        <form class="mt-8 space-y-6" method="POST" action="<?= url('/auth/resetPassword/<?= htmlspecialchars($token ?? '') ?>') ?>">
             <div class="rounded-md shadow-sm -space-y-px">
                 <div>
                     <label for="password" class="sr-only">Password</label>
@@ -40,7 +40,7 @@
         </form>
 
         <div class="text-sm text-center">
-            <a href="/auth/login" class="font-medium text-indigo-600 hover:text-indigo-500">
+            <a href="<?= url('/auth/login') ?>" class="font-medium text-indigo-600 hover:text-indigo-500">
                 Back to login
             </a>
         </div>

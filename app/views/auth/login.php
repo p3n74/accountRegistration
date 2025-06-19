@@ -8,7 +8,7 @@
             </h2>
             <p class="mt-2 text-center text-sm text-gray-600">
                 Or
-                <a href="/auth/register" class="font-medium text-indigo-600 hover:text-indigo-500">
+                <a href="<?= url('/auth/register') ?>" class="font-medium text-indigo-600 hover:text-indigo-500">
                     create a new account
                 </a>
             </p>
@@ -47,7 +47,7 @@
 
             <div class="flex items-center justify-between">
                 <div class="text-sm">
-                    <a href="/auth/resetRequest" class="font-medium text-indigo-600 hover:text-indigo-500">
+                    <a href="<?= url('/auth/resetRequest') ?>" class="font-medium text-indigo-600 hover:text-indigo-500">
                         Forgot your password?
                     </a>
                 </div>

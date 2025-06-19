@@ -15,7 +15,7 @@ class AuthController extends Controller {
     public function login() {
         // If already logged in, redirect to dashboard
         if (isset($_SESSION['uid'])) {
-            header('Location: /dashboard');
+            header('Location: ' . $this->getBasePath() . '/dashboard');
             exit;
         }
 
@@ -67,7 +67,7 @@ class AuthController extends Controller {
 
                 session_regenerate_id(true);
 
-                header('Location: /dashboard');
+                header('Location: ' . $this->getBasePath() . '/dashboard');
                 exit;
             } catch (Exception $e) {
                 error_log("Login error: " . $e->getMessage());
@@ -84,7 +84,7 @@ class AuthController extends Controller {
     public function register() {
         // If already logged in, redirect to dashboard
         if (isset($_SESSION['uid'])) {
-            header('Location: /dashboard');
+            header('Location: ' . $this->getBasePath() . '/dashboard');
             exit;
         }
 
@@ -172,7 +172,7 @@ class AuthController extends Controller {
         session_destroy();
         
         // Redirect to login page
-        header('Location: /auth/login');
+        header('Location: ' . $this->getBasePath() . '/auth/login');
         exit;
     }
     

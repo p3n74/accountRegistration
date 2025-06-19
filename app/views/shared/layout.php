@@ -14,12 +14,12 @@
             <div class="max-w-7xl mx-auto px-4">
                 <div class="flex justify-between h-16">
                     <div class="flex items-center">
-                        <a href="/dashboard" class="text-xl font-bold text-gray-800"><?= APP_NAME ?></a>
+                        <a href="<?= url('/dashboard') ?>" class="text-xl font-bold text-gray-800"><?= APP_NAME ?></a>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <a href="/dashboard" class="text-gray-600 hover:text-gray-900">Dashboard</a>
-                        <a href="/events/create" class="text-gray-600 hover:text-gray-900">Create Event</a>
-                        <a href="/dashboard/badges" class="text-gray-600 hover:text-gray-900">My Badges</a>
+                        <a href="<?= url('/dashboard') ?>" class="text-gray-600 hover:text-gray-900">Dashboard</a>
+                        <a href="<?= url('/events/create') ?>" class="text-gray-600 hover:text-gray-900">Create Event</a>
+                        <a href="<?= url('/dashboard/badges') ?>" class="text-gray-600 hover:text-gray-900">My Badges</a>
                         <div class="relative group">
                             <button class="flex items-center text-gray-600 hover:text-gray-900" onclick="toggleDropdown(event)">
                                 <span><?= $_SESSION['fname'] ?></span>
@@ -28,8 +28,8 @@
                                 </svg>
                             </button>
                             <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden">
-                                <a href="/dashboard/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                                <a href="/auth/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                                <a href="<?= url('/dashboard/profile') ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                                <a href="<?= url('/auth/logout') ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
                             </div>
                         </div>
                     </div>
