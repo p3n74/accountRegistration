@@ -56,6 +56,13 @@
                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" 
                            placeholder="Email address">
                 </div>
+                
+                <!-- Existing student notification -->
+                <div id="existing-student-notice" class="hidden bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4">
+                    <p class="text-sm">
+                        <strong>Student record found!</strong> Your name information has been pre-filled and locked because you are already in our system.
+                    </p>
+                </div>
                 <div>
                     <label for="password" class="sr-only">Password</label>
                     <input id="password" name="password" type="password" required 
@@ -83,4 +90,139 @@
             </div>
         </form>
     </div>
-</div> 
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const emailField = document.getElementById('email');
+    const fnameField = document.getElementById('fname');
+    const mnameField = document.getElementById('mname');
+    const lnameField = document.getElementById('lname');
+    const existingStudentNotice = document.getElementById('existing-student-notice');
+    
+    // Null check for all elements
+    if (!emailField || !fnameField || !mnameField || !lnameField || !existingStudentNotice) {
+        console.error('Required form elements not found');
+        return;
+    }
+    
+    let debounceTimer;
+    
+    // Check existing student on page load if email is already filled
+    if (emailField.value.trim()) {
+        checkExistingStudent(emailField.value.trim());
+    }
+    
+    // More dynamic - check on every input with shorter debounce for live feel
+    emailField.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        
+        const email = this.value.trim();
+        
+        // If email is empty or invalid, reset immediately
+        if (!email || !isValidEmail(email)) {
+            resetNameFields();
+            return;
+        }
+        
+        // Very short debounce for live feel (200ms instead of 500ms)
+        debounceTimer = setTimeout(() => {
+            checkExistingStudent(email);
+        }, 200);
+    });
+    
+    // Also check on blur for immediate validation
+    emailField.addEventListener('blur', function() {
+        const email = this.value.trim();
+        if (email && isValidEmail(email)) {
+            checkExistingStudent(email);
+        }
+    });
+    
+    function isValidEmail(email) {
+        // More thorough email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    function checkExistingStudent(email) {
+        const formData = new FormData();
+        formData.append('email', email);
+        
+        fetch('/auth/checkExistingStudent', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text(); // Get as text first to debug
+        })
+        .then(text => {
+            try {
+                const data = JSON.parse(text);
+                if (data.exists && data.data) {
+                    // Pre-fill and lock name fields
+                    fnameField.value = data.data.fname;
+                    mnameField.value = data.data.mname || '';
+                    lnameField.value = data.data.lname;
+                    
+                    // Disable the fields
+                    fnameField.disabled = true;
+                    mnameField.disabled = true;
+                    lnameField.disabled = true;
+                    
+                    // Add visual styling for disabled fields
+                    fnameField.classList.add('bg-gray-100', 'cursor-not-allowed');
+                    mnameField.classList.add('bg-gray-100', 'cursor-not-allowed');
+                    lnameField.classList.add('bg-gray-100', 'cursor-not-allowed');
+                    
+                    // Show notification
+                    if (existingStudentNotice && existingStudentNotice.classList) {
+                        existingStudentNotice.classList.remove('hidden');
+                    }
+                } else {
+                    resetNameFields();
+                }
+            } catch (parseError) {
+                console.error('JSON parse error:', parseError);
+                console.error('Response text:', text);
+                resetNameFields();
+            }
+        })
+        .catch(error => {
+            console.error('Error checking existing student:', error);
+            resetNameFields();
+        });
+    }
+    
+    function resetNameFields() {
+        // Check if elements exist before manipulating
+        if (fnameField) {
+            fnameField.disabled = false;
+            fnameField.classList.remove('bg-gray-100', 'cursor-not-allowed');
+        }
+        if (mnameField) {
+            mnameField.disabled = false;
+            mnameField.classList.remove('bg-gray-100', 'cursor-not-allowed');
+        }
+        if (lnameField) {
+            lnameField.disabled = false;
+            lnameField.classList.remove('bg-gray-100', 'cursor-not-allowed');
+        }
+        
+        // Hide notification
+        if (existingStudentNotice && existingStudentNotice.classList) {
+            existingStudentNotice.classList.add('hidden');
+        }
+        
+        // Don't clear values if they were manually entered
+        if (emailField && emailField.value.trim() === '') {
+            if (fnameField) fnameField.value = '';
+            if (mnameField) mnameField.value = '';
+            if (lnameField) lnameField.value = '';
+        }
+    }
+});
+</script> 
