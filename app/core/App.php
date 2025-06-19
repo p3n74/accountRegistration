@@ -25,7 +25,8 @@ class App {
             'auth/reset',
             'auth/resetpassword',
             'auth/verify',
-            'auth/verifyemail'
+            'auth/verifyemail',
+            'auth/checkexistingstudent'
         ];
 
         // Parse the URL

@@ -2,9 +2,11 @@
 
 class AuthController extends Controller {
     private $userModel;
+    private $existingStudentModel;
 
     public function __construct() {
         $this->userModel = $this->model('User');
+        $this->existingStudentModel = $this->model('ExistingStudent');
     }
     
     public function index() {
@@ -96,16 +98,32 @@ class AuthController extends Controller {
             $password = $_POST['password'] ?? '';
             $confirm_password = $_POST['confirm_password'] ?? '';
             
+            // Check if this is an existing student and override names if necessary
+            $existingStudent = $this->existingStudentModel->getStudentByEmail($email);
+            if ($existingStudent) {
+                $fname = $existingStudent['fname'];
+                $mname = $existingStudent['mname'] ?? '';
+                $lname = $existingStudent['lname'];
+            }
+            
             if (empty($fname) || empty($lname) || empty($email) || empty($password) || empty($confirm_password)) {
                 $this->view('auth/register', [
-                    'error' => 'Please fill in all fields'
+                    'error' => 'Please fill in all fields',
+                    'fname' => $fname,
+                    'mname' => $mname,
+                    'lname' => $lname,
+                    'email' => $email
                 ]);
                 return;
             }
             
             if ($password !== $confirm_password) {
                 $this->view('auth/register', [
-                    'error' => 'Passwords do not match'
+                    'error' => 'Passwords do not match',
+                    'fname' => $fname,
+                    'mname' => $mname,
+                    'lname' => $lname,
+                    'email' => $email
                 ]);
                 return;
             }
@@ -113,7 +131,11 @@ class AuthController extends Controller {
             try {
                 if ($this->userModel->getUserByEmail($email)) {
                     $this->view('auth/register', [
-                        'error' => 'Email already exists'
+                        'error' => 'Email already exists',
+                        'fname' => $fname,
+                        'mname' => $mname,
+                        'lname' => $lname,
+                        'email' => $email
                     ]);
                     return;
                 }
@@ -123,6 +145,9 @@ class AuthController extends Controller {
 
                 $fullname = trim($fname . ' ' . ($mname ? $mname . ' ' : '') . $lname);
 
+                // Determine if this is a student based on existing student data
+                $isStudent = $existingStudent ? 1 : 0;
+
                 $isCreated = $this->userModel->createUser([
                     'fname' => $fname,
                     'mname' => $mname,
@@ -130,7 +155,8 @@ class AuthController extends Controller {
                     'fullname' => $fullname,
                     'email' => $email,
                     'password' => $hashedPassword,
-                    'token' => $token
+                    'token' => $token,
+                    'is_student' => $isStudent
                 ]);
                 
                 if ($isCreated) {
@@ -145,13 +171,21 @@ class AuthController extends Controller {
                     ]);
                 } else {
                     $this->view('auth/register', [
-                        'error' => 'Registration failed'
+                        'error' => 'Registration failed',
+                        'fname' => $fname,
+                        'mname' => $mname,
+                        'lname' => $lname,
+                        'email' => $email
                     ]);
                 }
             } catch (Exception $e) {
                 error_log("Registration error: " . $e->getMessage());
                 $this->view('auth/register', [
-                    'error' => 'An error occurred during registration. Please try again.'
+                    'error' => 'An error occurred during registration. Please try again.',
+                    'fname' => $fname,
+                    'mname' => $mname,
+                    'lname' => $lname,
+                    'email' => $email
                 ]);
             }
         } else {
@@ -406,5 +440,47 @@ class AuthController extends Controller {
 
     public function reset($token = null) {
         return $this->resetPassword($token);
+    }
+
+    public function checkExistingStudent() {
+        // Set content type to JSON first
+        header('Content-Type: application/json');
+        
+        // Only allow POST requests
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method not allowed']);
+            return;
+        }
+
+        // Get email from request
+        $email = $_POST['email'] ?? '';
+
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo json_encode(['error' => 'Invalid email address', 'debug' => 'Email validation failed']);
+            return;
+        }
+
+        try {
+            $existingStudent = $this->existingStudentModel->getStudentByEmail($email);
+            
+            if ($existingStudent) {
+                echo json_encode([
+                    'exists' => true,
+                    'data' => [
+                        'fname' => $existingStudent['fname'],
+                        'mname' => $existingStudent['mname'] ?? '',
+                        'lname' => $existingStudent['lname']
+                    ],
+                    'debug' => 'Student found'
+                ]);
+            } else {
+                echo json_encode(['exists' => false, 'debug' => 'Student not found']);
+            }
+        } catch (Exception $e) {
+            error_log("Error checking existing student: " . $e->getMessage());
+            echo json_encode(['error' => 'Server error', 'debug' => $e->getMessage()]);
+        }
+        exit; // Make sure we don't output anything else
     }
 } 
