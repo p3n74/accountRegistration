@@ -30,6 +30,16 @@ class DashboardController extends Controller {
         $user = $userModel->getUserById($uid);
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Check if user is a student
+            $isStudent = (int)($user['is_student'] ?? 0) === 1;
+            
+            if ($isStudent) {
+                // Students cannot change their names
+                $this->setFlash('error', 'Students cannot modify their name information as it is managed by the university system.');
+                $this->view('dashboard/profile', ['user' => $user]);
+                return;
+            }
+            
             $fname = trim($_POST['fname'] ?? '');
             $mname = trim($_POST['mname'] ?? '');
             $lname = trim($_POST['lname'] ?? '');

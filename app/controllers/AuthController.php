@@ -145,6 +145,9 @@ class AuthController extends Controller {
 
                 $fullname = trim($fname . ' ' . ($mname ? $mname . ' ' : '') . $lname);
 
+                // Determine if this is a student based on existing student data
+                $isStudent = $existingStudent ? 1 : 0;
+
                 $isCreated = $this->userModel->createUser([
                     'fname' => $fname,
                     'mname' => $mname,
@@ -152,7 +155,8 @@ class AuthController extends Controller {
                     'fullname' => $fullname,
                     'email' => $email,
                     'password' => $hashedPassword,
-                    'token' => $token
+                    'token' => $token,
+                    'is_student' => $isStudent
                 ]);
                 
                 if ($isCreated) {

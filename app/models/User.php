@@ -18,7 +18,7 @@ class User extends Model {
     }
 
     public function getUserById($uid) {
-        $sql = "SELECT uid, fname, mname, lname, email, profilepicture, emailverified FROM {$this->table} WHERE uid = ?";
+        $sql = "SELECT uid, fname, mname, lname, email, profilepicture, emailverified, is_student FROM {$this->table} WHERE uid = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("s", $uid);
         $stmt->execute();
@@ -39,9 +39,10 @@ class User extends Model {
         // Generate GUID for new user
         $uid = $this->generateGUID();
         
-        $sql = "INSERT INTO {$this->table} (uid, fname, mname, lname, fullname, email, password, currboundtoken, emailverified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)";
+        $sql = "INSERT INTO {$this->table} (uid, fname, mname, lname, fullname, email, password, currboundtoken, emailverified, is_student) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?)";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("ssssssss", 
+        $isStudent = isset($data['is_student']) ? $data['is_student'] : 0;
+        $stmt->bind_param("ssssssssi", 
             $uid,
             $data['fname'], 
             $data['mname'], 
@@ -49,7 +50,8 @@ class User extends Model {
             $data['fullname'], 
             $data['email'], 
             $data['password'], 
-            $data['token']
+            $data['token'],
+            $isStudent
         );
         
         if ($stmt->execute()) {
