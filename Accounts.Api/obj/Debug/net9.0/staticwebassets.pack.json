@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "/opt/homebrew/var/www/accounts/Accounts.Api/wwwroot/logo.png",
+      "PackagePath": "staticwebassets/logo.png"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.Accounts.Api.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.Accounts.Api.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.build.Accounts.Api.props",
+      "PackagePath": "build\\Accounts.Api.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.buildMultiTargeting.Accounts.Api.props",
+      "PackagePath": "buildMultiTargeting\\Accounts.Api.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.buildTransitive.Accounts.Api.props",
+      "PackagePath": "buildTransitive\\Accounts.Api.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

@@ -1,0 +1,18 @@
+export const ciscoColors = {
+  primary: {
+    blue: "#4A90E2",
+    darkBlue: "#2E5BBA",
+  },
+  neutral: {
+    white: "#FFFFFF",
+    black: "#1A1A1A",
+    lightGray: "#F5F5F5",
+    mediumGray: "#9CA3AF",
+  },
+  gradients: {
+    primary: "linear-gradient(135deg, #4A90E2, #2E5BBA)",
+    background: "linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #eff6ff 100%)",
+  },
+} as const
+
+export type CiscoColorKey = keyof typeof ciscoColors.primary | keyof typeof ciscoColors.neutral

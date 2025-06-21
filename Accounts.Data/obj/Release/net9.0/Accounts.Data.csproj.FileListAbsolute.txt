@@ -1,0 +1,15 @@
+/opt/homebrew/var/www/accounts/Accounts.Data/bin/Release/net9.0/Accounts.Data.deps.json
+/opt/homebrew/var/www/accounts/Accounts.Data/bin/Release/net9.0/Accounts.Data.runtimeconfig.json
+/opt/homebrew/var/www/accounts/Accounts.Data/bin/Release/net9.0/Accounts.Data.dll
+/opt/homebrew/var/www/accounts/Accounts.Data/bin/Release/net9.0/Accounts.Data.pdb
+/opt/homebrew/var/www/accounts/Accounts.Data/obj/Release/net9.0/Accounts.Data.csproj.AssemblyReference.cache
+/opt/homebrew/var/www/accounts/Accounts.Data/obj/Release/net9.0/Accounts.Data.GeneratedMSBuildEditorConfig.editorconfig
+/opt/homebrew/var/www/accounts/Accounts.Data/obj/Release/net9.0/Accounts.Data.AssemblyInfoInputs.cache
+/opt/homebrew/var/www/accounts/Accounts.Data/obj/Release/net9.0/Accounts.Data.AssemblyInfo.cs
+/opt/homebrew/var/www/accounts/Accounts.Data/obj/Release/net9.0/Accounts.Data.csproj.CoreCompileInputs.cache
+/opt/homebrew/var/www/accounts/Accounts.Data/obj/Release/net9.0/Accounts.Data.sourcelink.json
+/opt/homebrew/var/www/accounts/Accounts.Data/obj/Release/net9.0/Accounts.Data.dll
+/opt/homebrew/var/www/accounts/Accounts.Data/obj/Release/net9.0/refint/Accounts.Data.dll
+/opt/homebrew/var/www/accounts/Accounts.Data/obj/Release/net9.0/Accounts.Data.pdb
+/opt/homebrew/var/www/accounts/Accounts.Data/obj/Release/net9.0/Accounts.Data.genruntimeconfig.cache
+/opt/homebrew/var/www/accounts/Accounts.Data/obj/Release/net9.0/ref/Accounts.Data.dll

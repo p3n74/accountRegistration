@@ -1,12 +1,125 @@
 {
   "Version": 1,
-  "Hash": "l/x+WknbaWSPjttfOQADwhSWLDvcgRbbR84PWMZlOJw=",
+  "Hash": "sNNVnWI0kusibxVX7JcSaKuwcJZWHbsSqflC6ns/52s=",
   "Source": "Accounts.Api",
   "BasePath": "_content/Accounts.Api",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "Accounts.Api/wwwroot",
+      "Source": "Accounts.Api",
+      "ContentRoot": "/opt/homebrew/var/www/accounts/Accounts.Api/wwwroot/",
+      "BasePath": "_content/Accounts.Api",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/opt/homebrew/var/www/accounts/Accounts.Api/wwwroot/logo.png",
+      "SourceId": "Accounts.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/opt/homebrew/var/www/accounts/Accounts.Api/wwwroot/",
+      "BasePath": "_content/Accounts.Api",
+      "RelativePath": "logo#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "k0plsqi9fv",
+      "Integrity": "5BVsk5Bz0ZcrYzivJOXRu8DqW/CnwKv9968Xt2SK2hs=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/logo.png"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "logo.k0plsqi9fv.png",
+      "AssetFile": "/opt/homebrew/var/www/accounts/Accounts.Api/wwwroot/logo.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "30438"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"5BVsk5Bz0ZcrYzivJOXRu8DqW/CnwKv9968Xt2SK2hs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 21 Jun 2025 18:49:10 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "k0plsqi9fv"
+        },
+        {
+          "Name": "label",
+          "Value": "logo.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-5BVsk5Bz0ZcrYzivJOXRu8DqW/CnwKv9968Xt2SK2hs="
+        }
+      ]
+    },
+    {
+      "Route": "logo.png",
+      "AssetFile": "/opt/homebrew/var/www/accounts/Accounts.Api/wwwroot/logo.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "30438"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"5BVsk5Bz0ZcrYzivJOXRu8DqW/CnwKv9968Xt2SK2hs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 21 Jun 2025 18:49:10 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-5BVsk5Bz0ZcrYzivJOXRu8DqW/CnwKv9968Xt2SK2hs="
+        }
+      ]
+    }
+  ]
 }

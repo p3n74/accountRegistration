@@ -1,0 +1,404 @@
+@page
+@model Accounts.Api.Pages.Auth.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<style>
+    /* --- Shared CISCO Auth Styles (copied from Login page) --- */
+    .cisco-auth-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #eff6ff 100%);
+        padding: 3rem 1rem;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .cisco-auth-card {
+        width: 100%;
+        max-width: 480px;
+    }
+
+    .cisco-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .cisco-logo {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #4A90E2, #2E5BBA);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        box-shadow: 0 10px 25px rgba(74, 144, 226, 0.3);
+    }
+
+    .cisco-logo-inner {
+        width: 40px;
+        height: 40px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .cisco-dot {
+        width: 4px;
+        height: 4px;
+        background: #4A90E2;
+        border-radius: 50%;
+        margin: 1px;
+    }
+
+    .cisco-brand-text {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #4A90E2;
+        margin-bottom: 0.25rem;
+        letter-spacing: -0.025em;
+    }
+
+    .cisco-tagline {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-bottom: 1rem;
+    }
+
+    .cisco-title {
+        font-size: 1.875rem;
+        font-weight: bold;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+
+    .cisco-subtitle {
+        color: #6b7280;
+        margin-bottom: 0;
+    }
+
+    .cisco-subtitle a {
+        color: #4A90E2;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .cisco-subtitle a:hover {
+        color: #2E5BBA;
+    }
+
+    .cisco-form-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        border: 1px solid #f3f4f6;
+        padding: 2rem;
+    }
+
+    .cisco-alert {
+        margin-bottom: 1.5rem;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .cisco-alert-error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+    }
+
+    .cisco-alert-success {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        color: #1e40af;
+    }
+
+    .cisco-alert svg {
+        width: 20px;
+        height: 20px;
+        margin-right: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .cisco-form-group {
+        margin-bottom: 1rem;
+    }
+
+    .cisco-label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+    }
+
+    .cisco-input-wrapper {
+        position: relative;
+    }
+
+    .cisco-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        padding-right: 2.5rem;
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        color: #1f2937;
+        background: #f9fafb;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    .cisco-input:focus {
+        outline: none;
+        border-color: #4A90E2;
+        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        background: white;
+    }
+
+    .cisco-input-icon {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        color: #9ca3af;
+        pointer-events: none;
+    }
+
+    .cisco-validation-error {
+        font-size: 0.75rem;
+        color: #dc2626;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    .cisco-submit-btn {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: linear-gradient(135deg, #4A90E2, #2E5BBA);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 14px rgba(74, 144, 226, 0.3);
+    }
+
+    .cisco-submit-btn:hover {
+        background: linear-gradient(135deg, #2E5BBA, #1e3a8a);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+    }
+
+    .cisco-submit-btn svg {
+        width: 20px;
+        height: 20px;
+        margin-right: 0.5rem;
+    }
+
+    .cisco-footer {
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+    .cisco-footer-brand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-bottom: 1rem;
+        gap: 0.5rem;
+    }
+
+    .cisco-footer-brand .brand-name {
+        font-weight: 600;
+        color: #4A90E2;
+    }
+
+    .cisco-footer-text {
+        font-size: 0.75rem;
+        color: #9ca3af;
+    }
+
+    .cisco-footer-text a {
+        color: #4A90E2;
+        text-decoration: none;
+    }
+
+    .cisco-footer-text a:hover {
+        color: #2E5BBA;
+    }
+
+    /* Two-column grid for names */
+    .cisco-name-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    @@media (max-width: 640px) {
+        .cisco-name-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="cisco-auth-container">
+    <div class="cisco-auth-card">
+        <!-- Header -->
+        <div class="cisco-header">
+            <div class="cisco-logo">
+                <img src="~/logo.png" alt="CISCO Logo" style="width:100%;height:100%;object-fit:contain;" />
+            </div>
+            <div>
+                <h1 class="cisco-brand-text">CISCO</h1>
+                <p class="cisco-tagline">Computer and Information Sciences Council</p>
+            </div>
+            <h2 class="cisco-title">Create your account</h2>
+            <p class="cisco-subtitle">
+                Already have an account?
+                <a asp-page="Login">Sign in</a>
+            </p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="cisco-form-card">
+            <!-- Alerts -->
+            @if (Model.Error != null)
+            {
+                <div class="cisco-alert cisco-alert-error">
+                    <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>@Model.Error</span>
+                </div>
+            }
+            @if (Model.Success != null)
+            {
+                <div class="cisco-alert cisco-alert-success">
+                    <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>@Model.Success</span>
+                </div>
+            }
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="cisco-alert cisco-alert-error">
+                    <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                    </svg>
+                    <div>
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <div>@error.ErrorMessage</div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Register Form -->
+            <form class="cisco-form" method="post">
+                <!-- Email -->
+                <div class="cisco-form-group">
+                    <label asp-for="Input.Email" class="cisco-label"></label>
+                    <div class="cisco-input-wrapper">
+                        <input asp-for="Input.Email" class="cisco-input" placeholder="Enter your email" />
+                        <svg class="cisco-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
+                        </svg>
+                    </div>
+                    <span asp-validation-for="Input.Email" class="cisco-validation-error"></span>
+                </div>
+
+                <!-- Names Grid -->
+                <div class="cisco-name-grid">
+                    <div class="cisco-form-group">
+                        <label asp-for="Input.FirstName" class="cisco-label"></label>
+                        <div class="cisco-input-wrapper">
+                            <input asp-for="Input.FirstName" class="cisco-input" placeholder="First name" />
+                            <svg class="cisco-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.658 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <span asp-validation-for="Input.FirstName" class="cisco-validation-error"></span>
+                    </div>
+                    <div class="cisco-form-group">
+                        <label asp-for="Input.LastName" class="cisco-label"></label>
+                        <div class="cisco-input-wrapper">
+                            <input asp-for="Input.LastName" class="cisco-input" placeholder="Last name" />
+                            <svg class="cisco-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.658 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <span asp-validation-for="Input.LastName" class="cisco-validation-error"></span>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="cisco-form-group">
+                    <label asp-for="Input.Password" class="cisco-label"></label>
+                    <div class="cisco-input-wrapper">
+                        <input asp-for="Input.Password" type="password" class="cisco-input" placeholder="Create a password" />
+                        <svg class="cisco-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <span asp-validation-for="Input.Password" class="cisco-validation-error"></span>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="cisco-form-group">
+                    <label asp-for="Input.ConfirmPassword" class="cisco-label"></label>
+                    <div class="cisco-input-wrapper">
+                        <input asp-for="Input.ConfirmPassword" type="password" class="cisco-input" placeholder="Repeat your password" />
+                        <svg class="cisco-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <span asp-validation-for="Input.ConfirmPassword" class="cisco-validation-error"></span>
+                </div>
+
+                <button type="submit" class="cisco-submit-btn">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                    </svg>
+                    Create your account
+                </button>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="cisco-footer">
+            <div class="cisco-footer-brand">
+                <span>Powered by</span>
+                <span class="brand-name">CISCO</span>
+            </div>
+            <p class="cisco-footer-text">
+                By creating an account, you agree to our terms of service and privacy policy.
+            </p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} 

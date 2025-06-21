@@ -1,0 +1,47 @@
+@page "/channels/{id}"
+@model Accounts.Api.Pages.Channels.ChatModel
+@{
+    ViewData["Title"] = Model.Channel?.Name ?? "Channel";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex flex-col">
+    <header class="bg-white border-b border-gray-100 p-4 shadow-sm">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <h1 class="text-xl font-bold text-gray-900">#@Model.Channel?.Name</h1>
+            <a href="/channels" class="text-sm text-emerald-600 hover:underline">Back to channels</a>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto">
+        <div class="max-w-4xl mx-auto px-4 py-6 space-y-4">
+            @foreach (var msg in Model.Messages)
+            {
+                <div class="flex space-x-3">
+                    <div class="flex-shrink-0 h-8 w-8 bg-emerald-500/20 rounded-full"></div>
+                    <div>
+                        <p class="text-sm"><span class="font-semibold">@msg.SenderUid</span> <span class="text-gray-500 text-xs">@msg.CreatedAt.ToLocalTime().ToString("g")</span></p>
+                        <p class="text-gray-800">@msg.Body</p>
+                    </div>
+                </div>
+            }
+            @if (!Model.Messages.Any())
+            {
+                <p class="text-gray-500">No messages yet.</p>
+            }
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-100 p-4">
+        <div class="max-w-4xl mx-auto">
+            <form method="post" class="flex gap-3">
+                <input asp-for="NewMessage" placeholder="Type a message..." class="flex-1 px-4 py-3 border border-gray-200 rounded-xl" />
+                <button type="submit" class="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white">Send</button>
+            </form>
+            <span asp-validation-for="NewMessage" class="text-sm text-red-600"></span>
+        </div>
+    </footer>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} 
