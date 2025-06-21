@@ -72,13 +72,27 @@ A `FileStorage` helper keeps DB ↔ file structures in sync – updates are atom
 ### Key DB tables (current)
 | Table | Purpose | Notable columns |
 |-------|---------|-----------------|
-| `user_credentials` | Auth + profile | `uid PK`, `email UNIQUE`, `password`, `is_student TINYINT` |
+| `user_credentials` | Auth + profile | `uid PK`, `email UNIQUE`, `password`, `is_student TINYINT`, `user_level TINYINT` |
 | `events` | Event meta | `eventid PK`, `eventcreator FK`, triggers maintain `participantcount` |
 | `event_participants` | Normalised participant list | `participant_id PK UUID`, `event_id FK`, `email`, `attendance_status` ENUM |
 | `orgs` (alpha) | Student org accounts | `org_id PK`, `name`, `slug`, `owner_uid` |
 | `messages` (alpha) | Chat & DM | `msg_id PK`, `channel_id`, `sender_uid`, `body`, `created_at` |
 
 See `database/schema.sql` for full DDL.
+
+### User Levels (Role-Based Access Control)
+0 – Student / Normal  
+1 – Faculty  
+2 – CES Coordinator  
+3 – Office of Student Formation and Affairs (OSFA)  
+4 – Admin  
+
+Each account is mapped to the numeric `user_level` flag in the `user_credentials` table. Higher numbers inherit the abilities of the lower ones. Fresh sign-ups default to **0**.
+
+To upgrade an older database that does **not** yet have this column, run the bundled helper:
+```bash
+php scripts/add_user_level_column.php
+```
 
 ### Attendance Status Enum
 ```
@@ -156,6 +170,7 @@ _(Grepping for `function` in each file shows full list – code is doc-blocked).
 
 ### DB migrations
 Run `php scripts/migrate.php up|down` – see `scripts/migrations/*.sql`.
+Legacy upgrade: `php scripts/add_user_level_column.php` – adds the `user_level` column if missing.
 
 ### Coding conventions
 * PHP PSR-12 (use `composer cs:fix`).  

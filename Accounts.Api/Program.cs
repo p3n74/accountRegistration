@@ -9,6 +9,9 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddRazorPages();
 
+// File storage helper for events/channels
+builder.Services.AddSingleton<Accounts.Data.FileStorage.FileStorage>();
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "server=127.0.0.1;database=s21102134_palisade;user=s21102134_palisade;password=webwebwebweb";
 
 builder.Services.AddDbContext<Accounts.Data.Models.AccountsDbContext>(options =>
