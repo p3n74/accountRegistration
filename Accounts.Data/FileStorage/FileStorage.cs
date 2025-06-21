@@ -71,6 +71,12 @@ public class FileStorage
         return JsonSerializer.Deserialize<T>(File.ReadAllText(file), _jsonOptions);
     }
 
+    public void DeleteEventData(string eventId)
+    {
+        var dir = GetEventDir(eventId);
+        if (Directory.Exists(dir)) Directory.Delete(dir, true);
+    }
+
     /* -------------------- Participants CSV -------------------- */
     private string GetParticipantsCsv(string eventId) => Path.Combine(GetEventDir(eventId), "participants.csv");
 
