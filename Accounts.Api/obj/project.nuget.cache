@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "Gy8RAijhZx8=",
+  "dgSpecHash": "l+UFnVgM3i8=",
   "success": true,
   "projectFilePath": "/opt/homebrew/var/www/accounts/Accounts.Api/Accounts.Api.csproj",
   "expectedPackageFiles": [
+    "/Users/bastionii/.nuget/packages/csvhelper/33.1.0/csvhelper.33.1.0.nupkg.sha512",
     "/Users/bastionii/.nuget/packages/microsoft.aspnetcore.openapi/9.0.4/microsoft.aspnetcore.openapi.9.0.4.nupkg.sha512",
     "/Users/bastionii/.nuget/packages/microsoft.entityframeworkcore/8.0.13/microsoft.entityframeworkcore.8.0.13.nupkg.sha512",
     "/Users/bastionii/.nuget/packages/microsoft.entityframeworkcore.abstractions/8.0.13/microsoft.entityframeworkcore.abstractions.8.0.13.nupkg.sha512",

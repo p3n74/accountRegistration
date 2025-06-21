@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v9.0": {
       "Accounts.Data/1.0.0": {
         "dependencies": {
+          "CsvHelper": "33.1.0",
           "Microsoft.EntityFrameworkCore": "8.0.13",
           "Microsoft.EntityFrameworkCore.Design": "8.0.13",
           "Microsoft.EntityFrameworkCore.Relational": "8.0.13",
@@ -15,6 +16,14 @@
         },
         "runtime": {
           "Accounts.Data.dll": {}
+        }
+      },
+      "CsvHelper/33.1.0": {
+        "runtime": {
+          "lib/net9.0/CsvHelper.dll": {
+            "assemblyVersion": "33.0.0.0",
+            "fileVersion": "33.1.0.26"
+          }
         }
       },
       "Humanizer.Core/2.14.1": {
@@ -539,6 +548,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "CsvHelper/33.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kqfTOZGrn7NarNeXgjh86JcpTHUoeQDMB8t9NVa/ZtlSYiV1rxfRnQ49WaJsob4AiGrbK0XDzpyKkBwai4F8eg==",
+      "path": "csvhelper/33.1.0",
+      "hashPath": "csvhelper.33.1.0.nupkg.sha512"
     },
     "Humanizer.Core/2.14.1": {
       "type": "package",

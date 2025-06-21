@@ -39,3 +39,4 @@
 /opt/homebrew/var/www/accounts/Accounts.Api/obj/Debug/net9.0/Accounts.Api.pdb
 /opt/homebrew/var/www/accounts/Accounts.Api/obj/Debug/net9.0/Accounts.Api.genruntimeconfig.cache
 /opt/homebrew/var/www/accounts/Accounts.Api/obj/Debug/net9.0/ref/Accounts.Api.dll
+/opt/homebrew/var/www/accounts/Accounts.Api/bin/Debug/net9.0/CsvHelper.dll
