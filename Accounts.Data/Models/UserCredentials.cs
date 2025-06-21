@@ -1,29 +1,47 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Accounts.Data.Models;
 
-[Table("user_credentials")]
-public class UserCredentials
+public partial class UserCredentials
 {
-    [Key]
-    [Column("uid", TypeName="char(36)")]
-    public string Uid { get; set; } = Guid.NewGuid().ToString();
+    public string Uid { get; set; } = null!;
 
-    [Column("email")]
-    [MaxLength(255)]
-    public string Email { get; set; } = string.Empty;
+    public string? Fname { get; set; }
 
-    [Column("password")]
-    [MaxLength(255)]
-    public string PasswordHash { get; set; } = string.Empty;
+    public string? Mname { get; set; }
 
-    [Column("is_student")]
+    public string? Lname { get; set; }
+
+    public string Email { get; set; } = null!;
+
+    public string Password { get; set; } = null!;
+
+    public string? Currboundtoken { get; set; }
+
+    public bool? Emailverified { get; set; }
+
+    public string? Attendedevents { get; set; }
+
+    public DateTime? Creationtime { get; set; }
+
+    public string? Profilepicture { get; set; }
+
+    public string? PasswordResetToken { get; set; }
+
+    public DateTime? PasswordResetExpiry { get; set; }
+
+    public string? VerificationCode { get; set; }
+
+    public string? NewEmail { get; set; }
+
+    public string? Fullname { get; set; }
+
     public bool IsStudent { get; set; }
 
-    [Column("user_level")]
-    public int UserLevel { get; set; }
+    public sbyte UserLevel { get; set; }
 
-    [Column("created_at")]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-} 
+    public int ProgramId { get; set; }
+
+    public virtual ICollection<Events> Events { get; set; } = new List<Events>();
+}

@@ -1,4 +1,4 @@
-using Accounts.Data;
+using Accounts.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "server=127.0.0.1;database=s21102134_palisade;user=s21102134_palisade;password=webwebwebweb";
 
-builder.Services.AddDbContext<AccountsDbContext>(options =>
+builder.Services.AddDbContext<Accounts.Data.Models.AccountsDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 var app = builder.Build();

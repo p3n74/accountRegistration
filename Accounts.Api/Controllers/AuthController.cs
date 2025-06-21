@@ -1,5 +1,4 @@
 using Accounts.Api.DTOs;
-using Accounts.Data;
 using Accounts.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +11,9 @@ namespace Accounts.Api.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly AccountsDbContext _db;
+    private readonly Accounts.Data.Models.AccountsDbContext _db;
 
-    public AuthController(AccountsDbContext db)
+    public AuthController(Accounts.Data.Models.AccountsDbContext db)
     {
         _db = db;
     }
@@ -28,7 +27,7 @@ public class AuthController : ControllerBase
         var user = new UserCredentials
         {
             Email = req.Email,
-            PasswordHash = HashPassword(req.Password),
+            Password = HashPassword(req.Password),
             IsStudent = req.IsStudent,
             UserLevel = 0
         };
@@ -44,7 +43,7 @@ public class AuthController : ControllerBase
     {
         var user = await _db.UserCredentials.FirstOrDefaultAsync(u => u.Email == req.Email);
         if (user == null) return Unauthorized();
-        if (user.PasswordHash != HashPassword(req.Password)) return Unauthorized();
+        if (user.Password != HashPassword(req.Password)) return Unauthorized();
 
         var token = GenerateDummyToken(user);
         return new AuthResponse(user.Uid, user.Email, user.UserLevel, token);
