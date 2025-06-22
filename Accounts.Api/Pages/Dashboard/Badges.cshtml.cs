@@ -22,7 +22,7 @@ public class BadgesModel : PageModel
         if (user == null) return;
 
         AttendedEvents = await _db.EventParticipants
-            .Where(p => p.Email == user.Email && p.AttendanceStatus)
+            .Where(p => p.Email == user.Email && p.AttendanceStatus == 3)
             .Join(_db.Events, p => p.EventId.ToString(), e => e.Eventid, (p, e) => e)
             .Distinct()
             .OrderByDescending(e => e.Startdate)

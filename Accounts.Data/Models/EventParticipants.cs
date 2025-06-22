@@ -17,5 +17,5 @@ public partial class EventParticipants
 
     public bool? Registered { get; set; }
 
-    public bool AttendanceStatus { get; set; }
+    public int AttendanceStatus { get; set; } = 0; // 0=Invited, 1=Pending, 2=Paid, 3=Attended, 4=Absent, 5=Awaiting Verification
 }

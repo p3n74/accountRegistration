@@ -1,166 +1,684 @@
-@page "/dashboard"
+@page
 @model Accounts.Api.Pages.Dashboard.IndexModel
 @{
     ViewData["Title"] = "Dashboard";
+    Layout = "_Layout";
 }
 
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        <!-- Welcome Section -->
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-            <div class="bg-gradient-to-r from-emerald-500 to-teal-600 px-6 py-4 flex items-center">
-                <div class="flex-shrink-0">
-                    @if (!string.IsNullOrWhiteSpace(Model.UserInfo?.Profilepicture))
-                    {
-                        <img class="h-16 w-16 rounded-full border-4 border-white shadow-lg" src="/profilePictures/@Model.UserInfo.Profilepicture" alt="Profile Picture" />
-                    }
-                    else
-                    {
-                        <div class="h-16 w-16 rounded-full bg-white/20 backdrop-blur-sm border-4 border-white shadow-lg flex items-center justify-center">
-                            <svg class="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
-                        </div>
-                    }
-                </div>
-                <div class="ml-6">
-                    <h1 class="text-3xl font-bold text-white">Welcome back, @Model.UserInfo?.Fname!</h1>
-                    <p class="text-emerald-100 mt-1">Discover campus events and track your My Carolinian journey</p>
-                </div>
-            </div>
-            <div class="px-6 py-4 bg-gradient-to-r from-emerald-50 to-teal-50">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                    <div>
-                        <div class="text-2xl font-bold text-emerald-600">@Model.AttendedCount</div>
-                        <div class="text-sm text-gray-600">Events Attended</div>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold text-teal-600">@Model.BadgesCount</div>
-                        <div class="text-sm text-gray-600">Badges Earned</div>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold text-emerald-600">@Model.CreatedEvents.Count</div>
-                        <div class="text-sm text-gray-600">Events Created</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
-            <div class="flex items-center mb-6">
-                <div class="h-8 w-8 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center mr-3">
-                    <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                </div>
-                <h2 class="text-2xl font-bold text-gray-900">Quick Actions</h2>
-            </div>
-            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                <a href="/events/create" class="group relative bg-gradient-to-br from-emerald-50 to-emerald-100 p-6 rounded-2xl border border-emerald-200 hover:shadow-lg hover:scale-105 transition-all duration-200">
-                    <div class="flex items-center justify-between">
-                        <div class="h-12 w-12 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
-                            <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-                        </div>
-                        <svg class="h-5 w-5 text-emerald-400 group-hover:text-emerald-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                    </div>
-                    <div class="mt-4">
-                        <h3 class="text-lg font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">Create New Event</h3>
-                        <p class="mt-2 text-sm text-gray-600">Set up a new campus event and start collecting registrations</p>
-                    </div>
-                </a>
-                <a href="/dashboard/badges" class="group relative bg-gradient-to-br from-teal-50 to-teal-100 p-6 rounded-2xl border border-teal-200 hover:shadow-lg hover:scale-105 transition-all duration-200">
-                    <div class="flex items-center justify-between">
-                        <div class="h-12 w-12 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
-                            <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" /></svg>
-                        </div>
-                        <svg class="h-5 w-5 text-teal-400 group-hover:text-teal-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                    </div>
-                    <div class="mt-4">
-                        <h3 class="text-lg font-semibold text-gray-900 group-hover:text-teal-700 transition-colors">View My Badges</h3>
-                        <p class="mt-2 text-sm text-gray-600">See all your My Carolinian achievements and earned badges</p>
-                    </div>
-                </a>
-                <a href="/dashboard/profile" class="group relative bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl border border-purple-200 hover:shadow-lg hover:scale-105 transition-all duration-200">
-                    <div class="flex items-center justify-between">
-                        <div class="h-12 w-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                            <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                        </div>
-                        <svg class="h-5 w-5 text-purple-400 group-hover:text-purple-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                    </div>
-                    <div class="mt-4">
-                        <h3 class="text-lg font-semibold text-gray-900 group-hover:text-purple-700 transition-colors">Edit Profile</h3>
-                        <p class="mt-2 text-sm text-gray-600">Update your personal information and My Carolinian preferences</p>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <!-- Created Events -->
-        @if (Model.CreatedEvents.Any())
-        {
-            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-8 py-6 border-b border-gray-200 flex items-center">
-                    <div class="h-8 w-8 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center mr-3">
-                        <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-900">Events You've Created</h2>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                            <tr>
-                                <th class="px-6 py-4 text-left">Event Name</th>
-                                <th class="px-6 py-4 text-left">Date</th>
-                                <th class="px-6 py-4 text-left">Location</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-100">
-                            @foreach (var ev in Model.CreatedEvents)
+<div class="min-vh-100" style="background: var(--cisco-gradient-background);">
+    <div class="container-fluid px-4 py-4" style="max-width: 1400px;">
+        <div class="row g-4">
+            <!-- Welcome Section -->
+            <div class="col-12">
+                <div class="cisco-card cisco-gradient-animate">
+                    <div class="cisco-card-header d-flex align-items-center">
+                        <div class="flex-shrink-0 me-4">
+                            @if (!string.IsNullOrEmpty(Model.ProfilePicture))
                             {
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">@ev.Eventname</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">@ev.Startdate?.ToString("MMM d, yyyy")</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">@ev.Location</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        }
-
-        <!-- Attended Events -->
-        @if (Model.AttendedEvents.Any())
-        {
-            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
-                <div class="flex items-center mb-6">
-                    <div class="h-8 w-8 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center mr-3">
-                        <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" /></svg>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-900">Your My Carolinian Journey</h2>
-                </div>
-                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    @foreach (var ev in Model.AttendedEvents)
-                    {
-                        <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 hover:scale-105">
-                            @if (!string.IsNullOrWhiteSpace(ev.Eventbadgepath))
-                            {
-                                <div class="relative">
-                                    <img class="w-full h-48 object-cover" src="@ev.Eventbadgepath" alt="Event Badge" />
-                                    <div class="absolute top-4 right-4 bg-emerald-500 text-white px-2 py-1 rounded-lg text-xs font-semibold">Badge Earned</div>
-                                </div>
+                                <img class="rounded-3 border border-4 border-white shadow-lg" 
+                                     src="/profilePictures/@Model.ProfilePicture" 
+                                     alt="@(Model.UserName)'s profile picture" 
+                                     style="width: 80px; height: 80px; object-fit: cover;">
                             }
                             else
                             {
-                                <div class="w-full h-48 bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center">
-                                    <svg class="h-16 w-16 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" /></svg>
+                                <div class="cisco-glass rounded-3 border border-4 border-white shadow-lg d-flex align-items-center justify-content-center"
+                                     style="width: 80px; height: 80px;">
+                                    <i class="fas fa-user text-white" style="font-size: 2rem;" aria-hidden="true"></i>
                                 </div>
                             }
-                            <div class="p-4">
-                                <h3 class="text-lg font-semibold text-gray-900 mb-1">@ev.Eventname</h3>
-                                <p class="text-sm text-gray-600">@ev.Startdate?.ToString("MMM d, yyyy") • @ev.Location</p>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h1 class="text-white mb-2 fw-bold" style="font-size: var(--cisco-text-4xl);">
+                                Welcome back, @Model.UserName!
+                            </h1>
+                            <p class="text-white-50 mb-0" style="font-size: var(--cisco-text-lg);">
+                                Discover campus events and track your CISCO journey
+                            </p>
+                        </div>
+                        <div class="d-none d-lg-block">
+                            <div class="cisco-glass rounded-3 p-3">
+                                <div class="text-center">
+                                    <div class="fw-bold text-white" style="font-size: var(--cisco-text-xl);">
+                                        @DateTime.Now.ToString("MMM dd")
+                                    </div>
+                                    <div class="text-white-50 small">
+                                        @DateTime.Now.ToString("yyyy")
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    }
+                    </div>
+                    <div class="px-4 py-4" style="background: linear-gradient(135deg, var(--cisco-light-blue), rgba(74, 144, 226, 0.1));">
+                        <div class="row g-3">
+                            <div class="col-md-4 text-center">
+                                <div class="cisco-stat-card">
+                                    <div class="cisco-stat-number">@Model.AttendedEventsCount</div>
+                                    <div class="cisco-stat-label">Events Attended</div>
+                                    <div class="mt-2">
+                                        <i class="fas fa-calendar-check" style="color: var(--cisco-primary-blue); font-size: var(--cisco-text-lg);" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="cisco-stat-card">
+                                    <div class="cisco-stat-number">@Model.BadgesCount</div>
+                                    <div class="cisco-stat-label">Badges Earned</div>
+                                    <div class="mt-2">
+                                        <i class="fas fa-award" style="color: var(--cisco-warning); font-size: var(--cisco-text-lg);" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="cisco-stat-card">
+                                    <div class="cisco-stat-number">@Model.UpcomingEventsCount</div>
+                                    <div class="cisco-stat-label">Upcoming Events</div>
+                                    <div class="mt-2">
+                                        <i class="fas fa-clock" style="color: var(--cisco-success); font-size: var(--cisco-text-lg);" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        }
+
+            <!-- Quick Actions -->
+            <div class="col-12">
+                <div class="cisco-card">
+                    <div class="cisco-card-body">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="me-3 cisco-glass" style="width: 40px; height: 40px; border-radius: var(--cisco-radius-md); display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-bolt cisco-text-gradient" aria-hidden="true"></i>
+                            </div>
+                            <h2 class="mb-0 fw-bold">Quick Actions</h2>
+                            <div class="ms-auto d-none d-md-block">
+                                <small class="text-muted">Everything you need at your fingertips</small>
+                            </div>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <a href="/events" class="text-decoration-none">
+                                    <div class="cisco-card h-100 text-center position-relative overflow-hidden" 
+                                         style="background: var(--cisco-gradient-success); border: none; transition: all var(--cisco-transition-base);">
+                                        <div class="cisco-card-body text-white position-relative">
+                                            <div class="mb-3">
+                                                <i class="fas fa-calendar-alt" style="font-size: 3rem; opacity: 0.9;" aria-hidden="true"></i>
+                                            </div>
+                                            <h4 class="fw-bold mb-2">Browse Events</h4>
+                                            <p class="mb-0 opacity-90">Discover upcoming campus events and activities</p>
+                                        </div>
+                                        <div class="position-absolute top-0 end-0 p-3">
+                                            <i class="fas fa-arrow-right opacity-50" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="position-absolute bottom-0 start-0 w-100 h-100 opacity-10">
+                                            <div class="position-absolute bottom-0 end-0" style="width: 100px; height: 100px; background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);"></div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/events/create" class="text-decoration-none">
+                                    <div class="cisco-card h-100 text-center position-relative overflow-hidden" 
+                                         style="background: var(--cisco-gradient-warning); border: none; transition: all var(--cisco-transition-base);">
+                                        <div class="cisco-card-body text-white position-relative">
+                                            <div class="mb-3">
+                                                <i class="fas fa-plus-circle" style="font-size: 3rem; opacity: 0.9;" aria-hidden="true"></i>
+                                            </div>
+                                            <h4 class="fw-bold mb-2">Create Event</h4>
+                                            <p class="mb-0 opacity-90">Organize and share your own campus events</p>
+                                        </div>
+                                        <div class="position-absolute top-0 end-0 p-3">
+                                            <i class="fas fa-arrow-right opacity-50" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="position-absolute bottom-0 start-0 w-100 h-100 opacity-10">
+                                            <div class="position-absolute bottom-0 end-0" style="width: 100px; height: 100px; background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);"></div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/dashboard/badges" class="text-decoration-none">
+                                    <div class="cisco-card h-100 text-center position-relative overflow-hidden" 
+                                         style="background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); border: none; transition: all var(--cisco-transition-base);">
+                                        <div class="cisco-card-body text-white position-relative">
+                                            <div class="mb-3">
+                                                <i class="fas fa-award" style="font-size: 3rem; opacity: 0.9;" aria-hidden="true"></i>
+                                            </div>
+                                            <h4 class="fw-bold mb-2">View My Badges</h4>
+                                            <p class="mb-0 opacity-90">See all your CISCO achievements and earned badges</p>
+                                        </div>
+                                        <div class="position-absolute top-0 end-0 p-3">
+                                            <i class="fas fa-arrow-right opacity-50" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="position-absolute bottom-0 start-0 w-100 h-100 opacity-10">
+                                            <div class="position-absolute bottom-0 end-0" style="width: 100px; height: 100px; background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);"></div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity and Upcoming Events -->
+            <div class="col-lg-8">
+                <!-- Recent Activity -->
+                <div class="cisco-card h-100">
+                    <div class="cisco-card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 cisco-glass" style="width: 40px; height: 40px; border-radius: var(--cisco-radius-md); display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-clock cisco-text-gradient" aria-hidden="true"></i>
+                                </div>
+                                <h3 class="mb-0 fw-bold">Recent Activity</h3>
+                            </div>
+                            <div class="cisco-pulse">
+                                <div class="rounded-circle" style="width: 12px; height: 12px; background: var(--cisco-success);"></div>
+                            </div>
+                        </div>
+                        
+                        @if (Model.RecentActivities?.Any() == true)
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var activity in Model.RecentActivities)
+                                {
+                                    <div class="list-group-item border-0 px-0 py-3 rounded-3 mb-2" style="background: var(--cisco-gradient-subtle);">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3 cisco-glass rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                <i class="@activity.Icon" style="font-size: var(--cisco-text-sm); color: var(--cisco-primary-blue);" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <p class="mb-1 fw-medium">@activity.Description</p>
+                                                <small class="text-muted d-flex align-items-center">
+                                                    <i class="fas fa-clock me-1" style="font-size: 0.7rem;" aria-hidden="true"></i>
+                                                    @activity.TimeAgo
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <div class="cisco-glass rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-history" style="font-size: 2rem; color: var(--cisco-gray-400);" aria-hidden="true"></i>
+                                </div>
+                                <h5 class="text-muted mb-2">No recent activity</h5>
+                                <p class="text-muted mb-4">Start attending events to see your activity here!</p>
+                                <a href="/events" class="cisco-primary-btn cisco-btn-base">
+                                    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                                    Browse Events
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Summary and Notifications -->
+            <div class="col-lg-4">
+                <div class="row g-4">
+                    <!-- Profile Summary -->
+                    <div class="col-12">
+                        <div class="cisco-card">
+                            <div class="cisco-card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="me-3 cisco-glass" style="width: 32px; height: 32px; border-radius: var(--cisco-radius-sm); display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-user cisco-text-gradient" style="font-size: 0.9rem;" aria-hidden="true"></i>
+                                    </div>
+                                    <h4 class="mb-0 fw-bold">Profile Summary</h4>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="text-muted small d-block">Email</label>
+                                    <p class="mb-0 fw-medium">@Model.Email</p>
+                                </div>
+                                
+                                @if (Model.IsStudent)
+                                {
+                                    <div class="mb-3">
+                                        <label class="text-muted small d-block">Status</label>
+                                        <span class="badge rounded-pill d-inline-flex align-items-center" style="background: var(--cisco-gradient-success); color: white; padding: var(--cisco-space-2) var(--cisco-space-3);">
+                                            <i class="fas fa-graduation-cap me-1" aria-hidden="true"></i>Student
+                                        </span>
+                                    </div>
+                                }
+                                
+                                <div class="mb-3">
+                                    <label class="text-muted small d-block">Member Since</label>
+                                    <p class="mb-0 fw-medium d-flex align-items-center">
+                                        <i class="fas fa-calendar me-2 text-muted" aria-hidden="true"></i>
+                                        @Model.DaysAsMember days ago
+                                    </p>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <label class="text-muted small">Profile Completion</label>
+                                        <span class="small fw-bold cisco-text-gradient">@(Model.ProfileCompletionPercentage)%</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px; border-radius: var(--cisco-radius-sm); background: var(--cisco-gray-100);">
+                                        <div class="progress-bar" 
+                                             style="width: @(Model.ProfileCompletionPercentage)%; background: var(--cisco-gradient-primary); border-radius: var(--cisco-radius-sm);"
+                                             role="progressbar" 
+                                             aria-valuenow="@Model.ProfileCompletionPercentage" 
+                                             aria-valuemin="0" 
+                                             aria-valuemax="100"
+                                             aria-label="Profile completion progress"></div>
+                                    </div>
+                                </div>
+                                
+                                <a href="/dashboard/profile" class="cisco-secondary-btn cisco-btn-base w-100">
+                                    <i class="fas fa-edit" aria-hidden="true"></i>
+                                    Edit Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notifications -->
+                    <div class="col-12">
+                        <div class="cisco-card">
+                            <div class="cisco-card-body">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3 cisco-glass" style="width: 32px; height: 32px; border-radius: var(--cisco-radius-sm); display: flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-bell cisco-text-gradient" style="font-size: 0.9rem;" aria-hidden="true"></i>
+                                        </div>
+                                        <h4 class="mb-0 fw-bold">Notifications</h4>
+                                    </div>
+                                    @if (Model.Notifications?.Any() == true)
+                                    {
+                                        <span class="badge rounded-pill" style="background: var(--cisco-gradient-primary); color: white;">
+                                            @Model.Notifications.Count(n => !n.IsRead)
+                                        </span>
+                                    }
+                                </div>
+                                
+                                @if (Model.Notifications?.Any() == true)
+                                {
+                                    <div class="notification-list" style="max-height: 300px; overflow-y: auto;">
+                                        @foreach (var notification in Model.Notifications.Take(5))
+                                        {
+                                            <div class="border-bottom py-3 @(notification.IsRead ? "opacity-75" : "")" style="border-color: var(--cisco-gray-100) !important;">
+                                                <div class="d-flex align-items-start">
+                                                    <div class="me-2">
+                                                        @if (!notification.IsRead)
+                                                        {
+                                                            <div class="rounded-circle" style="width: 6px; height: 6px; background: var(--cisco-primary-blue); margin-top: 6px;"></div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div style="width: 6px; height: 6px; margin-top: 6px;"></div>
+                                                        }
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <p class="mb-1 small">@notification.Message</p>
+                                                        <small class="text-muted d-flex align-items-center">
+                                                            <i class="fas fa-clock me-1" style="font-size: 0.6rem;" aria-hidden="true"></i>
+                                                            @notification.TimeAgo
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                    @if (Model.Notifications.Count > 5)
+                                    {
+                                        <div class="text-center mt-3">
+                                            <a href="/dashboard/notifications" class="small cisco-text-gradient text-decoration-none fw-medium">
+                                                View all notifications
+                                            </a>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="text-center py-3">
+                                        <div class="cisco-glass rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                            <i class="fas fa-bell-slash" style="font-size: 1.2rem; color: var(--cisco-gray-400);" aria-hidden="true"></i>
+                                        </div>
+                                        <p class="text-muted small mb-0">No new notifications</p>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Events -->
+            @if (Model.UpcomingEvents?.Any() == true)
+            {
+                <div class="col-12">
+                    <div class="cisco-card">
+                        <div class="cisco-card-body">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3 cisco-glass" style="width: 40px; height: 40px; border-radius: var(--cisco-radius-md); display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-calendar-check cisco-text-gradient" aria-hidden="true"></i>
+                                    </div>
+                                    <h3 class="mb-0 fw-bold">Upcoming Events</h3>
+                                </div>
+                                <a href="/events" class="cisco-secondary-btn cisco-btn-base">
+                                    <i class="fas fa-eye" aria-hidden="true"></i>
+                                    View All
+                                </a>
+                            </div>
+                            
+                            <div class="row g-4">
+                                @foreach (var eventItem in Model.UpcomingEvents.Take(3))
+                                {
+                                    <div class="col-md-4">
+                                        <div class="cisco-card h-100 position-relative overflow-hidden">
+                                            <div class="cisco-card-body">
+                                                <div class="mb-3">
+                                                    <div class="cisco-glass rounded-3 p-2 d-inline-flex">
+                                                        <i class="fas fa-calendar-alt cisco-text-gradient" aria-hidden="true"></i>
+                                                    </div>
+                                                </div>
+                                                <h5 class="fw-bold mb-2">@eventItem.EventTitle</h5>
+                                                <p class="text-muted small mb-3">@eventItem.EventDescription</p>
+                                                <div class="d-flex align-items-center text-muted small mb-2">
+                                                    <i class="fas fa-calendar me-2" aria-hidden="true"></i>
+                                                    <span>@eventItem.EventDate.ToString("MMM dd, yyyy")</span>
+                                                </div>
+                                                <div class="d-flex align-items-center text-muted small mb-3">
+                                                    <i class="fas fa-map-marker-alt me-2" aria-hidden="true"></i>
+                                                    <span>@eventItem.EventLocation</span>
+                                                </div>
+                                                <div class="mt-auto">
+                                                    <a href="/events/@eventItem.EventId" class="cisco-primary-btn cisco-btn-base w-100 small">
+                                                        <i class="fas fa-eye" aria-hidden="true"></i>
+                                                        View Details
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="position-absolute top-0 end-0 p-2">
+                                                <div class="cisco-glass rounded-circle" style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
+                                                    <div class="rounded-circle" style="width: 6px; height: 6px; background: var(--cisco-success);"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
-</div> 
+</div>
+
+@section Styles {
+    <style>
+        /* Enhanced card animations */
+        .cisco-card {
+            transition: all var(--cisco-transition-base);
+        }
+        
+        .cisco-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--cisco-shadow-2xl);
+        }
+        
+        /* List item hover effects */
+        .list-group-item {
+            transition: all var(--cisco-transition-fast);
+            border: none !important;
+        }
+        
+        .list-group-item:hover {
+            background: var(--cisco-light-blue) !important;
+            transform: translateX(4px);
+        }
+        
+        /* Progress bar animation */
+        .progress-bar {
+            transition: width 1s ease-in-out;
+            animation: progressFill 2s ease-in-out;
+        }
+        
+        @@keyframes progressFill {
+            0% { width: 0%; }
+            100% { width: var(--progress-width, 0%); }
+        }
+        
+        /* Notification list custom scrollbar */
+        .notification-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .notification-list::-webkit-scrollbar-track {
+            background: var(--cisco-gray-100);
+            border-radius: 2px;
+        }
+        
+        .notification-list::-webkit-scrollbar-thumb {
+            background: var(--cisco-primary-blue);
+            border-radius: 2px;
+        }
+        
+        /* Quick action card hover effects */
+        .col-md-4 a .cisco-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--cisco-shadow-2xl);
+        }
+        
+        /* Stat card enhanced animations */
+        .cisco-stat-card {
+            transition: all var(--cisco-transition-base);
+            cursor: pointer;
+        }
+        
+        .cisco-stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--cisco-shadow-xl);
+        }
+        
+        /* Glass morphism effects */
+        .cisco-glass {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Loading animations */
+        .cisco-card {
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        .cisco-card:nth-child(1) { animation-delay: 0.1s; }
+        .cisco-card:nth-child(2) { animation-delay: 0.2s; }
+        .cisco-card:nth-child(3) { animation-delay: 0.3s; }
+        .cisco-card:nth-child(4) { animation-delay: 0.4s; }
+        
+        @@keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Badge pulse effect */
+        .badge {
+            animation: badgePulse 2s infinite;
+        }
+        
+        @@keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* Responsive enhancements */
+        @@media (max-width: 992px) {
+            .cisco-card-header h1 {
+                font-size: var(--cisco-text-3xl) !important;
+            }
+            
+            .cisco-stat-number {
+                font-size: var(--cisco-text-4xl) !important;
+            }
+        }
+        
+        @@media (max-width: 768px) {
+            .container-fluid {
+                padding: var(--cisco-space-4) !important;
+            }
+            
+            .cisco-card-body {
+                padding: var(--cisco-space-6) !important;
+            }
+            
+            .cisco-card-header {
+                padding: var(--cisco-space-6) !important;
+            }
+            
+            .cisco-card-header h1 {
+                font-size: var(--cisco-text-2xl) !important;
+            }
+            
+            .row.g-4 {
+                --bs-gutter-x: 1rem;
+                --bs-gutter-y: 1rem;
+            }
+        }
+        
+        @@media (max-width: 576px) {
+            .cisco-stat-number {
+                font-size: var(--cisco-text-3xl) !important;
+            }
+            
+            .quick-actions .col-md-4 {
+                margin-bottom: var(--cisco-space-4);
+            }
+        }
+        
+        /* Focus states for accessibility */
+        .cisco-card:focus-within {
+            outline: 2px solid var(--cisco-primary-blue);
+            outline-offset: 2px;
+        }
+        
+        .list-group-item:focus {
+            background: var(--cisco-light-blue) !important;
+            outline: 2px solid var(--cisco-primary-blue);
+            outline-offset: -2px;
+        }
+        
+        /* Print styles */
+        @@media print {
+            .cisco-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid var(--cisco-gray-300);
+            }
+            
+            .cisco-glass {
+                background: var(--cisco-gray-100);
+                backdrop-filter: none;
+            }
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate progress bars
+            const progressBars = document.querySelectorAll('.progress-bar');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.setProperty('--progress-width', width);
+                bar.style.width = '0%';
+                
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+            
+            // Add click handlers for stat cards
+            const statCards = document.querySelectorAll('.cisco-stat-card');
+            statCards.forEach((card, index) => {
+                card.addEventListener('click', function() {
+                    const links = ['/events', '/dashboard/badges', '/events'];
+                    if (links[index]) {
+                        window.location.href = links[index];
+                    }
+                });
+                
+                // Make stat cards keyboard accessible
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'button');
+                card.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+            
+            // Enhanced hover effects for quick action cards
+            const quickActionCards = document.querySelectorAll('.col-md-4 a .cisco-card');
+            quickActionCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // Auto-refresh notifications (if needed)
+            // setInterval(function() {
+            //     // Add notification refresh logic here
+            // }, 30000); // Refresh every 30 seconds
+            
+            // Add loading states to buttons
+            const buttons = document.querySelectorAll('.cisco-primary-btn, .cisco-secondary-btn');
+            buttons.forEach(button => {
+                if (button.tagName === 'A') {
+                    button.addEventListener('click', function() {
+                        const icon = this.querySelector('i');
+                        if (icon) {
+                            icon.className = 'fas fa-spinner fa-spin';
+                        }
+                    });
+                }
+            });
+            
+            // Lazy load upcoming events if there are many
+            const eventCards = document.querySelectorAll('.col-md-4 .cisco-card');
+            if (eventCards.length > 6) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }
+                    });
+                });
+                
+                eventCards.forEach((card, index) => {
+                    if (index > 2) {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        card.style.transition = 'all 0.6s ease';
+                        observer.observe(card);
+                    }
+                });
+            }
+        });
+    </script>
+} 

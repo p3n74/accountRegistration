@@ -1,31 +1,1005 @@
 @{
-    var title = ViewData["Title"] as string ?? "My Carolinian";
+    var title = ViewData["Title"] as string ?? "CISCO Accounts";
+    var currentPage = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
+    var isAuthPage = currentPage.StartsWith("/Auth/", StringComparison.OrdinalIgnoreCase) || 
+                     ViewContext.HttpContext.Request.Path.StartsWithSegments("/auth", StringComparison.OrdinalIgnoreCase);
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@title</title>
-    <link href="/dist/output.css" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>@ViewData["Title"] - CISCO</title>
+    
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CISCO Brand Colors and Modern Design System -->
     <style>
-        @@keyframes gradient-shift {
-            0%,100% {background-position:0% 50%}
-            50% {background-position:100% 50%}
+        :root {
+            /* CISCO Brand Colors */
+            --cisco-primary-blue: #4A90E2;
+            --cisco-dark-blue: #2E5BBA;
+            --cisco-light-blue: #EBF4FF;
+            --cisco-white: #FFFFFF;
+            --cisco-black: #1A1A1A;
+            --cisco-light-gray: #F8FAFC;
+            --cisco-medium-gray: #9CA3AF;
+            --cisco-dark-gray: #374151;
+            --cisco-success: #10B981;
+            --cisco-warning: #F59E0B;
+            --cisco-danger: #EF4444;
+            --cisco-info: #3B82F6;
+            
+            /* Enhanced Color Palette */
+            --cisco-gray-50: #F9FAFB;
+            --cisco-gray-100: #F3F4F6;
+            --cisco-gray-200: #E5E7EB;
+            --cisco-gray-300: #D1D5DB;
+            --cisco-gray-400: #9CA3AF;
+            --cisco-gray-500: #6B7280;
+            --cisco-gray-600: #4B5563;
+            --cisco-gray-700: #374151;
+            --cisco-gray-800: #1F2937;
+            --cisco-gray-900: #111827;
+            
+            /* Gradients */
+            --cisco-gradient-primary: linear-gradient(135deg, #4A90E2 0%, #2E5BBA 100%);
+            --cisco-gradient-background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #eff6ff 100%);
+            --cisco-gradient-card: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            --cisco-gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            --cisco-gradient-warning: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            --cisco-gradient-danger: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            --cisco-gradient-subtle: linear-gradient(135deg, rgba(74, 144, 226, 0.05) 0%, rgba(46, 91, 186, 0.05) 100%);
+            
+            /* Typography Scale */
+            --cisco-text-xs: 0.75rem;
+            --cisco-text-sm: 0.875rem;
+            --cisco-text-base: 1rem;
+            --cisco-text-lg: 1.125rem;
+            --cisco-text-xl: 1.25rem;
+            --cisco-text-2xl: 1.5rem;
+            --cisco-text-3xl: 1.875rem;
+            --cisco-text-4xl: 2.25rem;
+            --cisco-text-5xl: 3rem;
+            
+            /* Spacing Scale */
+            --cisco-space-1: 0.25rem;
+            --cisco-space-2: 0.5rem;
+            --cisco-space-3: 0.75rem;
+            --cisco-space-4: 1rem;
+            --cisco-space-5: 1.25rem;
+            --cisco-space-6: 1.5rem;
+            --cisco-space-8: 2rem;
+            --cisco-space-10: 2.5rem;
+            --cisco-space-12: 3rem;
+            
+            /* Border Radius */
+            --cisco-radius-sm: 8px;
+            --cisco-radius-md: 12px;
+            --cisco-radius-lg: 16px;
+            --cisco-radius-xl: 20px;
+            --cisco-radius-2xl: 24px;
+            --cisco-radius-full: 50%;
+            
+            /* Shadows */
+            --cisco-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --cisco-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --cisco-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --cisco-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --cisco-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --cisco-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+            
+            /* Transitions */
+            --cisco-transition-fast: 0.15s ease-out;
+            --cisco-transition-base: 0.3s ease-out;
+            --cisco-transition-slow: 0.5s ease-out;
         }
-        .gradient-animate {background-size:200% 200%;animation:gradient-shift 8s ease infinite}
+        
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+            background: var(--cisco-gradient-background);
+            color: var(--cisco-gray-900);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+        
+        /* Typography System */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+            color: var(--cisco-gray-900);
+        }
+        
+        h1 { font-size: var(--cisco-text-4xl); }
+        h2 { font-size: var(--cisco-text-3xl); }
+        h3 { font-size: var(--cisco-text-2xl); }
+        h4 { font-size: var(--cisco-text-xl); }
+        h5 { font-size: var(--cisco-text-lg); }
+        h6 { font-size: var(--cisco-text-base); }
+        
+        p {
+            color: var(--cisco-gray-700);
+            line-height: 1.7;
+        }
+        
+        /* Focus Management */
+        *:focus {
+            outline: 2px solid var(--cisco-primary-blue);
+            outline-offset: 2px;
+        }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        /* Modern Card System */
+        .cisco-card {
+            background: var(--cisco-gradient-card);
+            border-radius: var(--cisco-radius-xl);
+            box-shadow: var(--cisco-shadow-lg);
+            border: 1px solid rgba(156, 163, 175, 0.08);
+            overflow: hidden;
+            transition: all var(--cisco-transition-base);
+            position: relative;
+        }
+        
+        .cisco-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            opacity: 0;
+            transition: opacity var(--cisco-transition-base);
+        }
+        
+        .cisco-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--cisco-shadow-2xl);
+        }
+        
+        .cisco-card:hover::before {
+            opacity: 1;
+        }
+        
+        .cisco-card-header {
+            background: var(--cisco-gradient-primary);
+            padding: var(--cisco-space-8);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cisco-card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .cisco-card-body {
+            padding: var(--cisco-space-8);
+        }
+        
+        /* Enhanced Button System */
+        .cisco-btn-base {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--cisco-space-2);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: var(--cisco-text-sm);
+            line-height: 1;
+            border: none;
+            border-radius: var(--cisco-radius-md);
+            padding: var(--cisco-space-3) var(--cisco-space-6);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all var(--cisco-transition-base);
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .cisco-btn-base::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .cisco-btn-base:hover::before {
+            left: 100%;
+        }
+        
+        .cisco-primary-btn {
+            background: var(--cisco-gradient-primary);
+            color: var(--cisco-white);
+            box-shadow: var(--cisco-shadow-md);
+        }
+        
+        .cisco-primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--cisco-shadow-xl);
+            color: var(--cisco-white);
+            text-decoration: none;
+        }
+        
+        .cisco-primary-btn:active {
+            transform: translateY(0);
+        }
+        
+        .cisco-secondary-btn {
+            background: transparent;
+            color: var(--cisco-primary-blue);
+            border: 2px solid var(--cisco-primary-blue);
+        }
+        
+        .cisco-secondary-btn:hover {
+            background: var(--cisco-primary-blue);
+            color: white;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+        
+        /* Enhanced Input System */
+        .cisco-input {
+            width: 100%;
+            padding: var(--cisco-space-4) var(--cisco-space-5);
+            border: 2px solid var(--cisco-gray-200);
+            border-radius: var(--cisco-radius-md);
+            font-size: var(--cisco-text-sm);
+            font-family: inherit;
+            background: var(--cisco-white);
+            transition: all var(--cisco-transition-base);
+            appearance: none;
+        }
+        
+        .cisco-input::placeholder {
+            color: var(--cisco-gray-400);
+        }
+        
+        .cisco-input:focus {
+            outline: none;
+            border-color: var(--cisco-primary-blue);
+            box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
+            background: var(--cisco-white);
+        }
+        
+        .cisco-input:invalid {
+            border-color: var(--cisco-danger);
+        }
+        
+        /* Form Labels */
+        .form-label {
+            font-weight: 600;
+            color: var(--cisco-gray-900);
+            margin-bottom: var(--cisco-space-2);
+            font-size: var(--cisco-text-sm);
+        }
+        
+        /* Enhanced Alert System */
+        .cisco-alert {
+            padding: var(--cisco-space-4) var(--cisco-space-5);
+            border-radius: var(--cisco-radius-md);
+            margin-bottom: var(--cisco-space-5);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--cisco-space-3);
+            font-size: var(--cisco-text-sm);
+            font-weight: 500;
+            border: 1px solid;
+            position: relative;
+        }
+        
+        .cisco-alert::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            border-radius: 2px 0 0 2px;
+        }
+        
+        .cisco-alert-success {
+            background: rgba(16, 185, 129, 0.05);
+            color: #065f46;
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+        
+        .cisco-alert-success::before {
+            background: var(--cisco-success);
+        }
+        
+        .cisco-alert-error {
+            background: rgba(239, 68, 68, 0.05);
+            color: #991b1b;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+        
+        .cisco-alert-error::before {
+            background: var(--cisco-danger);
+        }
+        
+        .cisco-alert-info {
+            background: var(--cisco-light-blue);
+            color: var(--cisco-dark-blue);
+            border-color: rgba(74, 144, 226, 0.2);
+        }
+        
+        .cisco-alert-info::before {
+            background: var(--cisco-primary-blue);
+        }
+        
+        /* Enhanced Navigation System */
+        .cisco-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: var(--cisco-shadow-md);
+            border-bottom: 1px solid rgba(156, 163, 175, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all var(--cisco-transition-base);
+        }
+        
+        .cisco-logo {
+            font-size: var(--cisco-text-2xl);
+            font-weight: 800;
+            color: var(--cisco-primary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--cisco-space-3);
+            transition: all var(--cisco-transition-base);
+        }
+        
+        .cisco-logo:hover {
+            color: var(--cisco-dark-blue);
+            text-decoration: none;
+            transform: translateX(2px);
+        }
+        
+        .cisco-logo i {
+            background: var(--cisco-gradient-primary);
+            color: white;
+            padding: var(--cisco-space-2);
+            border-radius: var(--cisco-radius-sm);
+            font-size: var(--cisco-text-lg);
+            transition: all var(--cisco-transition-base);
+        }
+        
+        .cisco-logo:hover i {
+            transform: rotate(5deg);
+        }
+        
+        .cisco-nav-link {
+            color: var(--cisco-gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            padding: var(--cisco-space-3) var(--cisco-space-4);
+            border-radius: var(--cisco-radius-sm);
+            transition: all var(--cisco-transition-base);
+            display: flex;
+            align-items: center;
+            gap: var(--cisco-space-2);
+            position: relative;
+        }
+        
+        .cisco-nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--cisco-primary-blue);
+            transition: all var(--cisco-transition-base);
+            transform: translateX(-50%);
+        }
+        
+        .cisco-nav-link:hover {
+            background: var(--cisco-light-blue);
+            color: var(--cisco-dark-blue);
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+        
+        .cisco-nav-link:hover::before {
+            width: 80%;
+        }
+        
+        /* Profile Avatar */
+        .cisco-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--cisco-gradient-primary);
+            border-radius: var(--cisco-radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: var(--cisco-text-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cisco-avatar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+        }
+        
+        /* Dropdown Enhancements */
+        .dropdown-menu {
+            border: none;
+            box-shadow: var(--cisco-shadow-xl);
+            border-radius: var(--cisco-radius-md);
+            padding: var(--cisco-space-2);
+            margin-top: var(--cisco-space-2);
+        }
+        
+        .dropdown-item {
+            border-radius: var(--cisco-radius-sm);
+            padding: var(--cisco-space-3) var(--cisco-space-4);
+            font-size: var(--cisco-text-sm);
+            font-weight: 500;
+            transition: all var(--cisco-transition-fast);
+        }
+        
+        .dropdown-item:hover {
+            background: var(--cisco-light-blue);
+            color: var(--cisco-dark-blue);
+        }
+        
+        /* Enhanced Footer */
+        .cisco-footer {
+            background: var(--cisco-gray-900);
+            color: var(--cisco-gray-100);
+            padding: var(--cisco-space-12) 0 var(--cisco-space-8);
+            margin-top: auto;
+            position: relative;
+        }
+        
+        .cisco-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cisco-primary-blue), transparent);
+        }
+        
+        /* Stats Cards */
+        .cisco-stat-card {
+            background: var(--cisco-gradient-card);
+            border-radius: var(--cisco-radius-lg);
+            padding: var(--cisco-space-6);
+            text-align: center;
+            border: 1px solid rgba(156, 163, 175, 0.08);
+            transition: all var(--cisco-transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cisco-stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--cisco-gradient-primary);
+            transform: scaleX(0);
+            transition: transform var(--cisco-transition-base);
+        }
+        
+        .cisco-stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--cisco-shadow-xl);
+        }
+        
+        .cisco-stat-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .cisco-stat-number {
+            font-size: var(--cisco-text-5xl);
+            font-weight: 800;
+            background: var(--cisco-gradient-primary);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            letter-spacing: -0.05em;
+        }
+        
+        .cisco-stat-label {
+            color: var(--cisco-gray-500);
+            font-size: var(--cisco-text-sm);
+            font-weight: 600;
+            margin-top: var(--cisco-space-2);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Loading Animation */
+        .cisco-spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--cisco-gray-200);
+            border-top: 3px solid var(--cisco-primary-blue);
+            border-radius: var(--cisco-radius-full);
+            animation: cisco-spin 1s linear infinite;
+        }
+        
+        @@keyframes cisco-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Gradient Animation */
+        @@keyframes cisco-gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .cisco-gradient-animate {
+            background-size: 200% 200%;
+            animation: cisco-gradient-shift 8s ease infinite;
+        }
+        
+        /* Pulse Animation */
+        @@keyframes cisco-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .cisco-pulse {
+            animation: cisco-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--cisco-gray-100);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--cisco-gray-400);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--cisco-primary-blue);
+        }
+        
+        /* Utility Classes */
+        .cisco-text-gradient {
+            background: var(--cisco-gradient-primary);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .cisco-glass {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        /* Responsive Design */
+        @@media (max-width: 1200px) {
+            :root {
+                --cisco-text-4xl: 2rem;
+                --cisco-text-3xl: 1.75rem;
+                --cisco-space-8: 1.5rem;
+                --cisco-space-12: 2rem;
+            }
+        }
+        
+        @@media (max-width: 768px) {
+            :root {
+                --cisco-text-4xl: 1.75rem;
+                --cisco-text-3xl: 1.5rem;
+                --cisco-text-2xl: 1.25rem;
+                --cisco-space-8: 1rem;
+                --cisco-space-12: 1.5rem;
+            }
+            
+            .cisco-card-body {
+                padding: var(--cisco-space-6);
+            }
+            
+            .cisco-stat-number {
+                font-size: var(--cisco-text-4xl);
+            }
+            
+            .cisco-navbar .container {
+                padding: 0 var(--cisco-space-4);
+            }
+            
+            .cisco-btn-base {
+                padding: var(--cisco-space-4) var(--cisco-space-5);
+            }
+        }
+        
+        @@media (max-width: 576px) {
+            :root {
+                --cisco-text-4xl: 1.5rem;
+                --cisco-text-3xl: 1.25rem;
+                --cisco-space-8: 0.75rem;
+            }
+            
+            .cisco-card-body {
+                padding: var(--cisco-space-4);
+            }
+        }
+        
+        /* Dark mode support */
+        @@media (prefers-color-scheme: dark) {
+            :root {
+                --cisco-gradient-background: linear-gradient(135deg, #1f2937 0%, #111827 50%, #0f172a 100%);
+            }
+            
+            .cisco-navbar {
+                background: rgba(17, 24, 39, 0.95);
+            }
+        }
+        
+        /* Reduced motion support */
+        @@media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* High contrast support */
+        @@media (prefers-contrast: high) {
+            .cisco-card {
+                border: 2px solid var(--cisco-gray-400);
+            }
+            
+            .cisco-nav-link:hover {
+                background: var(--cisco-primary-blue);
+                color: white;
+            }
+        }
     </style>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    @RenderSection("Styles", required: false)
 </head>
-<body class="bg-gradient-to-br from-slate-50 via-white to-slate-100 min-h-screen flex flex-col">
-    <!-- TODO: Port navigation & flash messages using Blazor/TagHelpers -->
+<body class="d-flex flex-column min-vh-100">
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="sr-only cisco-primary-btn" style="position: absolute; top: 10px; left: 10px; z-index: 9999;">
+        Skip to main content
+    </a>
+    
+    @if (Context.Session.GetString("uid") != null)
+    {
+        <!-- Modern Navigation for authenticated users -->
+        <nav class="cisco-navbar navbar navbar-expand-lg" role="navigation" aria-label="Main navigation">
+            <div class="container">
+                <a class="cisco-logo navbar-brand" href="/dashboard" aria-label="CISCO Dashboard">
+                    <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+                    <span>CISCO</span>
+                </a>
+                
+                <button class="navbar-toggler border-0 p-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars" aria-hidden="true"></i>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto" role="menubar">
+                        <li class="nav-item" role="none">
+                            <a class="cisco-nav-link nav-link" href="/dashboard" role="menuitem" aria-current="@(currentPage == "/Dashboard" ? "page" : "false")">
+                                <i class="fas fa-tachometer-alt" aria-hidden="true"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item" role="none">
+                            <a class="cisco-nav-link nav-link" href="/events" role="menuitem">
+                                <i class="fas fa-calendar-alt" aria-hidden="true"></i>Events
+                            </a>
+                        </li>
+                        <li class="nav-item" role="none">
+                            <a class="cisco-nav-link nav-link" href="/events/create" role="menuitem">
+                                <i class="fas fa-plus" aria-hidden="true"></i>Create Event
+                            </a>
+                        </li>
+                        <li class="nav-item" role="none">
+                            <a class="cisco-nav-link nav-link" href="/dashboard/badges" role="menuitem">
+                                <i class="fas fa-award" aria-hidden="true"></i>My Badges
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="cisco-nav-link nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" 
+                               data-bs-toggle="dropdown" aria-expanded="false" aria-label="User menu">
+                                <div class="cisco-avatar me-2" aria-hidden="true">
+                                    @(Context.Session.GetString("fname")?.Substring(0, 1).ToUpper() ?? "U")
+                                </div>
+                                <span>@(Context.Session.GetString("fname") ?? "User")</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" role="menu" aria-labelledby="user-menu">
+                                <li role="none">
+                                    <div class="px-3 py-2 border-bottom">
+                                        <small class="text-muted d-block">@(Context.Session.GetString("email") ?? "")</small>
+                                    </div>
+                                </li>
+                                <li role="none"><a class="dropdown-item rounded" href="/dashboard/profile" role="menuitem">
+                                    <i class="fas fa-user-edit me-2" aria-hidden="true"></i>Profile Settings
+                                </a></li>
+                                <li role="none"><a class="dropdown-item rounded" href="/dashboard/badges" role="menuitem">
+                                    <i class="fas fa-award me-2" aria-hidden="true"></i>My Badges
+                                </a></li>
+                                <li role="none"><hr class="dropdown-divider"></li>
+                                <li role="none"><a class="dropdown-item rounded text-danger" href="/auth/logout" role="menuitem">
+                                    <i class="fas fa-sign-out-alt me-2" aria-hidden="true"></i>Sign Out
+                                </a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    }
+    else
+    {
+        <!-- Simple navigation for non-authenticated users -->
+        <nav class="cisco-navbar navbar navbar-expand-lg" role="navigation" aria-label="Main navigation">
+            <div class="container">
+                <a class="cisco-logo navbar-brand" href="/" aria-label="CISCO Home">
+                    <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+                    <span>CISCO</span>
+                </a>
+                
+                <div class="navbar-nav ms-auto">
+                    <a class="cisco-nav-link nav-link" href="/auth/login">
+                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>Login
+                    </a>
+                    <a class="cisco-primary-btn cisco-btn-base nav-link ms-2" href="/auth/register">
+                        <i class="fas fa-user-plus" aria-hidden="true"></i>Register
+                    </a>
+                </div>
+            </div>
+        </nav>
+    }
 
-    <main class="flex-1">
+    <!-- Flash Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="container mt-3">
+            <div class="cisco-alert cisco-alert-success" role="alert" aria-live="polite">
+                <i class="fas fa-check-circle" aria-hidden="true"></i>
+                <span>@TempData["SuccessMessage"]</span>
+            </div>
+        </div>
+    }
+    
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="container mt-3">
+            <div class="cisco-alert cisco-alert-error" role="alert" aria-live="assertive">
+                <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                <span>@TempData["ErrorMessage"]</span>
+            </div>
+        </div>
+    }
+    
+    @if (TempData["InfoMessage"] != null)
+    {
+        <div class="container mt-3">
+            <div class="cisco-alert cisco-alert-info" role="alert" aria-live="polite">
+                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                <span>@TempData["InfoMessage"]</span>
+            </div>
+        </div>
+    }
+
+    <!-- Main Content -->
+    <main class="flex-grow-1" id="main-content" tabindex="-1">
         @RenderBody()
     </main>
-    <footer class="bg-white/80 backdrop-blur-lg border-t border-gray-100 mt-auto p-4 text-center text-sm text-gray-500">
-        &copy; @DateTime.UtcNow.Year My Carolinian
+
+    <!-- Enhanced Footer -->
+    <footer class="cisco-footer" role="contentinfo">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5 class="mb-4 d-flex align-items-center">
+                        <i class="fas fa-graduation-cap me-3" style="background: var(--cisco-gradient-primary); padding: var(--cisco-space-2); border-radius: var(--cisco-radius-sm);" aria-hidden="true"></i>
+                        Computer and Information Sciences Council
+                    </h5>
+                    <p class="mb-2 text-gray-300">University of San Carlos</p>
+                    <p class="text-muted small mb-4">
+                        Advancing Computer Science Education and Innovation
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="http://dcism.org" class="text-gray-400 text-decoration-none" target="_blank" rel="noopener noreferrer" aria-label="Visit DCISM Website">
+                            <i class="fas fa-external-link-alt me-2" aria-hidden="true"></i>DCISM Website
+                        </a>
+                        <a href="mailto:cisco@usc.edu.ph" class="text-gray-400 text-decoration-none" aria-label="Contact CISCO">
+                            <i class="fas fa-envelope me-2" aria-hidden="true"></i>Contact Us
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <p class="small text-muted mb-0">
+                        © @DateTime.Now.Year CISCO. All rights reserved.
+                    </p>
+                    <p class="small text-muted">
+                        Made with <i class="fas fa-heart text-danger" aria-hidden="true"></i> for USC students
+                    </p>
+                </div>
+            </div>
+        </div>
     </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Enhanced Interactions -->
+    <script>
+        // Page loading animation
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('loaded');
+            
+            // Auto-dismiss alerts after 5 seconds
+            const alerts = document.querySelectorAll('.cisco-alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.style.opacity = '0';
+                        alert.style.transform = 'translateY(-10px)';
+                        setTimeout(() => alert.remove(), 300);
+                    }
+                }, 5000);
+            });
+            
+            // Add ripple effect to buttons
+            const buttons = document.querySelectorAll('.cisco-primary-btn, .cisco-secondary-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = button.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        border-radius: 50%;
+                        background: rgba(255, 255, 255, 0.6);
+                        transform: scale(0);
+                        animation: ripple 0.6s linear;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        pointer-events: none;
+                    `;
+                    
+                    button.style.position = 'relative';
+                    button.style.overflow = 'hidden';
+                    button.appendChild(ripple);
+                    
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            });
+        });
+        
+        // Enhanced form validation feedback
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Find first invalid field and focus it
+                    const firstInvalid = form.querySelector(':invalid');
+                    if (firstInvalid) {
+                        firstInvalid.focus();
+                        firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+                form.classList.add('was-validated');
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+    
+    <style>
+        @@keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        .loaded {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    
     @RenderSection("Scripts", required: false)
 </body>
 </html> 

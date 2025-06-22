@@ -3,67 +3,111 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography;
-using System.Text;
+using Microsoft.AspNetCore.Http;
+using BCrypt.Net;
 
 namespace Accounts.Api.Pages.Auth;
 
 public class LoginModel : PageModel
 {
-    private readonly AccountsDbContext _db;
+    private readonly AccountsDbContext _context;
+    private readonly ILogger<LoginModel> _logger;
 
-    public LoginModel(AccountsDbContext db)
+    public LoginModel(AccountsDbContext context, ILogger<LoginModel> logger)
     {
-        _db = db;
+        _context = context;
+        _logger = logger;
     }
 
     [BindProperty]
-    public LoginInput Input { get; set; } = new();
+    [Required(ErrorMessage = "Email is required")]
+    [EmailAddress(ErrorMessage = "Please enter a valid email address")]
+    public string Email { get; set; } = string.Empty;
 
-    public string? Error { get; set; }
-    public string? Success { get; set; }
+    [BindProperty]
+    [Required(ErrorMessage = "Password is required")]
+    [DataType(DataType.Password)]
+    public string Password { get; set; } = string.Empty;
 
-    public void OnGet(bool created = false)
+    [BindProperty]
+    public bool RememberMe { get; set; }
+
+    public string? ErrorMessage { get; set; }
+
+    public async Task<IActionResult> OnGetAsync()
     {
-        if (created)
+        // If already logged in, redirect to dashboard
+        if (HttpContext.Session.GetString("uid") != null)
         {
-            Success = "Account created successfully. Please log in.";
+            return RedirectToPage("/Dashboard/Index");
         }
+
+        return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!ModelState.IsValid)
-            return Page();
-
-        var user = await _db.UserCredentials.FirstOrDefaultAsync(u => u.Email == Input.Email);
-        if (user == null || user.Password != HashPassword(Input.Password))
+        // If already logged in, redirect to dashboard
+        if (HttpContext.Session.GetString("uid") != null)
         {
-            Error = "Invalid credentials";
+            return RedirectToPage("/Dashboard/Index");
+        }
+
+        if (!ModelState.IsValid)
+        {
             return Page();
         }
 
-        // TODO: Add authentication cookie or JWT handling
-        Success = "Login successful";
-        // TODO: set auth cookie then redirect
-        return RedirectToPage("/Index");
-    }
+        try
+        {
+            // Find user by email
+            var user = await _context.UserCredentials
+                .FirstOrDefaultAsync(u => u.Email == Email.ToLower().Trim());
 
-    /* ---- Helpers ---- */
-    private static string HashPassword(string plain)
-    {
-        using var sha = SHA256.Create();
-        var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(plain));
-        return Convert.ToHexString(bytes);
-    }
+            if (user == null)
+            {
+                ErrorMessage = "Email not registered";
+                _logger.LogWarning("Login attempt with unregistered email: {Email}", Email);
+                return Page();
+            }
 
-    public class LoginInput
-    {
-        [Required, EmailAddress]
-        public string Email { get; set; } = string.Empty;
+                            // Check if email is verified
+                if (user.Emailverified != true)
+                {
+                    ErrorMessage = "Email not verified. Please check your inbox for the verification link.";
+                    _logger.LogWarning("Login attempt with unverified email: {Email}", Email);
+                    return Page();
+                }
 
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; } = string.Empty;
+                // Verify password
+                if (!BCrypt.Net.BCrypt.Verify(Password, user.Password))
+                {
+                    ErrorMessage = "Incorrect password";
+                    _logger.LogWarning("Failed login attempt for user: {Email}", Email);
+                    return Page();
+                }
+
+                // Successful login - create session
+                HttpContext.Session.SetString("uid", user.Uid);
+                HttpContext.Session.SetString("email", user.Email);
+                HttpContext.Session.SetString("fname", user.Fname ?? "");
+                HttpContext.Session.SetString("lname", user.Lname ?? "");
+                HttpContext.Session.SetString("last_activity", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString());
+
+                // Log successful login
+                _logger.LogInformation("Successful login for user: {Email}", Email);
+
+                // Set success message
+                TempData["SuccessMessage"] = $"Welcome back, {user.Fname}!";
+
+            // Redirect to dashboard
+            return RedirectToPage("/Dashboard/Index");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during login attempt for email: {Email}", Email);
+            ErrorMessage = "An error occurred during login. Please try again.";
+            return Page();
+        }
     }
 } 

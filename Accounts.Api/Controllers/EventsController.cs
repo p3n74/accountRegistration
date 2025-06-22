@@ -88,7 +88,7 @@ public class EventsController : ControllerBase
             Email = req.Email ?? string.Empty,
             JoinedAt = DateTime.UtcNow,
             Registered = req.Uid != null,
-            AttendanceStatus = false
+            AttendanceStatus = req.Uid != null ? 1 : 0 // Pending if registered user, Invited if email only
         };
         _db.EventParticipants.Add(participant);
         evt.Participantcount += 1;

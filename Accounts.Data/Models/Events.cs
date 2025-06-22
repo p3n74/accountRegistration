@@ -29,5 +29,8 @@ public partial class Events
 
     public uint Views { get; set; }
 
+    // Explicitly specify that Eventcreator is the FK used for this navigation. This prevents EF Core from
+    // trying to create a shadow FK column ("EventcreatorNavigationUid") which doesn't exist in the DB.
+    [System.ComponentModel.DataAnnotations.Schema.ForeignKey("Eventcreator")]
     public virtual UserCredentials? EventcreatorNavigation { get; set; }
 }

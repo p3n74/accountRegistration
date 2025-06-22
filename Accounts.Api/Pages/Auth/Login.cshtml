@@ -2,380 +2,579 @@
 @model Accounts.Api.Pages.Auth.LoginModel
 @{
     ViewData["Title"] = "Login";
+    Layout = "_Layout";
 }
 
-<style>
-    .cisco-login-container {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #eff6ff 100%);
-        padding: 3rem 1rem;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-    
-    .cisco-login-card {
-        width: 100%;
-        max-width: 400px;
-    }
-    
-    .cisco-header {
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-    
-    .cisco-logo {
-        width: 80px;
-        height: 80px;
-        background: linear-gradient(135deg, #4A90E2, #2E5BBA);
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1.5rem;
-        box-shadow: 0 10px 25px rgba(74, 144, 226, 0.3);
-    }
-    
-    .cisco-logo-inner {
-        width: 40px;
-        height: 40px;
-        background: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-    }
-    
-    .cisco-dot {
-        width: 4px;
-        height: 4px;
-        background: #4A90E2;
-        border-radius: 50%;
-        margin: 1px;
-    }
-    
-    .cisco-brand-text {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #4A90E2;
-        margin-bottom: 0.25rem;
-        letter-spacing: -0.025em;
-    }
-    
-    .cisco-tagline {
-        font-size: 0.875rem;
-        color: #6b7280;
-        margin-bottom: 1rem;
-    }
-    
-    .cisco-welcome {
-        font-size: 1.875rem;
-        font-weight: bold;
-        color: #1f2937;
-        margin-bottom: 0.5rem;
-    }
-    
-    .cisco-subtitle {
-        color: #6b7280;
-        margin-bottom: 0;
-    }
-    
-    .cisco-subtitle a {
-        color: #4A90E2;
-        text-decoration: none;
-        font-weight: 600;
-    }
-    
-    .cisco-subtitle a:hover {
-        color: #2E5BBA;
-    }
-    
-    .cisco-form-card {
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
-        border: 1px solid #f3f4f6;
-        padding: 2rem;
-    }
-    
-    .cisco-alert {
-        margin-bottom: 1.5rem;
-        padding: 0.75rem 1rem;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        font-size: 0.875rem;
-        font-weight: 500;
-    }
-    
-    .cisco-alert-error {
-        background: #fef2f2;
-        border: 1px solid #fecaca;
-        color: #991b1b;
-    }
-    
-    .cisco-alert-success {
-        background: #eff6ff;
-        border: 1px solid #bfdbfe;
-        color: #1e40af;
-    }
-    
-    .cisco-alert svg {
-        width: 20px;
-        height: 20px;
-        margin-right: 0.75rem;
-        flex-shrink: 0;
-    }
-    
-    .cisco-form {
-        margin: 0;
-    }
-    
-    .cisco-form-group {
-        margin-bottom: 1rem;
-    }
-    
-    .cisco-label {
-        display: block;
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #374151;
-        margin-bottom: 0.5rem;
-    }
-    
-    .cisco-input-wrapper {
-        position: relative;
-    }
-    
-    .cisco-input {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        padding-right: 2.5rem;
-        border: 1px solid #d1d5db;
-        border-radius: 12px;
-        font-size: 0.875rem;
-        color: #1f2937;
-        background: #f9fafb;
-        transition: all 0.2s ease;
-        box-sizing: border-box;
-    }
-    
-    .cisco-input:focus {
-        outline: none;
-        border-color: #4A90E2;
-        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
-        background: white;
-    }
-    
-    .cisco-input-icon {
-        position: absolute;
-        right: 0.75rem;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 20px;
-        height: 20px;
-        color: #9ca3af;
-        pointer-events: none;
-    }
-    
-    .cisco-validation-error {
-        font-size: 0.75rem;
-        color: #dc2626;
-        margin-top: 0.25rem;
-        display: block;
-    }
-    
-    .cisco-forgot-link {
-        text-align: right;
-        margin: 1rem 0 1.5rem;
-    }
-    
-    .cisco-forgot-link a {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #4A90E2;
-        text-decoration: none;
-    }
-    
-    .cisco-forgot-link a:hover {
-        color: #2E5BBA;
-    }
-    
-    .cisco-submit-btn {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        background: linear-gradient(135deg, #4A90E2, #2E5BBA);
-        color: white;
-        border: none;
-        border-radius: 12px;
-        font-size: 0.875rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 14px rgba(74, 144, 226, 0.3);
-    }
-    
-    .cisco-submit-btn:hover {
-        background: linear-gradient(135deg, #2E5BBA, #1e3a8a);
-        transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
-    }
-    
-    .cisco-submit-btn svg {
-        width: 20px;
-        height: 20px;
-        margin-right: 0.5rem;
-    }
-    
-    .cisco-footer {
-        margin-top: 2rem;
-        text-align: center;
-    }
-    
-    .cisco-footer-brand {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.875rem;
-        color: #6b7280;
-        margin-bottom: 1rem;
-        gap: 0.5rem;
-    }
-    
-    .cisco-footer-brand .brand-name {
-        font-weight: 600;
-        color: #4A90E2;
-    }
-    
-    .cisco-footer-text {
-        font-size: 0.75rem;
-        color: #9ca3af;
-    }
-    
-    .cisco-footer-text a {
-        color: #4A90E2;
-        text-decoration: none;
-    }
-    
-    .cisco-footer-text a:hover {
-        color: #2E5BBA;
-    }
-</style>
+<div class="min-vh-100 d-flex align-items-center" style="background: var(--cisco-gradient-background);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-9">
+                <div class="cisco-card overflow-hidden" style="animation: slideInUp 0.8s ease-out;">
+                    <div class="row g-0">
+                        <!-- Left side - Enhanced Branding -->
+                        <div class="col-lg-6 d-none d-lg-flex">
+                            <div class="w-100 d-flex align-items-center justify-content-center text-white position-relative" 
+                                 style="background: var(--cisco-gradient-primary); min-height: 600px; overflow: hidden;">
+                                <!-- Animated Background Pattern -->
+                                <div class="position-absolute w-100 h-100 opacity-10">
+                                    <div class="floating-circle" style="top: 10%; left: 10%; width: 100px; height: 100px; border: 2px solid white; border-radius: 50%; opacity: 0.3; animation: float 6s ease-in-out infinite;"></div>
+                                    <div class="floating-circle" style="top: 60%; right: 15%; width: 60px; height: 60px; border: 2px solid white; border-radius: 50%; opacity: 0.2; animation: float 8s ease-in-out infinite reverse;"></div>
+                                    <div class="floating-circle" style="bottom: 20%; left: 20%; width: 80px; height: 80px; border: 2px solid white; border-radius: 50%; opacity: 0.25; animation: float 7s ease-in-out infinite;"></div>
+                                    <div class="floating-circle" style="top: 30%; right: 30%; width: 40px; height: 40px; border: 2px solid white; border-radius: 50%; opacity: 0.15; animation: float 9s ease-in-out infinite;"></div>
+                                </div>
+                                
+                                <!-- Gradient Overlay -->
+                                <div class="position-absolute w-100 h-100" style="background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(46, 91, 186, 0.1) 100%);"></div>
+                                
+                                <div class="text-center p-5 position-relative z-index-2">
+                                    <div class="mb-4">
+                                        <div class="cisco-glass d-inline-flex align-items-center justify-content-center rounded-3 mb-4 cisco-pulse"
+                                             style="width: 100px; height: 100px;">
+                                            <i class="fas fa-graduation-cap" style="font-size: 3rem;" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    <h1 class="display-5 fw-bold mb-3 cisco-text-gradient" style="color: white;">CISCO</h1>
+                                    <h3 class="h4 mb-4 opacity-90">Computer and Information Sciences Council</h3>
+                                    <p class="lead mb-5 opacity-80">University of San Carlos</p>
+                                    
+                                    <div class="row text-center g-4">
+                                        <div class="col-4">
+                                            <div class="cisco-glass p-3 rounded-3" style="transition: all var(--cisco-transition-base);">
+                                                <i class="fas fa-users fa-2x mb-3 opacity-80" aria-hidden="true"></i>
+                                                <p class="small mb-0 opacity-90">Community</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="cisco-glass p-3 rounded-3" style="transition: all var(--cisco-transition-base);">
+                                                <i class="fas fa-calendar-alt fa-2x mb-3 opacity-80" aria-hidden="true"></i>
+                                                <p class="small mb-0 opacity-90">Events</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="cisco-glass p-3 rounded-3" style="transition: all var(--cisco-transition-base);">
+                                                <i class="fas fa-award fa-2x mb-3 opacity-80" aria-hidden="true"></i>
+                                                <p class="small mb-0 opacity-90">Achievements</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-<div class="cisco-login-container">
-    <div class="cisco-login-card">
-        <!-- Header Section -->
-        <div class="cisco-header">
-            <!-- CISCO Logo -->
-            <div class="cisco-logo">
-                <img src="~/logo.png" alt="CISCO Logo" style="width:100%;height:100%;object-fit:contain;" />
-            </div>
-            <div>
-                <h1 class="cisco-brand-text">CISCO</h1>
-                <p class="cisco-tagline">Computer and Information Sciences Council</p>
-            </div>
-            <h2 class="cisco-welcome">Welcome back</h2>
-            <p class="cisco-subtitle">
-                Sign in to your account or
-                <a asp-page="Register">create a new account</a>
-            </p>
-        </div>
-        
-        <!-- Main Card -->
-        <div class="cisco-form-card">
-            <!-- Error Messages using TempData -->
-            @if (TempData["ErrorMessage"] != null)
-            {
-                <div class="cisco-alert cisco-alert-error">
-                    <svg fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span>@TempData["ErrorMessage"]</span>
-                </div>
-            }
-            
-            <!-- Success Messages using TempData -->
-            @if (TempData["SuccessMessage"] != null)
-            {
-                <div class="cisco-alert cisco-alert-success">
-                    <svg fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span>@TempData["SuccessMessage"]</span>
-                </div>
-            }
+                        <!-- Right side - Enhanced Login Form -->
+                        <div class="col-lg-6">
+                            <div class="p-5" style="min-height: 600px;">
+                                <!-- Mobile Header -->
+                                <div class="d-lg-none text-center mb-4">
+                                    <div class="cisco-glass d-inline-flex align-items-center justify-content-center rounded-3 mb-3"
+                                         style="width: 60px; height: 60px;">
+                                        <i class="fas fa-graduation-cap cisco-text-gradient" style="font-size: 1.5rem;" aria-hidden="true"></i>
+                                    </div>
+                                    <h2 class="h4 mb-0 cisco-text-gradient">CISCO</h2>
+                                </div>
 
-            <!-- Model State Errors -->
-            @if (!ViewData.ModelState.IsValid)
-            {
-                <div class="cisco-alert cisco-alert-error">
-                    <svg fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                    </svg>
-                    <div>
-                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                        {
-                            <div>@error.ErrorMessage</div>
-                        }
+                                <!-- Header -->
+                                <div class="text-center mb-5">
+                                    <h1 class="h2 fw-bold mb-3">Welcome Back</h1>
+                                    <p class="text-muted mb-0">
+                                        Sign in to your account or 
+                                        <a href="/auth/register" class="text-decoration-none fw-medium cisco-text-gradient">
+                                            create a new account
+                                        </a>
+                                    </p>
+                                </div>
+
+                                <!-- Alert Messages -->
+                                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                                {
+                                    <div class="cisco-alert cisco-alert-error mb-4" role="alert" aria-live="assertive">
+                                        <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                                        <span>@Model.ErrorMessage</span>
+                                    </div>
+                                }
+
+                                @if (!string.IsNullOrEmpty(TempData["SuccessMessage"]?.ToString()))
+                                {
+                                    <div class="cisco-alert cisco-alert-success mb-4" role="alert" aria-live="polite">
+                                        <i class="fas fa-check-circle" aria-hidden="true"></i>
+                                        <span>@TempData["SuccessMessage"]</span>
+                                    </div>
+                                }
+
+                                <!-- Enhanced Login Form -->
+                                <form method="post" class="needs-validation" novalidate id="loginForm">
+                                    <div class="mb-4">
+                                        <label for="Email" class="form-label fw-semibold text-dark">
+                                            Email Address <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="position-relative">
+                                            <input asp-for="Email" type="email" class="cisco-input form-control ps-5" 
+                                                   placeholder="Enter your email address" required autocomplete="email"
+                                                   aria-describedby="emailHelp">
+                                            <i class="fas fa-envelope position-absolute top-50 translate-middle-y ms-3 text-muted" aria-hidden="true"></i>
+                                            <div class="position-absolute top-50 translate-middle-y end-0 me-3" id="emailValidation" style="display: none;">
+                                                <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="Email" class="text-danger small"></span>
+                                        <div id="emailHelp" class="form-text small text-muted">We'll never share your email with anyone else.</div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="Password" class="form-label fw-semibold text-dark">
+                                            Password <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="position-relative">
+                                            <input asp-for="Password" type="password" class="cisco-input form-control ps-5 pe-5" 
+                                                   placeholder="Enter your password" required autocomplete="current-password"
+                                                   aria-describedby="passwordHelp">
+                                            <i class="fas fa-lock position-absolute top-50 translate-middle-y ms-3 text-muted" aria-hidden="true"></i>
+                                            <button type="button" class="btn btn-link position-absolute top-50 translate-middle-y end-0 me-2 p-1" 
+                                                    id="togglePassword" aria-label="Toggle password visibility">
+                                                <i class="fas fa-eye text-muted" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                        <span asp-validation-for="Password" class="text-danger small"></span>
+                                        <div id="passwordHelp" class="form-text small text-muted">Password must be at least 8 characters long.</div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <div class="form-check">
+                                            <input asp-for="RememberMe" type="checkbox" class="form-check-input" id="rememberMe"
+                                                   style="border-color: var(--cisco-medium-gray);">
+                                            <label class="form-check-label small text-muted" for="rememberMe">
+                                                Remember me for 30 days
+                                            </label>
+                                        </div>
+                                        <a href="/auth/reset-request" class="small text-decoration-none fw-medium cisco-text-gradient">
+                                            Forgot password?
+                                        </a>
+                                    </div>
+
+                                    <button type="submit" class="cisco-primary-btn cisco-btn-base w-100 py-3 mb-4" id="loginButton">
+                                        <span class="button-text">
+                                            <i class="fas fa-sign-in-alt me-2" aria-hidden="true"></i>
+                                            Sign In to CISCO
+                                        </span>
+                                        <span class="button-loading" style="display: none;">
+                                            <div class="cisco-spinner me-2"></div>
+                                            Signing In...
+                                        </span>
+                                    </button>
+                                </form>
+
+                                <!-- Divider -->
+                                <div class="text-center my-4">
+                                    <div class="position-relative">
+                                        <hr class="my-0" style="border-color: var(--cisco-gray-200);">
+                                        <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small">
+                                            New to CISCO?
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Register Link -->
+                                <div class="text-center">
+                                    <a href="/auth/register" class="cisco-secondary-btn cisco-btn-base w-100 py-3">
+                                        <i class="fas fa-user-plus me-2" aria-hidden="true"></i>
+                                        Create New Account
+                                    </a>
+                                </div>
+
+                                <!-- Footer Info -->
+                                <div class="text-center mt-4">
+                                    <p class="small text-muted mb-0">
+                                        By signing in, you agree to our 
+                                        <a href="#" class="text-decoration-none cisco-text-gradient">Terms of Service</a> 
+                                        and 
+                                        <a href="#" class="text-decoration-none cisco-text-gradient">Privacy Policy</a>
+                                    </p>
+                                </div>
+
+                                <!-- Security Notice -->
+                                <div class="mt-4 p-3 rounded-3" style="background: var(--cisco-gradient-subtle); border: 1px solid var(--cisco-gray-200);">
+                                    <div class="d-flex align-items-start">
+                                        <i class="fas fa-shield-alt me-2 mt-1 cisco-text-gradient" aria-hidden="true"></i>
+                                        <div>
+                                            <small class="fw-medium text-dark">Secure Login</small>
+                                            <br>
+                                            <small class="text-muted">Your login is protected with industry-standard encryption.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            }
-
-            <!-- Login Form -->
-            <form class="cisco-form" method="post">
-                <div class="cisco-form-group">
-                    <label asp-for="Input.Email" class="cisco-label"></label>
-                    <div class="cisco-input-wrapper">
-                        <input asp-for="Input.Email" class="cisco-input" placeholder="Enter your email" />
-                        <svg class="cisco-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
-                        </svg>
-                    </div>
-                    <span asp-validation-for="Input.Email" class="cisco-validation-error"></span>
-                </div>
-                
-                <div class="cisco-form-group">
-                    <label asp-for="Input.Password" class="cisco-label"></label>
-                    <div class="cisco-input-wrapper">
-                        <input asp-for="Input.Password" type="password" class="cisco-input" placeholder="Enter your password" />
-                        <svg class="cisco-input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                        </svg>
-                    </div>
-                    <span asp-validation-for="Input.Password" class="cisco-validation-error"></span>
-                </div>
-
-                <div class="cisco-forgot-link">
-                    <a asp-page="ResetRequest">Forgot your password?</a>
-                </div>
-
-                <button type="submit" class="cisco-submit-btn">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013 3v1"></path>
-                    </svg>
-                    Sign in to your account
-                </button>
-            </form>
-        </div>
-        
-        <!-- Footer -->
-        <div class="cisco-footer">
-            <div class="cisco-footer-brand">
-                <span>Powered by</span>
-                <span class="brand-name">CISCO</span>
             </div>
-            <p class="cisco-footer-text">
-                By signing in, you agree to our terms of service and privacy policy.
-            </p>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            const emailInput = document.getElementById('Email');
+            const passwordInput = document.getElementById('Password');
+            const togglePassword = document.getElementById('togglePassword');
+            const loginButton = document.getElementById('loginButton');
+            const emailValidation = document.getElementById('emailValidation');
+
+            // Auto-focus email field
+            if (emailInput && !emailInput.value) {
+                emailInput.focus();
+            }
+
+            // Password toggle functionality
+            if (togglePassword) {
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    const icon = this.querySelector('i');
+                    if (type === 'password') {
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                        this.setAttribute('aria-label', 'Show password');
+                    } else {
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                        this.setAttribute('aria-label', 'Hide password');
+                    }
+                });
+            }
+
+            // Real-time email validation
+            if (emailInput) {
+                emailInput.addEventListener('input', function() {
+                    const email = this.value;
+                    const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+                    
+                    if (email && emailRegex.test(email)) {
+                        this.classList.remove('is-invalid');
+                        this.classList.add('is-valid');
+                        emailValidation.style.display = 'block';
+                    } else if (email) {
+                        this.classList.remove('is-valid');
+                        this.classList.add('is-invalid');
+                        emailValidation.style.display = 'none';
+                    } else {
+                        this.classList.remove('is-valid', 'is-invalid');
+                        emailValidation.style.display = 'none';
+                    }
+                });
+            }
+
+            // Real-time password validation
+            if (passwordInput) {
+                passwordInput.addEventListener('input', function() {
+                    const password = this.value;
+                    
+                    if (password.length >= 8) {
+                        this.classList.remove('is-invalid');
+                        this.classList.add('is-valid');
+                    } else if (password.length > 0) {
+                        this.classList.remove('is-valid');
+                        this.classList.add('is-invalid');
+                    } else {
+                        this.classList.remove('is-valid', 'is-invalid');
+                    }
+                });
+            }
+
+            // Enhanced form submission
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    const email = emailInput.value.trim();
+                    const password = passwordInput.value;
+                    
+                    // Basic validation
+                    if (!email || !password) {
+                        e.preventDefault();
+                        showAlert('Please fill in all required fields.', 'error');
+                        return false;
+                    }
+                    
+                    // Email validation
+                    const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+                    if (!emailRegex.test(email)) {
+                        e.preventDefault();
+                        showAlert('Please enter a valid email address.', 'error');
+                        emailInput.focus();
+                        return false;
+                    }
+                    
+                    // Password validation
+                    if (password.length < 8) {
+                        e.preventDefault();
+                        showAlert('Password must be at least 8 characters long.', 'error');
+                        passwordInput.focus();
+                        return false;
+                    }
+                    
+                    // Show loading state
+                    showLoadingState();
+                });
+            }
+
+            // Show loading state
+            function showLoadingState() {
+                const buttonText = loginButton.querySelector('.button-text');
+                const buttonLoading = loginButton.querySelector('.button-loading');
+                
+                buttonText.style.display = 'none';
+                buttonLoading.style.display = 'flex';
+                buttonLoading.style.alignItems = 'center';
+                buttonLoading.style.justifyContent = 'center';
+                
+                loginButton.disabled = true;
+                
+                // Auto-hide after 10 seconds as fallback
+                setTimeout(function() {
+                    buttonText.style.display = 'flex';
+                    buttonLoading.style.display = 'none';
+                    loginButton.disabled = false;
+                }, 10000);
+            }
+
+            // Show alert function
+            function showAlert(message, type) {
+                // Remove existing alerts
+                const existingAlerts = document.querySelectorAll('.dynamic-alert');
+                existingAlerts.forEach(alert => alert.remove());
+                
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `cisco-alert cisco-alert-${type} mb-4 dynamic-alert`;
+                alertDiv.setAttribute('role', 'alert');
+                alertDiv.innerHTML = `
+                    <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}" aria-hidden="true"></i>
+                    <span>${message}</span>
+                `;
+                
+                form.insertBefore(alertDiv, form.firstChild);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (alertDiv.parentNode) {
+                        alertDiv.style.opacity = '0';
+                        alertDiv.style.transform = 'translateY(-10px)';
+                        setTimeout(() => alertDiv.remove(), 300);
+                    }
+                }, 5000);
+            }
+
+            // Keyboard navigation enhancements
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.target.tagName !== 'BUTTON' && e.target.type !== 'submit') {
+                    e.preventDefault();
+                    if (e.target === emailInput) {
+                        passwordInput.focus();
+                    } else if (e.target === passwordInput) {
+                        loginButton.click();
+                    }
+                }
+            });
+
+            // Add floating label effect
+            const inputs = [emailInput, passwordInput];
+            inputs.forEach(function(input) {
+                if (input) {
+                    input.addEventListener('focus', function() {
+                        this.parentElement.classList.add('focused');
+                    });
+                    
+                    input.addEventListener('blur', function() {
+                        if (!this.value) {
+                            this.parentElement.classList.remove('focused');
+                        }
+                    });
+                    
+                    // Check if already has value on load
+                    if (input.value) {
+                        input.parentElement.classList.add('focused');
+                    }
+                }
+            });
+
+            // Add shake animation for failed login
+            if (window.location.search.includes('error=true')) {
+                form.style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => {
+                    form.style.animation = '';
+                }, 500);
+            }
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .z-index-2 {
+            z-index: 2;
+        }
+        
+        /* Enhanced input styling */
+        .cisco-input {
+            border: 2px solid var(--cisco-gray-200);
+            transition: all var(--cisco-transition-base);
+            background: var(--cisco-white);
+        }
+        
+        .cisco-input:focus {
+            background: white;
+            border-color: var(--cisco-primary-blue);
+            box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
+        }
+        
+        .cisco-input.is-valid {
+            border-color: var(--cisco-success);
+            background-image: none;
+        }
+        
+        .cisco-input.is-invalid {
+            border-color: var(--cisco-danger);
+            background-image: none;
+        }
+        
+        /* Form check styling */
+        .form-check-input:checked {
+            background-color: var(--cisco-primary-blue);
+            border-color: var(--cisco-primary-blue);
+        }
+        
+        .form-check-input:focus {
+            border-color: var(--cisco-primary-blue);
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+        }
+        
+        /* Enhanced card styling */
+        .cisco-card {
+            box-shadow: var(--cisco-shadow-2xl);
+            border: none;
+        }
+        
+        /* Floating animations */
+        @@keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        .floating-circle {
+            position: absolute;
+        }
+        
+        /* Button loading state */
+        .button-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Shake animation for errors */
+        @@keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        /* Glass effect hover states */
+        .cisco-glass:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        /* Password toggle button */
+        #togglePassword {
+            border: none;
+            background: none;
+            color: var(--cisco-gray-500);
+            transition: color var(--cisco-transition-fast);
+        }
+        
+        #togglePassword:hover {
+            color: var(--cisco-primary-blue);
+        }
+        
+        #togglePassword:focus {
+            outline: 2px solid var(--cisco-primary-blue);
+            outline-offset: 2px;
+        }
+        
+        /* Responsive adjustments */
+        @@media (max-width: 992px) {
+            .min-vh-100 {
+                padding: var(--cisco-space-8) 0;
+            }
+        }
+        
+        @@media (max-width: 576px) {
+            .cisco-card .p-5 {
+                padding: var(--cisco-space-8) !important;
+            }
+            
+            .display-5 {
+                font-size: var(--cisco-text-3xl) !important;
+            }
+            
+            .cisco-btn-base {
+                padding: var(--cisco-space-4) var(--cisco-space-5);
+            }
+        }
+        
+        /* Print styles */
+        @@media print {
+            .floating-circle {
+                display: none;
+            }
+            
+            .cisco-glass {
+                background: var(--cisco-gray-100);
+                backdrop-filter: none;
+            }
+        }
+        
+        /* High contrast mode */
+        @@media (prefers-contrast: high) {
+            .cisco-input {
+                border: 3px solid var(--cisco-gray-600);
+            }
+            
+            .cisco-input:focus {
+                border-color: var(--cisco-primary-blue);
+                outline: 2px solid var(--cisco-primary-blue);
+            }
+        }
+        
+        /* Reduced motion */
+        @@media (prefers-reduced-motion: reduce) {
+            .floating-circle {
+                animation: none;
+            }
+            
+            .cisco-card {
+                animation: none;
+            }
+        }
+        
+        /* Dark mode support */
+        @@media (prefers-color-scheme: dark) {
+            .cisco-input {
+                background: var(--cisco-gray-800);
+                border-color: var(--cisco-gray-600);
+                color: var(--cisco-gray-100);
+            }
+            
+            .cisco-input::placeholder {
+                color: var(--cisco-gray-400);
+            }
+        }
+    </style>
 }

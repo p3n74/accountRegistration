@@ -1,0 +1,27 @@
+@page "{token?}"
+@model Accounts.Api.Pages.Auth.VerifyModel
+@{
+    ViewData["Title"] = "Email Verification";
+}
+
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-100 p-6">
+    <div class="max-w-md w-full bg-white shadow-xl rounded-2xl p-8 text-center">
+        @if (Model.Success)
+        {
+            <svg class="h-12 w-12 text-blue-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h2 class="text-2xl font-bold mb-2">Success!</h2>
+            <p class="text-gray-600 mb-6">@Model.Message</p>
+            <a class="inline-block bg-[#4A90E2] hover:bg-[#2E5BBA] text-white px-4 py-2 rounded-lg" asp-page="Login">Go to Login</a>
+        }
+        else
+        {
+            <svg class="h-12 w-12 text-red-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            <h2 class="text-2xl font-bold mb-2">Verification Failed</h2>
+            <p class="text-gray-600">@Model.Message</p>
+        }
+    </div>
+</div> 
