@@ -1,0 +1,20 @@
+
+> accounts-app@1.0.0 dev
+> nodemon nodejs-server/server.js
+
+[33m[nodemon] 3.1.10[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+✅ Database connected successfully

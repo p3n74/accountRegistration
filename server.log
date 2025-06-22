@@ -1,52 +1,230 @@
-[Wed Jun 18 07:44:24 2025] PHP 8.4.8 Development Server (http://localhost:8000) started
-[Wed Jun 18 07:44:25 2025] [::1]:61829 Accepted
-[Wed Jun 18 07:44:25 2025] [::1]:61830 Accepted
-[Wed Jun 18 07:44:25 2025] [::1]:61829 [200]: GET /dashboard
-[Wed Jun 18 07:44:25 2025] [::1]:61829 Closing
-[Wed Jun 18 07:44:25 2025] [::1]:61830 [200]: GET /dist/output.css
-[Wed Jun 18 07:44:25 2025] [::1]:61830 Closing
-[Wed Jun 18 07:44:25 2025] [::1]:61836 Accepted
-[Wed Jun 18 07:44:25 2025] [::1]:61836 [200]: GET /profilePictures/7_1750167896.png
-[Wed Jun 18 07:44:25 2025] [::1]:61836 Closing
-[Wed Jun 18 07:44:25 2025] [::1]:61837 Accepted
-[Wed Jun 18 07:44:25 2025] [::1]:61837 [302]: GET /favicon.ico
-[Wed Jun 18 07:44:25 2025] [::1]:61837 Closing
-[Wed Jun 18 07:44:25 2025] [::1]:61838 Accepted
-[Wed Jun 18 07:44:25 2025] [::1]:61838 [200]: GET /dashboard
-[Wed Jun 18 07:44:25 2025] [::1]:61838 Closing
-[Wed Jun 18 07:44:26 2025] [::1]:61844 Accepted
-[Wed Jun 18 07:44:26 2025] [::1]:61845 Accepted
-[Wed Jun 18 07:44:26 2025] [::1]:61844 [302]: GET /events/create
-[Wed Jun 18 07:44:26 2025] [::1]:61844 Closing
-[Wed Jun 18 07:44:27 2025] [::1]:61845 [200]: GET /dashboard
-[Wed Jun 18 07:44:27 2025] [::1]:61845 Closing
-[Wed Jun 18 07:44:27 2025] [::1]:61848 Accepted
-[Wed Jun 18 07:44:27 2025] [::1]:61848 [200]: GET /dist/output.css
-[Wed Jun 18 07:44:27 2025] [::1]:61848 Closing
-[Wed Jun 18 07:44:27 2025] [::1]:61850 Accepted
-[Wed Jun 18 07:44:27 2025] [::1]:61850 [200]: GET /profilePictures/7_1750167896.png
-[Wed Jun 18 07:44:27 2025] [::1]:61850 Closing
-[Wed Jun 18 07:44:27 2025] [::1]:61851 Accepted
-[Wed Jun 18 07:44:27 2025] [::1]:61851 [302]: GET /favicon.ico
-[Wed Jun 18 07:44:27 2025] [::1]:61851 Closing
-[Wed Jun 18 07:44:27 2025] [::1]:61852 Accepted
-[Wed Jun 18 07:44:27 2025] [::1]:61852 [200]: GET /dashboard
-[Wed Jun 18 07:44:27 2025] [::1]:61852 Closing
-[Wed Jun 18 07:44:28 2025] [::1]:61855 Accepted
-[Wed Jun 18 07:44:28 2025] [::1]:61856 Accepted
-[Wed Jun 18 07:44:28 2025] [::1]:61855 [302]: GET /events/create
-[Wed Jun 18 07:44:28 2025] [::1]:61855 Closing
-[Wed Jun 18 07:44:29 2025] [::1]:61856 [200]: GET /dashboard
-[Wed Jun 18 07:44:29 2025] [::1]:61856 Closing
-[Wed Jun 18 07:44:29 2025] [::1]:61860 Accepted
-[Wed Jun 18 07:44:29 2025] [::1]:61860 [200]: GET /dist/output.css
-[Wed Jun 18 07:44:29 2025] [::1]:61860 Closing
-[Wed Jun 18 07:44:29 2025] [::1]:61861 Accepted
-[Wed Jun 18 07:44:29 2025] [::1]:61861 [200]: GET /profilePictures/7_1750167896.png
-[Wed Jun 18 07:44:29 2025] [::1]:61861 Closing
-[Wed Jun 18 07:44:29 2025] [::1]:61862 Accepted
-[Wed Jun 18 07:44:29 2025] [::1]:61862 [302]: GET /favicon.ico
-[Wed Jun 18 07:44:29 2025] [::1]:61862 Closing
-[Wed Jun 18 07:44:29 2025] [::1]:61863 Accepted
-[Wed Jun 18 07:44:29 2025] [::1]:61863 [200]: GET /dashboard
-[Wed Jun 18 07:44:29 2025] [::1]:61863 Closing
+[Sun Jun 22 14:55:20 2025] PHP 8.4.8 Development Server (http://localhost:8000) started
+[Sun Jun 22 14:55:27 2025] [::1]:60773 Accepted
+[Sun Jun 22 14:55:27 2025] [::1]:60773 [302]: HEAD /
+[Sun Jun 22 14:55:27 2025] [::1]:60773 Closing
+[Sun Jun 22 14:55:57 2025] [::1]:60788 Accepted
+[Sun Jun 22 14:55:57 2025] [::1]:60789 Accepted
+[Sun Jun 22 14:55:57 2025] [::1]:60788 [302]: GET /auth/login
+[Sun Jun 22 14:55:57 2025] [::1]:60788 Closing
+[Sun Jun 22 14:55:58 2025] [::1]:60789 [200]: GET /dashboard
+[Sun Jun 22 14:55:58 2025] [::1]:60789 Closing
+[Sun Jun 22 14:55:58 2025] [::1]:60793 Accepted
+[Sun Jun 22 14:55:58 2025] [::1]:60793 [200]: GET /dist/output.css
+[Sun Jun 22 14:55:58 2025] [::1]:60793 Closing
+[Sun Jun 22 14:55:58 2025] [::1]:60795 Accepted
+[Sun Jun 22 14:55:58 2025] [::1]:60795 [302]: GET /favicon.ico
+[Sun Jun 22 14:55:58 2025] [::1]:60795 Closing
+[Sun Jun 22 14:55:58 2025] [::1]:60796 Accepted
+[Sun Jun 22 14:55:59 2025] [::1]:60796 [200]: GET /dashboard
+[Sun Jun 22 14:55:59 2025] [::1]:60796 Closing
+[Sun Jun 22 14:56:00 2025] [::1]:60799 Accepted
+[Sun Jun 22 14:56:00 2025] [::1]:60800 Accepted
+[Sun Jun 22 14:56:01 2025] [::1]:60799 [200]: GET /dashboard
+[Sun Jun 22 14:56:01 2025] [::1]:60799 Closing
+[Sun Jun 22 14:56:01 2025] [::1]:60800 [200]: GET /dist/output.css
+[Sun Jun 22 14:56:01 2025] [::1]:60800 Closing
+[Sun Jun 22 14:56:01 2025] [::1]:60804 Accepted
+[Sun Jun 22 14:56:01 2025] [::1]:60804 [302]: GET /favicon.ico
+[Sun Jun 22 14:56:01 2025] [::1]:60804 Closing
+[Sun Jun 22 14:56:01 2025] [::1]:60805 Accepted
+[Sun Jun 22 14:56:02 2025] [::1]:60805 [200]: GET /dashboard
+[Sun Jun 22 14:56:02 2025] [::1]:60805 Closing
+[Sun Jun 22 14:56:04 2025] [::1]:60810 Accepted
+[Sun Jun 22 14:56:04 2025] [::1]:60811 Accepted
+[Sun Jun 22 14:56:04 2025] [::1]:60810 [200]: GET /dashboard/profile
+[Sun Jun 22 14:56:04 2025] [::1]:60810 Closing
+[Sun Jun 22 14:56:04 2025] [::1]:60811 Closed without sending a request; it was probably just an unused speculative preconnection
+[Sun Jun 22 14:56:04 2025] [::1]:60811 Closing
+[Sun Jun 22 14:56:04 2025] [::1]:60813 Accepted
+[Sun Jun 22 14:56:05 2025] [::1]:60813 [200]: GET /dashboard/dist/output.css
+[Sun Jun 22 14:56:05 2025] [::1]:60813 Closing
+[Sun Jun 22 14:56:05 2025] [::1]:60816 Accepted
+[Sun Jun 22 14:56:05 2025] [::1]:60816 [302]: GET /favicon.ico
+[Sun Jun 22 14:56:05 2025] [::1]:60816 Closing
+[Sun Jun 22 14:56:05 2025] [::1]:60817 Accepted
+[Sun Jun 22 14:56:06 2025] [::1]:60817 [200]: GET /dashboard
+[Sun Jun 22 14:56:06 2025] [::1]:60817 Closing
+[Sun Jun 22 14:56:07 2025] [::1]:60821 Accepted
+[Sun Jun 22 14:56:07 2025] [::1]:60822 Accepted
+[Sun Jun 22 14:56:08 2025] [::1]:60821 [200]: GET /dashboard
+[Sun Jun 22 14:56:08 2025] [::1]:60821 Closing
+[Sun Jun 22 14:56:08 2025] [::1]:60822 [302]: GET /favicon.ico
+[Sun Jun 22 14:56:08 2025] [::1]:60822 Closing
+[Sun Jun 22 14:56:08 2025] [::1]:60826 Accepted
+[Sun Jun 22 14:56:09 2025] [::1]:60826 [200]: GET /dashboard
+[Sun Jun 22 14:56:09 2025] [::1]:60826 Closing
+[Sun Jun 22 14:57:56 2025] [::1]:60871 Accepted
+[Sun Jun 22 14:57:56 2025] [::1]:60871 [302]: GET /dashboard
+[Sun Jun 22 14:57:56 2025] [::1]:60871 Closing
+[Sun Jun 22 14:58:58 2025] [::1]:60888 Accepted
+[Sun Jun 22 14:58:58 2025] [::1]:60888 [302]: GET /dashboard
+[Sun Jun 22 14:58:58 2025] [::1]:60888 Closing
+[Sun Jun 22 14:59:15 2025] [::1]:60901 Accepted
+[Sun Jun 22 14:59:15 2025] [::1]:60903 Accepted
+[Sun Jun 22 14:59:16 2025] [::1]:60901 [302]: GET /dashboard
+[Sun Jun 22 14:59:16 2025] [::1]:60901 Closing
+[Sun Jun 22 14:59:17 2025] [::1]:60903 [200]: GET /auth/login
+[Sun Jun 22 14:59:17 2025] [::1]:60903 Closing
+[Sun Jun 22 14:59:17 2025] [::1]:60911 Accepted
+[Sun Jun 22 14:59:17 2025] [::1]:60911 [302]: GET /auth/dist/output.css
+[Sun Jun 22 14:59:17 2025] [::1]:60911 Closing
+[Sun Jun 22 14:59:17 2025] [::1]:60912 Accepted
+[Sun Jun 22 14:59:18 2025] [::1]:60912 [200]: GET /auth/login
+[Sun Jun 22 14:59:18 2025] [::1]:60912 Closing
+[Sun Jun 22 14:59:18 2025] [::1]:60916 Accepted
+[Sun Jun 22 14:59:18 2025] [::1]:60916 [302]: GET /favicon.ico
+[Sun Jun 22 14:59:18 2025] [::1]:60916 Closing
+[Sun Jun 22 14:59:18 2025] [::1]:60917 Accepted
+[Sun Jun 22 14:59:19 2025] [::1]:60917 [200]: GET /auth/login
+[Sun Jun 22 14:59:19 2025] [::1]:60917 Closing
+[Sun Jun 22 14:59:25 2025] [::1]:60927 Accepted
+[Sun Jun 22 14:59:25 2025] [::1]:60928 Accepted
+[Sun Jun 22 14:59:26 2025] [::1]:60927 [200]: POST /auth/login
+[Sun Jun 22 14:59:26 2025] [::1]:60927 Closing
+[Sun Jun 22 14:59:26 2025] [::1]:60928 [302]: GET /auth/dist/output.css
+[Sun Jun 22 14:59:26 2025] [::1]:60928 Closing
+[Sun Jun 22 14:59:26 2025] [::1]:60933 Accepted
+[Sun Jun 22 14:59:27 2025] [::1]:60933 [200]: GET /auth/login
+[Sun Jun 22 14:59:27 2025] [::1]:60933 Closing
+[Sun Jun 22 14:59:27 2025] [::1]:60937 Accepted
+[Sun Jun 22 14:59:27 2025] [::1]:60937 [302]: GET /favicon.ico
+[Sun Jun 22 14:59:27 2025] [::1]:60937 Closing
+[Sun Jun 22 14:59:27 2025] [::1]:60938 Accepted
+[Sun Jun 22 14:59:27 2025] [::1]:60938 [200]: GET /auth/login
+[Sun Jun 22 14:59:27 2025] [::1]:60938 Closing
+[Sun Jun 22 14:59:44 2025] [::1]:60944 Accepted
+[Sun Jun 22 14:59:45 2025] [::1]:60944 [302]: POST /auth/login
+[Sun Jun 22 14:59:45 2025] [::1]:60944 Closing
+[Sun Jun 22 14:59:45 2025] [::1]:60945 Accepted
+[Sun Jun 22 14:59:45 2025] [::1]:60945 Closed without sending a request; it was probably just an unused speculative preconnection
+[Sun Jun 22 14:59:45 2025] [::1]:60945 Closing
+[Sun Jun 22 14:59:45 2025] [::1]:60950 Accepted
+[Sun Jun 22 14:59:46 2025] [::1]:60950 [200]: GET /dashboard
+[Sun Jun 22 14:59:46 2025] [::1]:60950 Closing
+[Sun Jun 22 14:59:46 2025] [::1]:60953 Accepted
+[Sun Jun 22 14:59:46 2025] [::1]:60953 [200]: GET /dist/output.css
+[Sun Jun 22 14:59:46 2025] [::1]:60953 Closing
+[Sun Jun 22 14:59:46 2025] [::1]:60954 Accepted
+[Sun Jun 22 14:59:46 2025] [::1]:60954 [302]: GET /favicon.ico
+[Sun Jun 22 14:59:46 2025] [::1]:60954 Closing
+[Sun Jun 22 14:59:46 2025] [::1]:60955 Accepted
+[Sun Jun 22 14:59:47 2025] [::1]:60955 [200]: GET /dashboard
+[Sun Jun 22 14:59:47 2025] [::1]:60955 Closing
+[Sun Jun 22 14:59:50 2025] [::1]:60958 Accepted
+[Sun Jun 22 14:59:50 2025] [::1]:60959 Accepted
+[Sun Jun 22 14:59:50 2025] [::1]:60958 [200]: GET /events/create
+[Sun Jun 22 14:59:50 2025] [::1]:60958 Closing
+[Sun Jun 22 14:59:50 2025] [::1]:60959 [200]: GET /events/dist/output.css - Uncaught TypeError: call_user_func_array(): Argument #1 ($callback) must be a valid callback, class EventsController does not have a method "index" in /opt/homebrew/var/www/accounts/app/core/App.php:81
+Stack trace:
+#0 /opt/homebrew/var/www/accounts/public/index.php(21): App->__construct()
+#1 {main}
+  thrown in /opt/homebrew/var/www/accounts/app/core/App.php on line 81
+[Sun Jun 22 14:59:50 2025] [::1]:60959 Closing
+[Sun Jun 22 14:59:50 2025] [::1]:60961 Accepted
+[Sun Jun 22 14:59:50 2025] [::1]:60961 [302]: GET /favicon.ico
+[Sun Jun 22 14:59:50 2025] [::1]:60961 Closing
+[Sun Jun 22 14:59:50 2025] [::1]:60962 Accepted
+[Sun Jun 22 14:59:51 2025] [::1]:60962 [200]: GET /dashboard
+[Sun Jun 22 14:59:51 2025] [::1]:60962 Closing
+[Sun Jun 22 15:00:00 2025] [::1]:60965 Accepted
+[Sun Jun 22 15:00:00 2025] [::1]:60966 Accepted
+[Sun Jun 22 15:00:01 2025] [::1]:60965 [302]: POST /events/create
+[Sun Jun 22 15:00:01 2025] [::1]:60965 Closing
+[Sun Jun 22 15:00:02 2025] [::1]:60966 [200]: GET /dashboard
+[Sun Jun 22 15:00:02 2025] [::1]:60966 Closing
+[Sun Jun 22 15:00:02 2025] [::1]:60971 Accepted
+[Sun Jun 22 15:00:02 2025] [::1]:60971 [200]: GET /dist/output.css
+[Sun Jun 22 15:00:02 2025] [::1]:60971 Closing
+[Sun Jun 22 15:00:02 2025] [::1]:60972 Accepted
+[Sun Jun 22 15:00:02 2025] [::1]:60972 [302]: GET /favicon.ico
+[Sun Jun 22 15:00:02 2025] [::1]:60972 Closing
+[Sun Jun 22 15:00:02 2025] [::1]:60973 Accepted
+[Sun Jun 22 15:00:04 2025] [::1]:60973 [200]: GET /dashboard
+[Sun Jun 22 15:00:04 2025] [::1]:60973 Closing
+[Sun Jun 22 15:00:04 2025] [::1]:60976 Accepted
+[Sun Jun 22 15:00:05 2025] [::1]:60976 [200]: GET /events/manage/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
+[Sun Jun 22 15:00:05 2025] [::1]:60976 Closing
+[Sun Jun 22 15:00:05 2025] [::1]:60977 Accepted
+[Sun Jun 22 15:00:05 2025] [::1]:60977 Closed without sending a request; it was probably just an unused speculative preconnection
+[Sun Jun 22 15:00:05 2025] [::1]:60977 Closing
+[Sun Jun 22 15:00:05 2025] [::1]:60988 Accepted
+[Sun Jun 22 15:00:06 2025] [::1]:60988 [302]: GET /events/manage/dist/output.css
+[Sun Jun 22 15:00:06 2025] [::1]:60988 Closing
+[Sun Jun 22 15:00:06 2025] [::1]:61006 Accepted
+[Sun Jun 22 15:00:08 2025] [::1]:61006 [200]: GET /dashboard
+[Sun Jun 22 15:00:08 2025] [::1]:61006 Closing
+[Sun Jun 22 15:00:08 2025] [::1]:61010 Accepted
+[Sun Jun 22 15:00:08 2025] [::1]:61010 [302]: GET /favicon.ico
+[Sun Jun 22 15:00:08 2025] [::1]:61010 Closing
+[Sun Jun 22 15:00:08 2025] [::1]:61011 Accepted
+[Sun Jun 22 15:00:09 2025] [::1]:61011 [200]: GET /dashboard
+[Sun Jun 22 15:00:09 2025] [::1]:61011 Closing
+[Sun Jun 22 15:00:12 2025] [::1]:61020 Accepted
+[Sun Jun 22 15:00:12 2025] [::1]:61020 [200]: GET /users/search?q=hes
+[Sun Jun 22 15:00:12 2025] [::1]:61020 Closing
+[Sun Jun 22 15:00:12 2025] [::1]:61022 Accepted
+[Sun Jun 22 15:00:13 2025] [::1]:61022 [302]: GET /events/manage/default.png
+[Sun Jun 22 15:00:13 2025] [::1]:61022 Closing
+[Sun Jun 22 15:00:13 2025] [::1]:61024 Accepted
+[Sun Jun 22 15:00:13 2025] [::1]:61024 [200]: GET /dashboard
+[Sun Jun 22 15:00:13 2025] [::1]:61024 Closing
+[Sun Jun 22 15:00:13 2025] [::1]:61027 Accepted
+[Sun Jun 22 15:00:15 2025] [::1]:61027 [200]: POST /events/addParticipant/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
+[Sun Jun 22 15:00:15 2025] [::1]:61027 Closing
+[Sun Jun 22 15:00:16 2025] [::1]:61032 Accepted
+[Sun Jun 22 15:00:16 2025] [::1]:61033 Accepted
+[Sun Jun 22 15:00:16 2025] [::1]:61032 [200]: GET /events/manage/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
+[Sun Jun 22 15:00:16 2025] [::1]:61032 Closing
+[Sun Jun 22 15:00:16 2025] [::1]:61033 [302]: GET /events/manage/dist/output.css
+[Sun Jun 22 15:00:16 2025] [::1]:61033 Closing
+[Sun Jun 22 15:00:16 2025] [::1]:61038 Accepted
+[Sun Jun 22 15:00:17 2025] [::1]:61038 [200]: GET /dashboard
+[Sun Jun 22 15:00:17 2025] [::1]:61038 Closing
+[Sun Jun 22 15:00:17 2025] [::1]:61041 Accepted
+[Sun Jun 22 15:00:17 2025] [::1]:61041 [302]: GET /favicon.ico
+[Sun Jun 22 15:00:17 2025] [::1]:61041 Closing
+[Sun Jun 22 15:00:17 2025] [::1]:61042 Accepted
+[Sun Jun 22 15:00:18 2025] [::1]:61042 [200]: GET /dashboard
+[Sun Jun 22 15:00:18 2025] [::1]:61042 Closing
+[Sun Jun 22 15:00:21 2025] [::1]:61045 Accepted
+[Sun Jun 22 15:00:22 2025] [::1]:61045 [200]: GET /users/search?q=zeu
+[Sun Jun 22 15:00:22 2025] [::1]:61045 Closing
+[Sun Jun 22 15:00:22 2025] [::1]:61047 Accepted
+[Sun Jun 22 15:00:22 2025] [::1]:61047 [302]: GET /events/manage/default.png
+[Sun Jun 22 15:00:22 2025] [::1]:61047 Closing
+[Sun Jun 22 15:00:22 2025] [::1]:61050 Accepted
+[Sun Jun 22 15:00:23 2025] [::1]:61050 [200]: GET /dashboard
+[Sun Jun 22 15:00:23 2025] [::1]:61050 Closing
+[Sun Jun 22 15:00:23 2025] [::1]:61053 Accepted
+[Sun Jun 22 15:00:24 2025] [::1]:61053 [200]: POST /events/addParticipant/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
+[Sun Jun 22 15:00:24 2025] [::1]:61053 Closing
+[Sun Jun 22 15:00:26 2025] [::1]:61058 Accepted
+[Sun Jun 22 15:00:26 2025] [::1]:61059 Accepted
+[Sun Jun 22 15:00:27 2025] [::1]:61058 [200]: GET /events/manage/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
+[Sun Jun 22 15:00:27 2025] [::1]:61058 Closing
+[Sun Jun 22 15:00:27 2025] [::1]:61059 [302]: GET /events/manage/dist/output.css
+[Sun Jun 22 15:00:27 2025] [::1]:61059 Closing
+[Sun Jun 22 15:00:27 2025] [::1]:61063 Accepted
+[Sun Jun 22 15:00:28 2025] [::1]:61063 [200]: GET /dashboard
+[Sun Jun 22 15:00:28 2025] [::1]:61063 Closing
+[Sun Jun 22 15:00:29 2025] [::1]:61067 Accepted
+[Sun Jun 22 15:00:29 2025] [::1]:61067 [302]: GET /favicon.ico
+[Sun Jun 22 15:00:29 2025] [::1]:61067 Closing
+[Sun Jun 22 15:00:29 2025] [::1]:61068 Accepted
+[Sun Jun 22 15:00:30 2025] [::1]:61068 [200]: GET /dashboard
+[Sun Jun 22 15:00:30 2025] [::1]:61068 Closing
+[Sun Jun 22 15:28:11 2025] [::1]:61716 Accepted
+[Sun Jun 22 15:28:11 2025] [::1]:61717 Accepted
+[Sun Jun 22 15:28:11 2025] [::1]:61716 [302]: GET /auth/login
+[Sun Jun 22 15:28:11 2025] [::1]:61716 Closing
+[Sun Jun 22 15:28:12 2025] [::1]:61717 [200]: GET /dashboard
+[Sun Jun 22 15:28:12 2025] [::1]:61717 Closing
+[Sun Jun 22 15:28:12 2025] [::1]:61721 Accepted
+[Sun Jun 22 15:28:12 2025] [::1]:61721 [200]: GET /dist/output.css
+[Sun Jun 22 15:28:12 2025] [::1]:61721 Closing
+[Sun Jun 22 15:28:12 2025] [::1]:61722 Accepted
+[Sun Jun 22 15:28:12 2025] [::1]:61722 [302]: GET /favicon.ico
+[Sun Jun 22 15:28:12 2025] [::1]:61722 Closing
+[Sun Jun 22 15:28:12 2025] [::1]:61723 Accepted
+[Sun Jun 22 15:28:14 2025] [::1]:61723 [200]: GET /dashboard
+[Sun Jun 22 15:28:14 2025] [::1]:61723 Closing

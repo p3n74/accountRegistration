@@ -8,7 +8,7 @@
                 <div class="bg-gradient-to-r from-emerald-500 to-teal-600 px-6 py-4">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
-                            <?php if (!empty($user['profilepicture'])): ?>
+                            <?php if (!empty($user['profilepicture'] ?? '')): ?>
                                 <img class="h-16 w-16 rounded-full border-4 border-white shadow-lg" src="profilePictures/<?= htmlspecialchars($user['profilepicture']) ?>" alt="Profile Picture">
                             <?php else: ?>
                                 <div class="h-16 w-16 rounded-full bg-white/20 backdrop-blur-sm border-4 border-white shadow-lg flex items-center justify-center">
@@ -19,7 +19,7 @@
                             <?php endif; ?>
                         </div>
                         <div class="ml-6">
-                            <h1 class="text-3xl font-bold text-white">Welcome back, <?= htmlspecialchars($user['fname']) ?>!</h1>
+                            <h1 class="text-3xl font-bold text-white">Welcome back, <?= htmlspecialchars($user['fname'] ?? 'User') ?>!</h1>
                             <p class="text-emerald-100 mt-1">Discover campus events and track your My Carolinian journey</p>
                         </div>
                     </div>

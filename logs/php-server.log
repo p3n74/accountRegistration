@@ -1,0 +1,85 @@
+[Sun Jun 22 15:33:36 2025] PHP 8.4.8 Development Server (http://localhost:8000) started
+[Sun Jun 22 15:33:43 2025] [::1]:61852 Accepted
+[Sun Jun 22 15:33:43 2025] [::1]:61852 [302]: GET /
+[Sun Jun 22 15:33:43 2025] [::1]:61852 Closing
+[Sun Jun 22 15:33:45 2025] [::1]:61854 Accepted
+[Sun Jun 22 15:33:45 2025] [::1]:61855 Accepted
+[Sun Jun 22 15:33:46 2025] [::1]:61854 [200]: GET /dashboard
+[Sun Jun 22 15:33:46 2025] [::1]:61854 Closing
+[Sun Jun 22 15:33:46 2025] [::1]:61855 [200]: GET /dist/output.css
+[Sun Jun 22 15:33:46 2025] [::1]:61855 Closing
+[Sun Jun 22 15:33:46 2025] [::1]:61859 Accepted
+[Sun Jun 22 15:33:46 2025] [::1]:61859 [302]: GET /favicon.ico
+[Sun Jun 22 15:33:46 2025] [::1]:61859 Closing
+[Sun Jun 22 15:33:46 2025] [::1]:61860 Accepted
+[Sun Jun 22 15:33:47 2025] [::1]:61860 [200]: GET /dashboard
+[Sun Jun 22 15:33:47 2025] [::1]:61860 Closing
+[Sun Jun 22 15:33:48 2025] [::1]:61864 Accepted
+[Sun Jun 22 15:33:48 2025] [::1]:61865 Accepted
+[Sun Jun 22 15:33:48 2025] [::1]:61864 [302]: GET /auth/logout
+[Sun Jun 22 15:33:48 2025] [::1]:61864 Closing
+[Sun Jun 22 15:33:48 2025] [::1]:61865 Closed without sending a request; it was probably just an unused speculative preconnection
+[Sun Jun 22 15:33:48 2025] [::1]:61865 Closing
+[Sun Jun 22 15:33:48 2025] [::1]:61869 Accepted
+[Sun Jun 22 15:33:49 2025] [::1]:61869 [200]: GET /auth/login
+[Sun Jun 22 15:33:49 2025] [::1]:61869 Closing
+[Sun Jun 22 15:33:49 2025] [::1]:61873 Accepted
+[Sun Jun 22 15:33:49 2025] [::1]:61873 [302]: GET /auth/dist/output.css
+[Sun Jun 22 15:33:49 2025] [::1]:61873 Closing
+[Sun Jun 22 15:33:49 2025] [::1]:61874 Accepted
+[Sun Jun 22 15:33:50 2025] [::1]:61874 [200]: GET /auth/login
+[Sun Jun 22 15:33:50 2025] [::1]:61874 Closing
+[Sun Jun 22 15:33:50 2025] [::1]:61878 Accepted
+[Sun Jun 22 15:33:50 2025] [::1]:61878 [302]: GET /favicon.ico
+[Sun Jun 22 15:33:50 2025] [::1]:61878 Closing
+[Sun Jun 22 15:33:50 2025] [::1]:61879 Accepted
+[Sun Jun 22 15:33:50 2025] [::1]:61879 [200]: GET /auth/login
+[Sun Jun 22 15:33:50 2025] [::1]:61879 Closing
+[Sun Jun 22 15:33:59 2025] [::1]:61886 Accepted
+[Sun Jun 22 15:33:59 2025] [::1]:61887 Accepted
+[Sun Jun 22 15:34:00 2025] [::1]:61886 [302]: POST /auth/login
+[Sun Jun 22 15:34:00 2025] [::1]:61886 Closing
+[Sun Jun 22 15:34:01 2025] [::1]:61887 [200]: GET /dashboard
+[Sun Jun 22 15:34:01 2025] [::1]:61887 Closing
+[Sun Jun 22 15:34:01 2025] [::1]:61894 Accepted
+[Sun Jun 22 15:34:01 2025] [::1]:61894 [200]: GET /dist/output.css
+[Sun Jun 22 15:34:01 2025] [::1]:61894 Closing
+[Sun Jun 22 15:34:01 2025] [::1]:61895 Accepted
+[Sun Jun 22 15:34:01 2025] [::1]:61895 [302]: GET /favicon.ico
+[Sun Jun 22 15:34:01 2025] [::1]:61895 Closing
+[Sun Jun 22 15:34:01 2025] [::1]:61896 Accepted
+[Sun Jun 22 15:34:01 2025] [::1]:61896 [200]: GET /dashboard
+[Sun Jun 22 15:34:01 2025] [::1]:61896 Closing
+[Sun Jun 22 15:34:02 2025] [::1]:61901 Accepted
+[Sun Jun 22 15:34:03 2025] [::1]:61901 [200]: GET /events/manage/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
+[Sun Jun 22 15:34:03 2025] [::1]:61901 Closing
+[Sun Jun 22 15:34:03 2025] [::1]:61902 Accepted
+[Sun Jun 22 15:34:03 2025] [::1]:61902 [302]: GET /events/manage/dist/output.css
+[Sun Jun 22 15:34:03 2025] [::1]:61902 Closing
+[Sun Jun 22 15:34:03 2025] [::1]:61905 Accepted
+[Sun Jun 22 15:34:04 2025] [::1]:61905 [200]: GET /dashboard
+[Sun Jun 22 15:34:04 2025] [::1]:61905 Closing
+[Sun Jun 22 15:34:04 2025] [::1]:61908 Accepted
+[Sun Jun 22 15:34:04 2025] [::1]:61908 [302]: GET /favicon.ico
+[Sun Jun 22 15:34:04 2025] [::1]:61908 Closing
+[Sun Jun 22 15:34:04 2025] [::1]:61909 Accepted
+[Sun Jun 22 15:34:05 2025] [::1]:61909 [200]: GET /dashboard
+[Sun Jun 22 15:34:05 2025] [::1]:61909 Closing
+[Sun Jun 22 15:34:08 2025] [::1]:61912 Accepted
+[Sun Jun 22 15:34:10 2025] [::1]:61912 [200]: POST /events/removeParticipant/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
+[Sun Jun 22 15:34:10 2025] [::1]:61912 Closing
+[Sun Jun 22 15:34:12 2025] [::1]:61924 Accepted
+[Sun Jun 22 15:34:13 2025] [::1]:61924 [200]: GET /users/search?q=es
+[Sun Jun 22 15:34:13 2025] [::1]:61924 Closing
+[Sun Jun 22 15:34:13 2025] [::1]:61926 Accepted
+[Sun Jun 22 15:34:14 2025] [::1]:61926 [302]: GET /events/manage/default.png
+[Sun Jun 22 15:34:14 2025] [::1]:61926 Closing
+[Sun Jun 22 15:34:14 2025] [::1]:61928 Accepted
+[Sun Jun 22 15:34:15 2025] [::1]:61928 [200]: GET /users/search?q=hes
+[Sun Jun 22 15:34:15 2025] [::1]:61928 Closing
+[Sun Jun 22 15:34:15 2025] [::1]:61931 Accepted
+[Sun Jun 22 15:34:16 2025] [::1]:61931 [200]: GET /dashboard
+[Sun Jun 22 15:34:16 2025] [::1]:61931 Closing
+[Sun Jun 22 15:34:16 2025] [::1]:61936 Accepted
+[Sun Jun 22 15:34:18 2025] [::1]:61936 [200]: POST /events/addParticipant/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
+[Sun Jun 22 15:34:18 2025] [::1]:61936 Closing

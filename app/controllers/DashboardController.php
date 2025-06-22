@@ -12,6 +12,14 @@ class DashboardController extends Controller {
         
         $uid = $this->getCurrentUserId();
         $user = $userModel->getUserById($uid);
+        
+        // If user not found, clear session and redirect to login
+        if (!$user) {
+            session_destroy();
+            $this->redirect('/auth/login');
+            return;
+        }
+        
         $createdEvents = $eventModel->getEventsByCreator($uid);
         $attendedEvents = $userModel->getAttendedEvents($uid);
         
@@ -28,6 +36,13 @@ class DashboardController extends Controller {
         $userModel = $this->model('User');
         $uid = $this->getCurrentUserId();
         $user = $userModel->getUserById($uid);
+        
+        // If user not found, clear session and redirect to login
+        if (!$user) {
+            session_destroy();
+            $this->redirect('/auth/login');
+            return;
+        }
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Check if user is a student
