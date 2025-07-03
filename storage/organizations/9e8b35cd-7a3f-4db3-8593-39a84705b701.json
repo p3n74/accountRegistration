@@ -1,0 +1,20 @@
+{
+    "org_id": "9e8b35cd-7a3f-4db3-8593-39a84705b701",
+    "org_name": "CISCO",
+    "org_slug": "cisco",
+    "org_description": "",
+    "org_type": "club",
+    "settings": {
+        "allow_public_events": true,
+        "require_member_approval": false,
+        "allow_paid_events": true,
+        "auto_approve_students": true
+    },
+    "branding": {
+        "logo_path": null,
+        "banner_path": null,
+        "primary_color": "#007bff",
+        "secondary_color": "#6c757d"
+    },
+    "last_updated": "2025-07-03 19:49:09"
+}

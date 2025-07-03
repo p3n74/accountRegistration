@@ -23,10 +23,84 @@ class DashboardController extends Controller {
         $createdEvents = $eventModel->getEventsByCreator($uid);
         $attendedEvents = $userModel->getAttendedEvents($uid);
         
+        // DEBUG: Add logging
+        error_log("DEBUG Dashboard: User UID = $uid");
+        error_log("DEBUG Dashboard: User program_id = " . ($user['program_id'] ?? 'NULL'));
+        
+        // Determine user's school_id via program
+        $schoolId = null;
+        if (!empty($user['program_id'])) {
+            $db = new Database();
+            $stmt = $db->prepare("SELECT s.school_id FROM program_list pl JOIN department d ON pl.department_id = d.department_id JOIN school s ON d.school_id = s.school_id WHERE pl.program_id = ? LIMIT 1");
+            $stmt->bind_param("i", $user['program_id']);
+            $stmt->execute();
+            $res = $stmt->get_result()->fetch_assoc();
+            $schoolId = $res['school_id'] ?? null;
+            error_log("DEBUG Dashboard: Derived school_id = " . ($schoolId ?? 'NULL'));
+        }
+
+        $promotedEvents = [];
+        $departmentId = null;
+        if (!empty($user['program_id'])) {
+            $db = new Database();
+            $stmtDep = $db->prepare("SELECT department_id FROM program_list WHERE program_id = ? LIMIT 1");
+            $stmtDep->bind_param("i", $user['program_id']);
+            $stmtDep->execute();
+            $rowDep = $stmtDep->get_result()->fetch_assoc();
+            $departmentId = $rowDep['department_id'] ?? null;
+            error_log("DEBUG Dashboard: Derived department_id = " . ($departmentId ?? 'NULL'));
+        }
+
+        if ($departmentId) {
+            $promotedEvents = $eventModel->getPromotedEventsByDepartment($departmentId, 5);
+            error_log("DEBUG Dashboard: Department events count = " . count($promotedEvents));
+        }
+        // Fallback to school-wide events if department list is empty
+        if (empty($promotedEvents) && $schoolId) {
+            $promotedEvents = $eventModel->getPromotedEventsBySchool($schoolId, 5);
+            error_log("DEBUG Dashboard: School events count = " . count($promotedEvents));
+        }
+        
+        // fallback via organization memberships
+        if (!$departmentId || !$schoolId) {
+            require_once __DIR__ . '/../models/OrganizationMember.php';
+            $memModel = new OrganizationMember();
+            $memberships = $memModel->getUserOrganizations($uid);
+            error_log("DEBUG Dashboard: User memberships count = " . count($memberships));
+            if (!empty($memberships)) {
+                // take first membership that has school_id/department_id
+                foreach ($memberships as $m) {
+                    if (!empty($m['department_id']) && !$departmentId) {
+                        $departmentId = $m['department_id'];
+                        error_log("DEBUG Dashboard: From membership - department_id = $departmentId");
+                    }
+                    if (!empty($m['school_id']) && !$schoolId) {
+                        $schoolId = $m['school_id'];
+                        error_log("DEBUG Dashboard: From membership - school_id = $schoolId");
+                    }
+                    if ($departmentId && $schoolId) break;
+                }
+            }
+        }
+        
+        // Re-attempt promoted events fetch if still empty after membership-derived IDs
+        if (empty($promotedEvents) && $departmentId) {
+            $promotedEvents = $eventModel->getPromotedEventsByDepartment($departmentId, 5);
+            error_log("DEBUG Dashboard: Re-attempt department events count = " . count($promotedEvents));
+        }
+
+        if (empty($promotedEvents) && $schoolId) {
+            $promotedEvents = $eventModel->getPromotedEventsBySchool($schoolId, 5);
+            error_log("DEBUG Dashboard: Re-attempt school events count = " . count($promotedEvents));
+        }
+        
+        error_log("DEBUG Dashboard: Final promoted events count = " . count($promotedEvents));
+        
         $data = [
             'user' => $user,
             'createdEvents' => $createdEvents,
-            'attendedEvents' => $attendedEvents
+            'attendedEvents' => $attendedEvents,
+            'promotedEvents' => $promotedEvents
         ];
         
         $this->view('dashboard/index', $data);

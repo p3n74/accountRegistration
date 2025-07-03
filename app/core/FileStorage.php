@@ -9,7 +9,7 @@ class FileStorage {
     }
 
     private function ensureDirectoriesExist() {
-        $directories = ['users', 'events', 'participants'];
+        $directories = ['users', 'events', 'participants', 'organizations'];
         foreach ($directories as $dir) {
             $path = $this->storageRoot . $dir;
             if (!is_dir($path)) {
@@ -286,5 +286,49 @@ class FileStorage {
             }
         }
         rmdir($dir);
+    }
+
+    // ======================== ORGANIZATION DATA MANAGEMENT ========================
+
+    public function saveOrganizationData($orgId, $data) {
+        $filePath = $this->storageRoot . "organizations/{$orgId}.json";
+        return file_put_contents($filePath, json_encode($data, JSON_PRETTY_PRINT)) !== false;
+    }
+
+    public function getOrganizationData($orgId) {
+        $filePath = $this->storageRoot . "organizations/{$orgId}.json";
+        if (!file_exists($filePath)) {
+            return null;
+        }
+        $content = file_get_contents($filePath);
+        return json_decode($content, true);
+    }
+
+    public function deleteOrganizationData($orgId) {
+        $filePath = $this->storageRoot . "organizations/{$orgId}.json";
+        if (file_exists($filePath)) {
+            return unlink($filePath);
+        }
+        return true;
+    }
+
+    public function listAllOrganizations() {
+        $orgDir = $this->storageRoot . 'organizations/';
+        $organizations = [];
+        
+        if (!is_dir($orgDir)) {
+            return $organizations;
+        }
+
+        $files = glob($orgDir . '*.json');
+        foreach ($files as $file) {
+            $orgId = basename($file, '.json');
+            $orgData = $this->getOrganizationData($orgId);
+            if ($orgData) {
+                $organizations[$orgId] = $orgData;
+            }
+        }
+        
+        return $organizations;
     }
 } 

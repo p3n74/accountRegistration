@@ -1,0 +1,20 @@
+{
+    "org_id": "ec8c8bf2-6a61-44d3-9054-61e932b8870e",
+    "org_name": "CISCO",
+    "org_slug": "cisco",
+    "org_description": "blah blah blah",
+    "org_type": "student",
+    "settings": {
+        "allow_public_events": true,
+        "require_member_approval": false,
+        "allow_paid_events": true,
+        "auto_approve_students": true
+    },
+    "branding": {
+        "logo_path": null,
+        "banner_path": null,
+        "primary_color": "#007bff",
+        "secondary_color": "#6c757d"
+    },
+    "last_updated": "2025-07-03 17:36:09"
+}

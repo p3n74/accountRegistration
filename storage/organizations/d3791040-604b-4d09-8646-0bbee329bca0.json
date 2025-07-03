@@ -1,0 +1,20 @@
+{
+    "org_id": "d3791040-604b-4d09-8646-0bbee329bca0",
+    "org_name": "Test Organization Complete",
+    "org_slug": "test-organization-complete",
+    "org_description": "A comprehensive test organization",
+    "org_type": "student",
+    "settings": {
+        "allow_public_events": true,
+        "require_member_approval": false,
+        "allow_paid_events": true,
+        "auto_approve_students": true
+    },
+    "branding": {
+        "logo_path": null,
+        "banner_path": null,
+        "primary_color": "#007bff",
+        "secondary_color": "#6c757d"
+    },
+    "last_updated": "2025-07-03 19:01:12"
+}

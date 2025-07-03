@@ -1,0 +1,17 @@
+{
+    "eventid": "e5728c40-d49b-4555-bd1d-055edcd62615",
+    "eventname": "Aqkwew",
+    "startdate": "2025-07-18T03:38",
+    "enddate": "2025-08-01T03:39",
+    "location": "Yes",
+    "eventshortinfo": "yes",
+    "eventcreator": "f1c72308-9be5-4865-a034-23afb7caf390",
+    "eventkey": "5439A40F",
+    "created_at": "2025-07-03 19:39:13",
+    "last_updated": "2025-07-03 19:39:13",
+    "settings": {
+        "registration_open": true,
+        "max_participants": null,
+        "require_approval": false
+    }
+}

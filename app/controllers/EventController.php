@@ -7,43 +7,72 @@ class EventController extends Controller {
     }
     
     public function create() {
+        $orgModel = $this->model('Organization');
+        $memberModel = $this->model('OrganizationMember');
+        $organization = null;
+        $orgId = null;
+
+        // Check if an organization slug is provided via GET (for the form) or POST (for submission)
+        if (isset($_GET['organization']) && $_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $organization = $orgModel->getOrganizationBySlug($_GET['organization']);
+            if ($organization) {
+                $orgId = $organization['org_id'];
+                // Permission check: can the current user create events for this org?
+                if (!$memberModel->canUserCreateEvents($orgId, $this->getCurrentUserId())) {
+                    $this->setFlash('error', 'You do not have permission to create events for this organization.');
+                    $this->redirect('/organizations/' . $organization['org_slug']);
+                    return;
+                }
+            }
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Handle hidden org_id from the form, if any
+            $orgId = $_POST['org_id'] ?? null;
+            if ($orgId) {
+                $organization = $orgModel->getOrganizationById($orgId);
+                if (!$organization) {
+                    $this->setFlash('error', 'Invalid organization specified.');
+                    $this->redirect('/events/create');
+                    return;
+                }
+                if (!$memberModel->canUserCreateEvents($orgId, $this->getCurrentUserId())) {
+                    $this->setFlash('error', 'You do not have permission to create events for this organization.');
+                    $this->redirect('/organizations/' . $organization['org_slug']);
+                    return;
+                }
+            }
+
             $eventname = trim($_POST['eventname'] ?? '');
             $startdate = $_POST['startdate'] ?? '';
             $enddate = $_POST['enddate'] ?? '';
             $location = trim($_POST['location'] ?? '');
             $eventshortinfo = trim($_POST['eventshortinfo'] ?? '');
             $eventinfo = $_POST['eventinfo'] ?? '';
-            
-            // Validation
+            $registrationFee = isset($_POST['registration_fee']) ? floatval($_POST['registration_fee']) : 0.00;
+            $paymentRequired = isset($_POST['payment_required']) ? 1 : 0;
+
+            // Basic validation
             if (empty($eventname) || empty($startdate) || empty($enddate) || empty($location)) {
                 $this->setFlash('error', 'Please fill in all required fields');
-                $this->view('events/create', [
-                    'eventname' => $eventname,
-                    'startdate' => $startdate,
-                    'enddate' => $enddate,
-                    'location' => $location,
-                    'eventshortinfo' => $eventshortinfo,
-                    'eventinfo' => $eventinfo
-                ]);
+                $this->view('events/create', compact('eventname','startdate','enddate','location','eventshortinfo','eventinfo','registrationFee','paymentRequired','organization'));
                 return;
             }
-            
+
             if (strtotime($startdate) >= strtotime($enddate)) {
                 $this->setFlash('error', 'End date must be after start date');
-                $this->view('events/create', [
-                    'eventname' => $eventname,
-                    'startdate' => $startdate,
-                    'enddate' => $enddate,
-                    'location' => $location,
-                    'eventshortinfo' => $eventshortinfo,
-                    'eventinfo' => $eventinfo
-                ]);
+                $this->view('events/create', compact('eventname','startdate','enddate','location','eventshortinfo','eventinfo','registrationFee','paymentRequired','organization'));
                 return;
             }
-            
+
+            if ($paymentRequired && $registrationFee <= 0) {
+                $this->setFlash('error', 'Please specify a valid registration fee greater than 0.');
+                $this->view('events/create', compact('eventname','startdate','enddate','location','eventshortinfo','eventinfo','registrationFee','paymentRequired','organization'));
+                return;
+            }
+
             $eventModel = $this->model('Event');
-            
+
             $eventData = [
                 'eventname' => $eventname,
                 'startdate' => $startdate,
@@ -51,26 +80,27 @@ class EventController extends Controller {
                 'location' => $location,
                 'eventshortinfo' => $eventshortinfo,
                 'eventcreator' => $_SESSION['uid'],
-                'eventkey' => $eventModel->generateEventKey()
+                'eventkey' => $eventModel->generateEventKey(),
+                'org_id' => $orgId,
+                'registration_fee' => $registrationFee,
+                'payment_required' => $paymentRequired
             ];
-            
+
             $eventId = $eventModel->createEvent($eventData);
             if ($eventId) {
                 $this->setFlash('success', 'Event created successfully!');
-                $this->redirect('/dashboard');
+                if ($organization) {
+                    $this->redirect('/organizations/' . $organization['org_slug']);
+                } else {
+                    $this->redirect('/dashboard');
+                }
             } else {
                 $this->setFlash('error', 'Failed to create event');
-                $this->view('events/create', [
-                    'eventname' => $eventname,
-                    'startdate' => $startdate,
-                    'enddate' => $enddate,
-                    'location' => $location,
-                    'eventshortinfo' => $eventshortinfo,
-                    'eventinfo' => $eventinfo
-                ]);
+                $this->view('events/create', compact('eventname','startdate','enddate','location','eventshortinfo','eventinfo','registrationFee','paymentRequired','organization'));
             }
         } else {
-            $this->view('events/create');
+            // GET request – just show form (possibly with organization context)
+            $this->view('events/create', ['organization' => $organization]);
         }
     }
     

@@ -52,7 +52,7 @@
                     </div>
                     <h2 class="text-2xl font-bold text-gray-900">Quick Actions</h2>
                 </div>
-                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     <a href="/events/create" class="group relative bg-gradient-to-br from-emerald-50 to-emerald-100 p-6 rounded-2xl border border-emerald-200 hover:shadow-lg hover:scale-105 transition-all duration-200">
                         <div class="flex items-center justify-between">
                             <div class="h-12 w-12 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -70,11 +70,28 @@
                         </div>
                     </a>
 
+                    <a href="/organizations" class="group relative bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-2xl border border-indigo-200 hover:shadow-lg hover:scale-105 transition-all duration-200">
+                        <div class="flex items-center justify-between">
+                            <div class="h-12 w-12 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                                <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 515.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 919.288 0M15 7a3 3 0 11-6 0 3 3 0 616 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                            </div>
+                            <svg class="h-5 w-5 text-indigo-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                        <div class="mt-4">
+                            <h3 class="text-lg font-semibold text-gray-900 group-hover:text-indigo-700 transition-colors">Organizations</h3>
+                            <p class="mt-2 text-sm text-gray-600">Join student organizations and create your own communities</p>
+                        </div>
+                    </a>
+
                     <a href="/dashboard/badges" class="group relative bg-gradient-to-br from-teal-50 to-teal-100 p-6 rounded-2xl border border-teal-200 hover:shadow-lg hover:scale-105 transition-all duration-200">
                         <div class="flex items-center justify-between">
                             <div class="h-12 w-12 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
                                 <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 713.138-3.138z"></path>
                                 </svg>
                             </div>
                             <svg class="h-5 w-5 text-teal-400 group-hover:text-teal-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,6 +120,46 @@
                             <p class="mt-2 text-sm text-gray-600">Update your personal information and My Carolinian preferences</p>
                         </div>
                     </a>
+                </div>
+            </div>
+
+            <!-- Promoted Events -->
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+                <div class="flex items-center mb-6">
+                    <div class="h-8 w-8 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center mr-3">
+                        <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900">Promoted Events</h2>
+                </div>
+                <div class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <?php if(!empty($promotedEvents)): ?>
+                        <?php foreach ($promotedEvents as $ev): ?>
+                        <a href="/events/manage/<?= $ev['eventid'] ?>" class="group bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all duration-200">
+                            <h3 class="text-lg font-semibold text-gray-900 group-hover:text-purple-700 transition-colors mb-2">
+                                <?= htmlspecialchars($ev['eventname']) ?>
+                            </h3>
+                            <p class="text-sm text-gray-500 mb-4">
+                                <?= date('M d, Y g:ia', strtotime($ev['startdate'])) ?> · <?= htmlspecialchars($ev['location'] ?? '') ?>
+                            </p>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-medium bg-emerald-50 text-emerald-700">
+                                    <?= $ev['participantcount'] ?> going
+                                </span>
+                                <?php if (!empty($ev['registration_fee']) && $ev['registration_fee']>0): ?>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-medium bg-purple-50 text-purple-700">
+                                    ₱<?= number_format($ev['registration_fee'],2) ?>
+                                </span>
+                                <?php else: ?>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-medium bg-gray-100 text-gray-600">Free</span>
+                                <?php endif; ?>
+                            </div>
+                        </a>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="text-sm text-gray-500">No upcoming events from your department or school at the moment.</p>
+                    <?php endif; ?>
                 </div>
             </div>
 

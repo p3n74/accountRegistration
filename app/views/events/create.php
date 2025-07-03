@@ -5,6 +5,15 @@
         <div class="space-y-8">
             <!-- Page Header -->
             <div class="text-center">
+                <!-- If creating for an organization, display banner -->
+                <?php if(isset($organization) && $organization): ?>
+                    <div class="mb-6 inline-flex items-center px-4 py-2 bg-purple-100 text-purple-700 rounded-xl text-sm font-medium">
+                        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l6 6-6 6" />
+                        </svg>
+                        Creating event for <span class="font-semibold ml-1"><?= htmlspecialchars($organization['org_name']) ?></span>
+                    </div>
+                <?php endif; ?>
                 <div class="mx-auto h-16 w-16 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
                     <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -31,6 +40,9 @@
                 
                 <div class="p-8">
                     <form method="POST" enctype="multipart/form-data" class="space-y-8">
+                        <?php if(isset($organization) && $organization): ?>
+                            <input type="hidden" name="org_id" value="<?= htmlspecialchars($organization['org_id']) ?>">
+                        <?php endif; ?>
                         <!-- Event Name -->
                         <div>
                             <label for="eventname" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -113,6 +125,31 @@
                                           placeholder="Brief, engaging description that will appear in event listings..."><?= htmlspecialchars($eventshortinfo ?? '') ?></textarea>
                             </div>
                             <p class="mt-2 text-xs text-gray-500">Keep it concise - this will be shown in event previews</p>
+                        </div>
+
+                        <!-- Registration & Payment -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label for="registration_fee" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    Registration Fee (PHP)
+                                </label>
+                                <div class="relative">
+                                    <input type="number" id="registration_fee" name="registration_fee" min="0" step="0.01"
+                                           value="<?= htmlspecialchars(isset($registrationFee) ? $registrationFee : '') ?>"
+                                           class="block w-full px-4 py-3 pl-12 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
+                                           placeholder="0.00">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <span class="text-gray-400">₱</span>
+                                    </div>
+                                </div>
+                                <p class="mt-1 text-xs text-gray-500">Leave at 0 for free events.</p>
+                            </div>
+                            <div class="flex items-end">
+                                <label class="inline-flex items-center space-x-2">
+                                    <input type="checkbox" name="payment_required" value="1" class="h-5 w-5 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded" <?= (isset($paymentRequired) && $paymentRequired) ? 'checked' : '' ?>>
+                                    <span class="text-sm text-gray-700">Payment required</span>
+                                </label>
+                            </div>
                         </div>
 
                         <!-- Event Badge Upload -->

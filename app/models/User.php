@@ -18,7 +18,7 @@ class User extends Model {
     }
 
     public function getUserById($uid) {
-        $sql = "SELECT uid, fname, mname, lname, email, profilepicture, emailverified, is_student FROM {$this->table} WHERE uid = ?";
+        $sql = "SELECT uid, fname, mname, lname, email, profilepicture, emailverified, is_student, program_id FROM {$this->table} WHERE uid = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("s", $uid);
         $stmt->execute();

@@ -46,21 +46,55 @@ class Event extends Model {
         return $events;
     }
 
+    public function getEventsByOrganization($orgId) {
+        $sql = "SELECT * FROM {$this->table} WHERE org_id = ? ORDER BY startdate DESC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("s", $orgId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $events = [];
+        
+        while ($row = $result->fetch_assoc()) {
+            // Fetch participants from DB
+            $participants = $this->getEventParticipants($row['eventid']);
+            $row['participant_count_file'] = count($participants);
+            $events[] = $row;
+        }
+        
+        return $events;
+    }
+
     public function createEvent($data) {
         // Generate GUID for the new event
         $eventId = $this->generateGUID();
 
-        $sql = "INSERT INTO {$this->table} (eventid, eventname, startdate, enddate, location, eventshortinfo, eventcreator, eventkey, participantcount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)";
+        $sql = "INSERT INTO {$this->table} (eventid, eventname, startdate, enddate, location, eventshortinfo, eventcreator, eventkey, participantcount, org_id, registration_fee, payment_required) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("ssssssss", 
+        
+        // Store values in variables to pass by reference
+        $eventName = $data['eventname'];
+        $startDate = $data['startdate'];
+        $endDate = $data['enddate'];
+        $location = $data['location'];
+        $eventShortInfo = $data['eventshortinfo'];
+        $eventCreator = $data['eventcreator'];
+        $eventKey = $data['eventkey'];
+        $orgId = $data['org_id'] ?? null;
+        $registrationFee = $data['registration_fee'] ?? 0.00;
+        $paymentRequired = $data['payment_required'] ?? 0;
+        
+        $stmt->bind_param("sssssssssdi", 
             $eventId,
-            $data['eventname'], 
-            $data['startdate'], 
-            $data['enddate'], 
-            $data['location'], 
-            $data['eventshortinfo'], 
-            $data['eventcreator'], 
-            $data['eventkey']
+            $eventName, 
+            $startDate, 
+            $endDate, 
+            $location, 
+            $eventShortInfo, 
+            $eventCreator, 
+            $eventKey,
+            $orgId,
+            $registrationFee,
+            $paymentRequired
         );
         
         if ($stmt->execute()) {
@@ -92,12 +126,20 @@ class Event extends Model {
     public function updateEvent($eventId, $data) {
         $sql = "UPDATE {$this->table} SET eventname = ?, startdate = ?, enddate = ?, location = ?, eventshortinfo = ? WHERE eventid = ?";
         $stmt = $this->db->prepare($sql);
+        
+        // Store values in variables to pass by reference
+        $eventName = $data['eventname'];
+        $startDate = $data['startdate'];
+        $endDate = $data['enddate'];
+        $location = $data['location'];
+        $eventShortInfo = $data['eventshortinfo'];
+        
         $stmt->bind_param("ssssss", 
-            $data['eventname'], 
-            $data['startdate'], 
-            $data['enddate'], 
-            $data['location'], 
-            $data['eventshortinfo'], 
+            $eventName, 
+            $startDate, 
+            $endDate, 
+            $location, 
+            $eventShortInfo, 
             $eventId
         );
         
@@ -390,5 +432,57 @@ class Event extends Model {
         }
         $stmt->execute();
         return $stmt->affected_rows > 0;
+    }
+
+    /**
+     * Get upcoming events from verified organizations within a given school.
+     */
+    public function getPromotedEventsBySchool(int $schoolId, int $limit = 5): array {
+        $sql = "SELECT e.*
+                FROM {$this->table} e
+                JOIN organizations o ON e.org_id = o.org_id
+                WHERE o.school_id = ?
+                  AND o.is_verified = 1
+                  AND o.status = 'active'
+                  AND e.startdate > NOW()
+                ORDER BY e.startdate ASC
+                LIMIT ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("ii", $schoolId, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $events = [];
+        while ($row = $result->fetch_assoc()) {
+            $participants = $this->getEventParticipants($row['eventid']);
+            $row['participant_count_file'] = count($participants);
+            $events[] = $row;
+        }
+        return $events;
+    }
+
+    /**
+     * Get upcoming events from verified organizations within a given department.
+     */
+    public function getPromotedEventsByDepartment(int $departmentId, int $limit = 5): array {
+        $sql = "SELECT e.*
+                FROM {$this->table} e
+                JOIN organizations o ON e.org_id = o.org_id
+                WHERE o.department_id = ?
+                  AND o.is_verified = 1
+                  AND o.status = 'active'
+                  AND e.startdate > NOW()
+                ORDER BY e.startdate ASC
+                LIMIT ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("ii", $departmentId, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $events = [];
+        while ($row = $result->fetch_assoc()) {
+            $participants = $this->getEventParticipants($row['eventid']);
+            $row['participant_count_file'] = count($participants);
+            $events[] = $row;
+        }
+        return $events;
     }
 } 
