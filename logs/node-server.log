@@ -17,4 +17,147 @@ Ignoring invalid configuration option passed to Connection: reconnect. This is c
 🚀 Node.js WebSocket server running on port 3000
 📊 Health check: http://localhost:3000/health
 🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+❌ Database connection failed: connect ECONNREFUSED 127.0.0.1:3306
+👤 User connected: v_sbTV7FG8Tb-dD9AAAB
+Socket connected: v_sbTV7FG8Tb-dD9AAAB
+👋 User disconnected: v_sbTV7FG8Tb-dD9AAAB
+👤 User connected: M3HGEmYavV6a8Dx-AAAD
+Socket connected: M3HGEmYavV6a8Dx-AAAD
+👋 User disconnected: M3HGEmYavV6a8Dx-AAAD
+👤 User connected: VEz5FcV_pHDuXPpYAAAF
+Socket connected: VEz5FcV_pHDuXPpYAAAF
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
 ✅ Database connected successfully
+👤 User connected: ZP8WQqxrwJ6vpNSzAAAB
+Socket connected: ZP8WQqxrwJ6vpNSzAAAB
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+👤 User connected: ILqZexpD5RCh8PJxAAAB
+Socket connected: ILqZexpD5RCh8PJxAAAB
+👋 User disconnected: ILqZexpD5RCh8PJxAAAB
+👤 User connected: 5JAs9FWT-DRrNmE7AAAD
+Socket connected: 5JAs9FWT-DRrNmE7AAAD
+User authenticated: NIKOLAI TRISTAN PAZON (f1c72308-9be5-4865-a034-23afb7caf390)
+Message sent: f1c72308-9be5-4865-a034-23afb7caf390 -> 79424a31-556d-40f1-8fb2-602497dca725
+👋 User disconnected: 5JAs9FWT-DRrNmE7AAAD
+User disconnected: f1c72308-9be5-4865-a034-23afb7caf390
+👤 User connected: nrIo946NDx11M5rBAAAF
+Socket connected: nrIo946NDx11M5rBAAAF
+User authenticated: ZEUS ELDERFIELD (79424a31-556d-40f1-8fb2-602497dca725)
+👋 User disconnected: nrIo946NDx11M5rBAAAF
+User disconnected: 79424a31-556d-40f1-8fb2-602497dca725
+👤 User connected: bNXpk_WkgZZ6r151AAAH
+Socket connected: bNXpk_WkgZZ6r151AAAH
+User authenticated: ZEUS ELDERFIELD (79424a31-556d-40f1-8fb2-602497dca725)
+Message sent: 79424a31-556d-40f1-8fb2-602497dca725 -> f1c72308-9be5-4865-a034-23afb7caf390
+👋 User disconnected: bNXpk_WkgZZ6r151AAAH
+User disconnected: 79424a31-556d-40f1-8fb2-602497dca725
+👤 User connected: Vj2JHdJUPh3PDXpLAAAJ
+Socket connected: Vj2JHdJUPh3PDXpLAAAJ
+User authenticated: ZEUS ELDERFIELD (79424a31-556d-40f1-8fb2-602497dca725)
+👋 User disconnected: Vj2JHdJUPh3PDXpLAAAJ
+User disconnected: 79424a31-556d-40f1-8fb2-602497dca725
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+👤 User connected: TvejpPJq2SM1bRvCAAAB
+Socket connected: TvejpPJq2SM1bRvCAAAB
+User authenticated: ZEUS ELDERFIELD (79424a31-556d-40f1-8fb2-602497dca725)
+Message sent: 79424a31-556d-40f1-8fb2-602497dca725 -> f1c72308-9be5-4865-a034-23afb7caf390

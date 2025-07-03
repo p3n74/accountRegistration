@@ -1,11 +1,160 @@
 
 ==> ./logs/php-server.log <==
-[Sun Jun 22 15:33:36 2025] PHP 8.4.8 Development Server (http://localhost:8000) started
-[Sun Jun 22 15:33:43 2025] [::1]:61852 Accepted
-[Sun Jun 22 15:33:43 2025] [::1]:61852 [302]: GET /
-[Sun Jun 22 15:33:43 2025] [::1]:61852 Closing
+#3 /opt/homebrew/var/www/accounts/app/core/Controller.php(7): User->__construct()
+#4 /opt/homebrew/var/www/accounts/app/controllers/AuthController.php(9): Controller->model('User')
+#5 /opt/homebrew/var/www/accounts/app/core/App.php(79): AuthController->__construct()
+#6 /opt/homebrew/var/www/accounts/public/index.php(45): App->__construct()
+#7 {main}
+  thrown in /opt/homebrew/var/www/accounts/app/core/Database.php on line 36
+[Thu Jul  3 22:36:29 2025] [::1]:54058 Closing
+[Thu Jul  3 22:36:29 2025] [::1]:54065 Accepted
+[Thu Jul  3 22:36:29 2025] [::1]:54065 [302]: GET /
+[Thu Jul  3 22:36:29 2025] [::1]:54065 Closing
 
 ==> ./logs/node-server.log <==
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+❌ Database connection failed: connect ECONNREFUSED 127.0.0.1:3306
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:36:29 2025] [::1]:54059 [302]: GET /favicon.ico
+[Thu Jul  3 22:36:29 2025] [::1]:54059 Closing
+[Thu Jul  3 22:36:29 2025] [::1]:54068 Accepted
+[Thu Jul  3 22:36:31 2025] [::1]:54068 [200]: GET /auth/login - Uncaught Exception: Database connection failed after 3 attempts: Connection refused in /opt/homebrew/var/www/accounts/app/core/Database.php:36
+Stack trace:
+#0 /opt/homebrew/var/www/accounts/app/core/Database.php(13): Database->connect()
+#1 /opt/homebrew/var/www/accounts/app/core/Model.php(8): Database->__construct()
+#2 /opt/homebrew/var/www/accounts/app/models/User.php(7): Model->__construct()
+#3 /opt/homebrew/var/www/accounts/app/core/Controller.php(7): User->__construct()
+#4 /opt/homebrew/var/www/accounts/app/controllers/AuthController.php(9): Controller->model('User')
+#5 /opt/homebrew/var/www/accounts/app/core/App.php(79): AuthController->__construct()
+#6 /opt/homebrew/var/www/accounts/public/index.php(45): App->__construct()
+#7 {main}
+  thrown in /opt/homebrew/var/www/accounts/app/core/Database.php on line 36
+[Thu Jul  3 22:36:31 2025] [::1]:54068 Closing
+[Thu Jul  3 22:36:45 2025] [::1]:54081 Accepted
+[Thu Jul  3 22:36:45 2025] [::1]:54082 Accepted
+[Thu Jul  3 22:36:45 2025] [::1]:54081 [200]: GET /auth/login
+[Thu Jul  3 22:36:45 2025] [::1]:54081 Closing
+[Thu Jul  3 22:36:45 2025] [::1]:54082 [302]: GET /auth/dist/output.css
+[Thu Jul  3 22:36:45 2025] [::1]:54082 Closing
+[Thu Jul  3 22:36:45 2025] [::1]:54087 Accepted
+[Thu Jul  3 22:36:46 2025] [::1]:54087 [200]: GET /auth/login
+[Thu Jul  3 22:36:46 2025] [::1]:54087 Closing
+[Thu Jul  3 22:36:47 2025] [::1]:54092 Accepted
+[Thu Jul  3 22:36:47 2025] [::1]:54092 [302]: GET /favicon.ico
+[Thu Jul  3 22:36:47 2025] [::1]:54092 Closing
+[Thu Jul  3 22:36:47 2025] [::1]:54093 Accepted
+[Thu Jul  3 22:36:47 2025] [::1]:54093 [200]: GET /auth/login
+[Thu Jul  3 22:36:47 2025] [::1]:54093 Closing
+[Thu Jul  3 22:37:18 2025] [::1]:54111 Accepted
+[Thu Jul  3 22:37:18 2025] [::1]:54112 Accepted
+[Thu Jul  3 22:37:18 2025] [::1]:54111 [302]: POST /auth/login
+[Thu Jul  3 22:37:18 2025] [::1]:54111 Closing
+[Thu Jul  3 22:37:19 2025] [::1]:54112 [200]: GET /dashboard
+[Thu Jul  3 22:37:19 2025] [::1]:54112 Closing
+[Thu Jul  3 22:37:19 2025] [::1]:54119 Accepted
+[Thu Jul  3 22:37:19 2025] [::1]:54119 [200]: GET /dist/output.css
+[Thu Jul  3 22:37:19 2025] [::1]:54119 Closing
+[Thu Jul  3 22:37:20 2025] [::1]:54120 Accepted
+[Thu Jul  3 22:37:20 2025] [::1]:54120 [302]: GET /favicon.ico
+[Thu Jul  3 22:37:20 2025] [::1]:54120 Closing
+[Thu Jul  3 22:37:20 2025] [::1]:54121 Accepted
+[Thu Jul  3 22:37:21 2025] [::1]:54121 [200]: GET /dashboard
+[Thu Jul  3 22:37:21 2025] [::1]:54121 Closing
+[Thu Jul  3 22:37:21 2025] [::1]:54124 Accepted
+[Thu Jul  3 22:37:21 2025] [::1]:54125 Accepted
+[Thu Jul  3 22:37:22 2025] [::1]:54124 [200]: GET /social
+[Thu Jul  3 22:37:22 2025] [::1]:54124 Closing
+[Thu Jul  3 22:37:22 2025] [::1]:54125 [200]: GET /dist/output.css
+[Thu Jul  3 22:37:22 2025] [::1]:54125 Closing
+[Thu Jul  3 22:37:23 2025] [::1]:54132 Accepted
+[Thu Jul  3 22:37:23 2025] [::1]:54132 [302]: GET /favicon.ico
+[Thu Jul  3 22:37:23 2025] [::1]:54132 Closing
+[Thu Jul  3 22:37:23 2025] [::1]:54133 Accepted
+
+==> ./logs/node-server.log <==
+👤 User connected: v_sbTV7FG8Tb-dD9AAAB
+Socket connected: v_sbTV7FG8Tb-dD9AAAB
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:37:23 2025] [::1]:54133 [200]: GET /dashboard
+[Thu Jul  3 22:37:23 2025] [::1]:54133 Closing
+[Thu Jul  3 22:37:25 2025] [::1]:54138 Accepted
+
+==> ./logs/node-server.log <==
+👋 User disconnected: v_sbTV7FG8Tb-dD9AAAB
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:37:25 2025] [::1]:54139 Accepted
+[Thu Jul  3 22:37:26 2025] [::1]:54138 [200]: GET /social/search
+[Thu Jul  3 22:37:26 2025] [::1]:54138 Closing
+[Thu Jul  3 22:37:27 2025] [::1]:54139 [200]: GET /social/dist/output.css
+[Thu Jul  3 22:37:27 2025] [::1]:54139 Closing
+[Thu Jul  3 22:37:27 2025] [::1]:54148 Accepted
+[Thu Jul  3 22:37:27 2025] [::1]:54148 [302]: GET /favicon.ico
+[Thu Jul  3 22:37:27 2025] [::1]:54148 Closing
+[Thu Jul  3 22:37:27 2025] [::1]:54149 Accepted
+[Thu Jul  3 22:37:28 2025] [::1]:54149 [200]: GET /dashboard
+[Thu Jul  3 22:37:28 2025] [::1]:54149 Closing
+[Thu Jul  3 22:37:31 2025] [::1]:54152 Accepted
+[Thu Jul  3 22:37:31 2025] [::1]:54153 Accepted
+[Thu Jul  3 22:37:32 2025] [::1]:54152 [200]: GET /social/search?q=zeus
+[Thu Jul  3 22:37:32 2025] [::1]:54152 Closing
+[Thu Jul  3 22:37:34 2025] [::1]:54153 [200]: GET /social/dist/output.css
+[Thu Jul  3 22:37:34 2025] [::1]:54153 Closing
+[Thu Jul  3 22:37:34 2025] [::1]:54162 Accepted
+[Thu Jul  3 22:37:34 2025] [::1]:54162 [302]: GET /favicon.ico
+[Thu Jul  3 22:37:34 2025] [::1]:54162 Closing
+[Thu Jul  3 22:37:34 2025] [::1]:54163 Accepted
+[Thu Jul  3 22:37:35 2025] [::1]:54163 [200]: GET /dashboard
+[Thu Jul  3 22:37:35 2025] [::1]:54163 Closing
+[Thu Jul  3 22:37:36 2025] [::1]:54168 Accepted
+[Thu Jul  3 22:37:36 2025] [::1]:54168 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 22:37:36 2025] [::1]:54168 Closing
+[Thu Jul  3 22:37:36 2025] [::1]:54172 Accepted
+[Thu Jul  3 22:37:36 2025] [::1]:54173 Accepted
+[Thu Jul  3 22:37:38 2025] [::1]:54172 [200]: GET /social/messages/79424a31-556d-40f1-8fb2-602497dca725
+[Thu Jul  3 22:37:38 2025] [::1]:54172 Closing
+[Thu Jul  3 22:37:38 2025] [::1]:54173 [302]: GET /social/messages/dist/output.css
+[Thu Jul  3 22:37:38 2025] [::1]:54173 Closing
+[Thu Jul  3 22:37:38 2025] [::1]:54181 Accepted
+[Thu Jul  3 22:37:40 2025] [::1]:54181 [200]: GET /social
+[Thu Jul  3 22:37:40 2025] [::1]:54181 Closing
+[Thu Jul  3 22:37:40 2025] [::1]:54189 Accepted
+[Thu Jul  3 22:37:40 2025] [::1]:54189 [302]: GET /favicon.ico
+[Thu Jul  3 22:37:40 2025] [::1]:54189 Closing
+[Thu Jul  3 22:37:40 2025] [::1]:54190 Accepted
+
+==> ./logs/node-server.log <==
+👤 User connected: M3HGEmYavV6a8Dx-AAAD
+Socket connected: M3HGEmYavV6a8Dx-AAAD
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:37:41 2025] [::1]:54190 [200]: GET /dashboard
+[Thu Jul  3 22:37:41 2025] [::1]:54190 Closing
+[Thu Jul  3 22:38:37 2025] [::1]:54223 Accepted
+[Thu Jul  3 22:38:38 2025] [::1]:54223 [302]: GET /social/messages/dist/output.css
+[Thu Jul  3 22:38:38 2025] [::1]:54223 Closing
+[Thu Jul  3 22:38:38 2025] [::1]:54228 Accepted
+[Thu Jul  3 22:38:42 2025] [::1]:54228 [200]: GET /social
+[Thu Jul  3 22:38:42 2025] [::1]:54228 Closing
+
+==> ./logs/node-server.log <==
+👋 User disconnected: M3HGEmYavV6a8Dx-AAAD
+👤 User connected: VEz5FcV_pHDuXPpYAAAF
+Socket connected: VEz5FcV_pHDuXPpYAAAF
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
 Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
 Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
 👀 Starting file watchers...
@@ -15,155 +164,374 @@ Ignoring invalid configuration option passed to Connection: reconnect. This is c
 🚀 Node.js WebSocket server running on port 3000
 📊 Health check: http://localhost:3000/health
 🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+👤 User connected: ZP8WQqxrwJ6vpNSzAAAB
+Socket connected: ZP8WQqxrwJ6vpNSzAAAB
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+👤 User connected: ILqZexpD5RCh8PJxAAAB
+Socket connected: ILqZexpD5RCh8PJxAAAB
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:46:34 2025] [::1]:56407 Accepted
+[Thu Jul  3 22:46:34 2025] [::1]:56408 Accepted
+
+==> ./logs/node-server.log <==
+👋 User disconnected: ILqZexpD5RCh8PJxAAAB
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:46:36 2025] [::1]:56407 [200]: GET /social/messages/79424a31-556d-40f1-8fb2-602497dca725
+[Thu Jul  3 22:46:36 2025] [::1]:56407 Closing
+[Thu Jul  3 22:46:37 2025] [::1]:56408 [302]: GET /social/messages/dist/output.css
+[Thu Jul  3 22:46:37 2025] [::1]:56408 Closing
+[Thu Jul  3 22:46:37 2025] [::1]:56423 Accepted
+[Thu Jul  3 22:46:38 2025] [::1]:56423 [200]: GET /social
+[Thu Jul  3 22:46:38 2025] [::1]:56423 Closing
+[Thu Jul  3 22:46:38 2025] [::1]:56440 Accepted
+[Thu Jul  3 22:46:38 2025] [::1]:56440 [302]: GET /favicon.ico
+[Thu Jul  3 22:46:38 2025] [::1]:56440 Closing
+
+==> ./logs/node-server.log <==
+👤 User connected: 5JAs9FWT-DRrNmE7AAAD
+Socket connected: 5JAs9FWT-DRrNmE7AAAD
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:46:38 2025] [::1]:56441 Accepted
+
+==> ./logs/node-server.log <==
+User authenticated: NIKOLAI TRISTAN PAZON (f1c72308-9be5-4865-a034-23afb7caf390)
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:46:39 2025] [::1]:56441 [200]: GET /dashboard
+[Thu Jul  3 22:46:39 2025] [::1]:56441 Closing
+
+==> ./logs/node-server.log <==
+Message sent: f1c72308-9be5-4865-a034-23afb7caf390 -> 79424a31-556d-40f1-8fb2-602497dca725
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:46:46 2025] [::1]:56472 Accepted
+
+==> ./logs/node-server.log <==
+👋 User disconnected: 5JAs9FWT-DRrNmE7AAAD
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:46:46 2025] [::1]:56474 Accepted
+
+==> ./logs/node-server.log <==
+User disconnected: f1c72308-9be5-4865-a034-23afb7caf390
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:46:47 2025] [::1]:56472 [200]: GET /dashboard
+[Thu Jul  3 22:46:47 2025] [::1]:56472 Closing
+[Thu Jul  3 22:46:47 2025] [::1]:56474 [200]: GET /dist/output.css
+[Thu Jul  3 22:46:47 2025] [::1]:56474 Closing
+[Thu Jul  3 22:46:47 2025] [::1]:56485 Accepted
+[Thu Jul  3 22:46:47 2025] [::1]:56485 [302]: GET /favicon.ico
+[Thu Jul  3 22:46:47 2025] [::1]:56485 Closing
+[Thu Jul  3 22:46:47 2025] [::1]:56486 Accepted
+[Thu Jul  3 22:46:48 2025] [::1]:56486 [200]: GET /dashboard
+[Thu Jul  3 22:46:48 2025] [::1]:56486 Closing
+[Thu Jul  3 22:46:50 2025] [::1]:56501 Accepted
+[Thu Jul  3 22:46:50 2025] [::1]:56502 Accepted
+[Thu Jul  3 22:46:50 2025] [::1]:56501 [302]: GET /auth/logout
+[Thu Jul  3 22:46:50 2025] [::1]:56501 Closing
+[Thu Jul  3 22:46:51 2025] [::1]:56502 [200]: GET /auth/login
+[Thu Jul  3 22:46:51 2025] [::1]:56502 Closing
+[Thu Jul  3 22:46:51 2025] [::1]:56519 Accepted
+[Thu Jul  3 22:46:51 2025] [::1]:56519 [302]: GET /auth/dist/output.css
+[Thu Jul  3 22:46:51 2025] [::1]:56519 Closing
+[Thu Jul  3 22:46:51 2025] [::1]:56520 Accepted
+[Thu Jul  3 22:46:52 2025] [::1]:56520 [200]: GET /auth/login
+[Thu Jul  3 22:46:52 2025] [::1]:56520 Closing
+[Thu Jul  3 22:46:52 2025] [::1]:56524 Accepted
+[Thu Jul  3 22:46:52 2025] [::1]:56524 [302]: GET /favicon.ico
+[Thu Jul  3 22:46:52 2025] [::1]:56524 Closing
+[Thu Jul  3 22:46:52 2025] [::1]:56525 Accepted
+[Thu Jul  3 22:46:52 2025] [::1]:56525 [200]: GET /auth/login
+[Thu Jul  3 22:46:52 2025] [::1]:56525 Closing
+[Thu Jul  3 22:47:21 2025] [::1]:56689 Accepted
+[Thu Jul  3 22:47:22 2025] [::1]:56689 [200]: POST /auth/login
+[Thu Jul  3 22:47:22 2025] [::1]:56689 Closing
+[Thu Jul  3 22:47:22 2025] [::1]:56690 Accepted
+[Thu Jul  3 22:47:22 2025] [::1]:56690 [302]: GET /auth/dist/output.css
+[Thu Jul  3 22:47:22 2025] [::1]:56690 Closing
+[Thu Jul  3 22:47:22 2025] [::1]:56699 Accepted
+[Thu Jul  3 22:47:22 2025] [::1]:56699 [200]: GET /auth/login
+[Thu Jul  3 22:47:22 2025] [::1]:56699 Closing
+[Thu Jul  3 22:47:22 2025] [::1]:56707 Accepted
+[Thu Jul  3 22:47:22 2025] [::1]:56707 [302]: GET /favicon.ico
+[Thu Jul  3 22:47:22 2025] [::1]:56707 Closing
+[Thu Jul  3 22:47:22 2025] [::1]:56708 Accepted
+[Thu Jul  3 22:47:23 2025] [::1]:56708 [200]: GET /auth/login
+[Thu Jul  3 22:47:23 2025] [::1]:56708 Closing
+[Thu Jul  3 22:47:43 2025] [::1]:56808 Accepted
+[Thu Jul  3 22:47:43 2025] [::1]:56809 Accepted
+[Thu Jul  3 22:47:44 2025] [::1]:56808 [302]: POST /auth/login
+[Thu Jul  3 22:47:44 2025] [::1]:56808 Closing
+[Thu Jul  3 22:47:44 2025] [::1]:56809 Closed without sending a request; it was probably just an unused speculative preconnection
+[Thu Jul  3 22:47:44 2025] [::1]:56809 Closing
+[Thu Jul  3 22:47:44 2025] [::1]:56818 Accepted
+[Thu Jul  3 22:47:45 2025] [::1]:56818 [200]: GET /dashboard
+[Thu Jul  3 22:47:45 2025] [::1]:56818 Closing
+[Thu Jul  3 22:47:45 2025] [::1]:56821 Accepted
+[Thu Jul  3 22:47:45 2025] [::1]:56821 [200]: GET /dist/output.css
+[Thu Jul  3 22:47:45 2025] [::1]:56821 Closing
+[Thu Jul  3 22:47:45 2025] [::1]:56822 Accepted
+[Thu Jul  3 22:47:45 2025] [::1]:56822 [200]: GET /profilePictures/default.png
+[Thu Jul  3 22:47:45 2025] [::1]:56822 Closing
+[Thu Jul  3 22:47:45 2025] [::1]:56827 Accepted
+[Thu Jul  3 22:47:45 2025] [::1]:56827 [302]: GET /favicon.ico
+[Thu Jul  3 22:47:45 2025] [::1]:56827 Closing
+[Thu Jul  3 22:47:45 2025] [::1]:56828 Accepted
+[Thu Jul  3 22:47:46 2025] [::1]:56828 [200]: GET /dashboard
+[Thu Jul  3 22:47:46 2025] [::1]:56828 Closing
+[Thu Jul  3 22:47:48 2025] [::1]:56835 Accepted
+[Thu Jul  3 22:47:48 2025] [::1]:56836 Accepted
+[Thu Jul  3 22:47:50 2025] [::1]:56835 [200]: GET /social
+[Thu Jul  3 22:47:50 2025] [::1]:56835 Closing
+[Thu Jul  3 22:47:50 2025] [::1]:56836 Closed without sending a request; it was probably just an unused speculative preconnection
+[Thu Jul  3 22:47:50 2025] [::1]:56836 Closing
+[Thu Jul  3 22:47:50 2025] [::1]:56842 Accepted
+[Thu Jul  3 22:47:50 2025] [::1]:56842 [200]: GET /dist/output.css
+[Thu Jul  3 22:47:50 2025] [::1]:56842 Closing
+[Thu Jul  3 22:47:50 2025] [::1]:56845 Accepted
+[Thu Jul  3 22:47:50 2025] [::1]:56845 [302]: GET /favicon.ico
+[Thu Jul  3 22:47:50 2025] [::1]:56845 Closing
+[Thu Jul  3 22:47:50 2025] [::1]:56846 Accepted
+
+==> ./logs/node-server.log <==
+👤 User connected: nrIo946NDx11M5rBAAAF
+Socket connected: nrIo946NDx11M5rBAAAF
+User authenticated: ZEUS ELDERFIELD (79424a31-556d-40f1-8fb2-602497dca725)
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:47:50 2025] [::1]:56846 [200]: GET /dashboard
+[Thu Jul  3 22:47:50 2025] [::1]:56846 Closing
+[Thu Jul  3 22:47:51 2025] [::1]:56852 Accepted
+
+==> ./logs/node-server.log <==
+👋 User disconnected: nrIo946NDx11M5rBAAAF
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:47:51 2025] [::1]:56853 Accepted
+
+==> ./logs/node-server.log <==
+User disconnected: 79424a31-556d-40f1-8fb2-602497dca725
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:47:52 2025] [::1]:56852 [200]: GET /social/messages/f1c72308-9be5-4865-a034-23afb7caf390
+[Thu Jul  3 22:47:52 2025] [::1]:56852 Closing
+[Thu Jul  3 22:47:53 2025] [::1]:56853 [302]: GET /social/messages/dist/output.css
+[Thu Jul  3 22:47:53 2025] [::1]:56853 Closing
+[Thu Jul  3 22:47:53 2025] [::1]:56862 Accepted
+[Thu Jul  3 22:47:54 2025] [::1]:56862 [200]: GET /social
+[Thu Jul  3 22:47:54 2025] [::1]:56862 Closing
+[Thu Jul  3 22:47:54 2025] [::1]:56871 Accepted
+[Thu Jul  3 22:47:54 2025] [::1]:56871 [302]: GET /favicon.ico
+[Thu Jul  3 22:47:54 2025] [::1]:56871 Closing
+[Thu Jul  3 22:47:54 2025] [::1]:56872 Accepted
+
+==> ./logs/node-server.log <==
+👤 User connected: bNXpk_WkgZZ6r151AAAH
+Socket connected: bNXpk_WkgZZ6r151AAAH
+User authenticated: ZEUS ELDERFIELD (79424a31-556d-40f1-8fb2-602497dca725)
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:47:55 2025] [::1]:56872 [200]: GET /dashboard
+[Thu Jul  3 22:47:55 2025] [::1]:56872 Closing
+
+==> ./logs/node-server.log <==
+Message sent: 79424a31-556d-40f1-8fb2-602497dca725 -> f1c72308-9be5-4865-a034-23afb7caf390
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:48:07 2025] [::1]:56877 Accepted
+
+==> ./logs/node-server.log <==
+👋 User disconnected: bNXpk_WkgZZ6r151AAAH
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:48:07 2025] [::1]:56878 Accepted
+
+==> ./logs/node-server.log <==
+User disconnected: 79424a31-556d-40f1-8fb2-602497dca725
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:48:09 2025] [::1]:56877 [200]: GET /social
+[Thu Jul  3 22:48:09 2025] [::1]:56877 Closing
+[Thu Jul  3 22:48:09 2025] [::1]:56878 [200]: GET /dist/output.css
+[Thu Jul  3 22:48:09 2025] [::1]:56878 Closing
+[Thu Jul  3 22:48:09 2025] [::1]:56885 Accepted
+[Thu Jul  3 22:48:09 2025] [::1]:56885 [302]: GET /favicon.ico
+[Thu Jul  3 22:48:09 2025] [::1]:56885 Closing
+[Thu Jul  3 22:48:09 2025] [::1]:56888 Accepted
+
+==> ./logs/node-server.log <==
+👤 User connected: Vj2JHdJUPh3PDXpLAAAJ
+Socket connected: Vj2JHdJUPh3PDXpLAAAJ
+User authenticated: ZEUS ELDERFIELD (79424a31-556d-40f1-8fb2-602497dca725)
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:48:09 2025] [::1]:56888 [200]: GET /dashboard
+[Thu Jul  3 22:48:09 2025] [::1]:56888 Closing
+[Thu Jul  3 22:48:16 2025] [::1]:56898 Accepted
+
+==> ./logs/node-server.log <==
+👋 User disconnected: Vj2JHdJUPh3PDXpLAAAJ
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:48:16 2025] [::1]:56899 Accepted
+
+==> ./logs/node-server.log <==
+User disconnected: 79424a31-556d-40f1-8fb2-602497dca725
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:48:17 2025] [::1]:56898 [200]: GET /social/search
+[Thu Jul  3 22:48:17 2025] [::1]:56898 Closing
+[Thu Jul  3 22:48:19 2025] [::1]:56899 [200]: GET /social/dist/output.css
+[Thu Jul  3 22:48:19 2025] [::1]:56899 Closing
+[Thu Jul  3 22:48:19 2025] [::1]:56908 Accepted
+[Thu Jul  3 22:48:19 2025] [::1]:56908 [302]: GET /favicon.ico
+[Thu Jul  3 22:48:19 2025] [::1]:56908 Closing
+[Thu Jul  3 22:48:19 2025] [::1]:56909 Accepted
+[Thu Jul  3 22:48:20 2025] [::1]:56909 [200]: GET /dashboard
+[Thu Jul  3 22:48:20 2025] [::1]:56909 Closing
+[Thu Jul  3 22:48:23 2025] [::1]:56913 Accepted
+[Thu Jul  3 22:48:23 2025] [::1]:56914 Accepted
+[Thu Jul  3 22:48:24 2025] [::1]:56913 [200]: GET /social/search?q=nikolai
+[Thu Jul  3 22:48:24 2025] [::1]:56913 Closing
+[Thu Jul  3 22:48:24 2025] [::1]:56914 Closed without sending a request; it was probably just an unused speculative preconnection
+[Thu Jul  3 22:48:24 2025] [::1]:56914 Closing
+[Thu Jul  3 22:48:25 2025] [::1]:56919 Accepted
+[Thu Jul  3 22:48:26 2025] [::1]:56919 [200]: GET /social/dist/output.css
+[Thu Jul  3 22:48:26 2025] [::1]:56919 Closing
+[Thu Jul  3 22:48:26 2025] [::1]:56924 Accepted
+[Thu Jul  3 22:48:26 2025] [::1]:56924 [302]: GET /favicon.ico
+[Thu Jul  3 22:48:26 2025] [::1]:56924 Closing
+[Thu Jul  3 22:48:26 2025] [::1]:56925 Accepted
+[Thu Jul  3 22:48:27 2025] [::1]:56925 [200]: GET /dashboard
+[Thu Jul  3 22:48:27 2025] [::1]:56925 Closing
+[Thu Jul  3 22:48:28 2025] [::1]:56928 Accepted
+[Thu Jul  3 22:48:28 2025] [::1]:56928 [405]: POST /api/users/f1c72308-9be5-4865-a034-23afb7caf390/follow
+[Thu Jul  3 22:48:28 2025] [::1]:56928 Closing
+
+==> ./logs/node-server.log <==
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
 ✅ Database connected successfully
 
 ==> ./logs/php-server.log <==
-[Sun Jun 22 15:33:45 2025] [::1]:61854 Accepted
-[Sun Jun 22 15:33:45 2025] [::1]:61855 Accepted
-[Sun Jun 22 15:33:46 2025] [::1]:61854 [200]: GET /dashboard
-[Sun Jun 22 15:33:46 2025] [::1]:61854 Closing
-[Sun Jun 22 15:33:46 2025] [::1]:61855 [200]: GET /dist/output.css
-[Sun Jun 22 15:33:46 2025] [::1]:61855 Closing
-[Sun Jun 22 15:33:46 2025] [::1]:61859 Accepted
-[Sun Jun 22 15:33:46 2025] [::1]:61859 [302]: GET /favicon.ico
-[Sun Jun 22 15:33:46 2025] [::1]:61859 Closing
-[Sun Jun 22 15:33:46 2025] [::1]:61860 Accepted
-[Sun Jun 22 15:33:47 2025] [::1]:61860 [200]: GET /dashboard
-[Sun Jun 22 15:33:47 2025] [::1]:61860 Closing
-[Sun Jun 22 15:33:48 2025] [::1]:61864 Accepted
-[Sun Jun 22 15:33:48 2025] [::1]:61865 Accepted
-[Sun Jun 22 15:33:48 2025] [::1]:61864 [302]: GET /auth/logout
-[Sun Jun 22 15:33:48 2025] [::1]:61864 Closing
-[Sun Jun 22 15:33:48 2025] [::1]:61865 Closed without sending a request; it was probably just an unused speculative preconnection
-[Sun Jun 22 15:33:48 2025] [::1]:61865 Closing
-[Sun Jun 22 15:33:48 2025] [::1]:61869 Accepted
-[Sun Jun 22 15:33:49 2025] [::1]:61869 [200]: GET /auth/login
-[Sun Jun 22 15:33:49 2025] [::1]:61869 Closing
-[Sun Jun 22 15:33:49 2025] [::1]:61873 Accepted
-[Sun Jun 22 15:33:49 2025] [::1]:61873 [302]: GET /auth/dist/output.css
-[Sun Jun 22 15:33:49 2025] [::1]:61873 Closing
-[Sun Jun 22 15:33:49 2025] [::1]:61874 Accepted
-[Sun Jun 22 15:33:50 2025] [::1]:61874 [200]: GET /auth/login
-[Sun Jun 22 15:33:50 2025] [::1]:61874 Closing
-[Sun Jun 22 15:33:50 2025] [::1]:61878 Accepted
-[Sun Jun 22 15:33:50 2025] [::1]:61878 [302]: GET /favicon.ico
-[Sun Jun 22 15:33:50 2025] [::1]:61878 Closing
-[Sun Jun 22 15:33:50 2025] [::1]:61879 Accepted
-[Sun Jun 22 15:33:50 2025] [::1]:61879 [200]: GET /auth/login
-[Sun Jun 22 15:33:50 2025] [::1]:61879 Closing
-[Sun Jun 22 15:33:59 2025] [::1]:61886 Accepted
-[Sun Jun 22 15:33:59 2025] [::1]:61887 Accepted
-[Sun Jun 22 15:34:00 2025] [::1]:61886 [302]: POST /auth/login
-[Sun Jun 22 15:34:00 2025] [::1]:61886 Closing
-[Sun Jun 22 15:34:01 2025] [::1]:61887 [200]: GET /dashboard
-[Sun Jun 22 15:34:01 2025] [::1]:61887 Closing
-[Sun Jun 22 15:34:01 2025] [::1]:61894 Accepted
-[Sun Jun 22 15:34:01 2025] [::1]:61894 [200]: GET /dist/output.css
-[Sun Jun 22 15:34:01 2025] [::1]:61894 Closing
-[Sun Jun 22 15:34:01 2025] [::1]:61895 Accepted
-[Sun Jun 22 15:34:01 2025] [::1]:61895 [302]: GET /favicon.ico
-[Sun Jun 22 15:34:01 2025] [::1]:61895 Closing
-[Sun Jun 22 15:34:01 2025] [::1]:61896 Accepted
-[Sun Jun 22 15:34:01 2025] [::1]:61896 [200]: GET /dashboard
-[Sun Jun 22 15:34:01 2025] [::1]:61896 Closing
-[Sun Jun 22 15:34:02 2025] [::1]:61901 Accepted
-[Sun Jun 22 15:34:03 2025] [::1]:61901 [200]: GET /events/manage/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
-[Sun Jun 22 15:34:03 2025] [::1]:61901 Closing
-[Sun Jun 22 15:34:03 2025] [::1]:61902 Accepted
-[Sun Jun 22 15:34:03 2025] [::1]:61902 [302]: GET /events/manage/dist/output.css
-[Sun Jun 22 15:34:03 2025] [::1]:61902 Closing
-[Sun Jun 22 15:34:03 2025] [::1]:61905 Accepted
-[Sun Jun 22 15:34:04 2025] [::1]:61905 [200]: GET /dashboard
-[Sun Jun 22 15:34:04 2025] [::1]:61905 Closing
-[Sun Jun 22 15:34:04 2025] [::1]:61908 Accepted
-[Sun Jun 22 15:34:04 2025] [::1]:61908 [302]: GET /favicon.ico
-[Sun Jun 22 15:34:04 2025] [::1]:61908 Closing
-[Sun Jun 22 15:34:04 2025] [::1]:61909 Accepted
-[Sun Jun 22 15:34:05 2025] [::1]:61909 [200]: GET /dashboard
-[Sun Jun 22 15:34:05 2025] [::1]:61909 Closing
-[Sun Jun 22 15:34:08 2025] [::1]:61912 Accepted
-[Sun Jun 22 15:34:10 2025] [::1]:61912 [200]: POST /events/removeParticipant/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
-[Sun Jun 22 15:34:10 2025] [::1]:61912 Closing
-[Sun Jun 22 15:34:12 2025] [::1]:61924 Accepted
-[Sun Jun 22 15:34:13 2025] [::1]:61924 [200]: GET /users/search?q=es
-[Sun Jun 22 15:34:13 2025] [::1]:61924 Closing
-[Sun Jun 22 15:34:13 2025] [::1]:61926 Accepted
-[Sun Jun 22 15:34:14 2025] [::1]:61926 [302]: GET /events/manage/default.png
-[Sun Jun 22 15:34:14 2025] [::1]:61926 Closing
-[Sun Jun 22 15:34:14 2025] [::1]:61928 Accepted
-[Sun Jun 22 15:34:15 2025] [::1]:61928 [200]: GET /users/search?q=hes
-[Sun Jun 22 15:34:15 2025] [::1]:61928 Closing
-[Sun Jun 22 15:34:15 2025] [::1]:61931 Accepted
-[Sun Jun 22 15:34:16 2025] [::1]:61931 [200]: GET /dashboard
-[Sun Jun 22 15:34:16 2025] [::1]:61931 Closing
-[Sun Jun 22 15:34:16 2025] [::1]:61936 Accepted
-[Sun Jun 22 15:34:18 2025] [::1]:61936 [200]: POST /events/addParticipant/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
-[Sun Jun 22 15:34:18 2025] [::1]:61936 Closing
- 2025] [::1]:61896 Closing
-[Sun Jun 22 15:34:02 2025] [::1]:61901 Accepted
-[Sun Jun 22 15:34:03 2025] [::1]:61901 [200]: GET /events/manage/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
-[Sun Jun 22 15:34:03 2025] [::1]:61901 Closing
-[Sun Jun 22 15:34:03 2025] [::1]:61902 Accepted
-[Sun Jun 22 15:34:03 2025] [::1]:61902 [302]: GET /events/manage/dist/output.css
-[Sun Jun 22 15:34:03 2025] [::1]:61902 Closing
-[Sun Jun 22 15:34:03 2025] [::1]:61905 Accepted
-[Sun Jun 22 15:34:04 2025] [::1]:61905 [200]: GET /dashboard
-[Sun Jun 22 15:34:04 2025] [::1]:61905 Closing
-[Sun Jun 22 15:34:04 2025] [::1]:61908 Accepted
-[Sun Jun 22 15:34:04 2025] [::1]:61908 [302]: GET /favicon.ico
-[Sun Jun 22 15:34:04 2025] [::1]:61908 Closing
-[Sun Jun 22 15:34:04 2025] [::1]:61909 Accepted
-[Sun Jun 22 15:34:05 2025] [::1]:61909 [200]: GET /dashboard
-[Sun Jun 22 15:34:05 2025] [::1]:61909 Closing
-[Sun Jun 22 15:34:08 2025] [::1]:61912 Accepted
-[Sun Jun 22 15:34:10 2025] [::1]:61912 [200]: POST /events/removeParticipant/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
-[Sun Jun 22 15:34:10 2025] [::1]:61912 Closing
-[Sun Jun 22 15:34:12 2025] [::1]:61924 Accepted
-[Sun Jun 22 15:34:13 2025] [::1]:61924 [200]: GET /users/search?q=es
-[Sun Jun 22 15:34:13 2025] [::1]:61924 Closing
-[Sun Jun 22 15:34:13 2025] [::1]:61926 Accepted
-[Sun Jun 22 15:34:14 2025] [::1]:61926 [302]: GET /events/manage/default.png
-[Sun Jun 22 15:34:14 2025] [::1]:61926 Closing
-[Sun Jun 22 15:34:14 2025] [::1]:61928 Accepted
-[Sun Jun 22 15:34:15 2025] [::1]:61928 [200]: GET /users/search?q=hes
-[Sun Jun 22 15:34:15 2025] [::1]:61928 Closing
-[Sun Jun 22 15:34:15 2025] [::1]:61931 Accepted
-[Sun Jun 22 15:34:16 2025] [::1]:61931 [200]: GET /dashboard
-[Sun Jun 22 15:34:16 2025] [::1]:61931 Closing
-[Sun Jun 22 15:34:16 2025] [::1]:61936 Accepted
-[Sun Jun 22 15:34:18 2025] [::1]:61936 [200]: POST /events/addParticipant/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
-[Sun Jun 22 15:34:18 2025] [::1]:61936 Closing
- 2025] [::1]:61896 Closing
-[Sun Jun 22 15:34:02 2025] [::1]:61901 Accepted
-[Sun Jun 22 15:34:03 2025] [::1]:61901 [200]: GET /events/manage/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
-[Sun Jun 22 15:34:03 2025] [::1]:61901 Closing
-[Sun Jun 22 15:34:03 2025] [::1]:61902 Accepted
-[Sun Jun 22 15:34:03 2025] [::1]:61902 [302]: GET /events/manage/dist/output.css
-[Sun Jun 22 15:34:03 2025] [::1]:61902 Closing
-[Sun Jun 22 15:34:03 2025] [::1]:61905 Accepted
-[Sun Jun 22 15:34:04 2025] [::1]:61905 [200]: GET /dashboard
-[Sun Jun 22 15:34:04 2025] [::1]:61905 Closing
-[Sun Jun 22 15:34:04 2025] [::1]:61908 Accepted
-[Sun Jun 22 15:34:04 2025] [::1]:61908 [302]: GET /favicon.ico
-[Sun Jun 22 15:34:04 2025] [::1]:61908 Closing
-[Sun Jun 22 15:34:04 2025] [::1]:61909 Accepted
-[Sun Jun 22 15:34:05 2025] [::1]:61909 [200]: GET /dashboard
-[Sun Jun 22 15:34:05 2025] [::1]:61909 Closing
-[Sun Jun 22 15:34:08 2025] [::1]:61912 Accepted
-[Sun Jun 22 15:34:10 2025] [::1]:61912 [200]: POST /events/removeParticipant/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
-[Sun Jun 22 15:34:10 2025] [::1]:61912 Closing
-[Sun Jun 22 15:34:12 2025] [::1]:61924 Accepted
-[Sun Jun 22 15:34:13 2025] [::1]:61924 [200]: GET /users/search?q=es
-[Sun Jun 22 15:34:13 2025] [::1]:61924 Closing
-[Sun Jun 22 15:34:13 2025] [::1]:61926 Accepted
-[Sun Jun 22 15:34:14 2025] [::1]:61926 [302]: GET /events/manage/default.png
-[Sun Jun 22 15:34:14 2025] [::1]:61926 Closing
-[Sun Jun 22 15:34:14 2025] [::1]:61928 Accepted
-[Sun Jun 22 15:34:15 2025] [::1]:61928 [200]: GET /users/search?q=hes
-[Sun Jun 22 15:34:15 2025] [::1]:61928 Closing
-[Sun Jun 22 15:34:15 2025] [::1]:61931 Accepted
-[Sun Jun 22 15:34:16 2025] [::1]:61931 [200]: GET /dashboard
-[Sun Jun 22 15:34:16 2025] [::1]:61931 Closing
-[Sun Jun 22 15:34:16 2025] [::1]:61936 Accepted
-[Sun Jun 22 15:34:18 2025] [::1]:61936 [200]: POST /events/addParticipant/9736cb5d-a513-48fd-9baa-0b5d4dbf2441
-[Sun Jun 22 15:34:18 2025] [::1]:61936 Closing
+[Thu Jul  3 22:54:12 2025] [::1]:57154 Accepted
+[Thu Jul  3 22:54:12 2025] [::1]:57154 Closed without sending a request; it was probably just an unused speculative preconnection
+[Thu Jul  3 22:54:12 2025] [::1]:57154 Closing
+[Thu Jul  3 22:54:12 2025] [::1]:57156 Accepted
+[Thu Jul  3 22:54:12 2025] [::1]:57157 Accepted
+[Thu Jul  3 22:54:13 2025] [::1]:57156 [200]: GET /social/messages/f1c72308-9be5-4865-a034-23afb7caf390
+[Thu Jul  3 22:54:13 2025] [::1]:57156 Closing
+[Thu Jul  3 22:54:14 2025] [::1]:57157 [302]: GET /social/messages/dist/output.css
+[Thu Jul  3 22:54:14 2025] [::1]:57157 Closing
+[Thu Jul  3 22:54:14 2025] [::1]:57166 Accepted
+[Thu Jul  3 22:54:16 2025] [::1]:57166 [200]: GET /social
+[Thu Jul  3 22:54:16 2025] [::1]:57166 Closing
+[Thu Jul  3 22:54:16 2025] [::1]:57172 Accepted
+[Thu Jul  3 22:54:16 2025] [::1]:57172 [302]: GET /favicon.ico
+[Thu Jul  3 22:54:16 2025] [::1]:57172 Closing
+[Thu Jul  3 22:54:16 2025] [::1]:57173 Accepted
+
+==> ./logs/node-server.log <==
+👤 User connected: TvejpPJq2SM1bRvCAAAB
+Socket connected: TvejpPJq2SM1bRvCAAAB
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 22:54:17 2025] [::1]:57173 [200]: GET /dashboard
+[Thu Jul  3 22:54:17 2025] [::1]:57173 Closing
+[Thu Jul  3 22:54:17 2025] [::1]:57177 Accepted
+[Thu Jul  3 22:54:17 2025] [::1]:57177 [200]: POST /api/auth/token
+[Thu Jul  3 22:54:17 2025] [::1]:57177 Closing
+
+==> ./logs/node-server.log <==
+User authenticated: ZEUS ELDERFIELD (79424a31-556d-40f1-8fb2-602497dca725)
+Message sent: 79424a31-556d-40f1-8fb2-602497dca725 -> f1c72308-9be5-4865-a034-23afb7caf390

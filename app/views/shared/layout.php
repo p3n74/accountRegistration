@@ -58,6 +58,12 @@
                             </svg>
                             <span>My Badges</span>
                         </a>
+                        <a href="/social" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-200 flex items-center space-x-2">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                            <span>Social</span>
+                        </a>
                         
                         <!-- Profile Dropdown -->
                         <div class="relative">
@@ -110,6 +116,7 @@
                     <a href="/dashboard" class="block px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-200">Dashboard</a>
                     <a href="/events/create" class="block px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-200">Create Event</a>
                     <a href="/dashboard/badges" class="block px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-200">My Badges</a>
+                    <a href="/social" class="block px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-200">Social</a>
                     <a href="/dashboard/profile" class="block px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-200">Profile</a>
                     <a href="/auth/logout" class="block px-4 py-3 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition-all duration-200">Sign Out</a>
                 </div>

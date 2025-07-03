@@ -29,6 +29,12 @@ class App {
             'auth/checkexistingstudent'
         ];
 
+        // Define API routes that require authentication
+        $apiRoutes = [
+            'api/users/search',
+            'api/users'
+        ];
+
         // Parse the URL
         $url = $this->parseUrl();
 
@@ -38,21 +44,27 @@ class App {
             $currentRoute .= strtolower($url[0]);
             if (isset($url[1])) {
                 $currentRoute .= '/' . strtolower($url[1]);
+                if (isset($url[2])) {
+                    $currentRoute .= '/' . strtolower($url[2]);
+                }
             }
         }
 
-        // Check if the current route is public
+        // Check if the current route is public or API
         $isPublicRoute = in_array($currentRoute, $publicRoutes);
+        $isApiRoute = strpos($currentRoute, 'api/') === 0;
 
-        // Handle authentication redirects
-        if (!$isLoggedIn && !$isPublicRoute) {
-            // Not logged in and trying to access protected route
-            header('Location: /auth/login');
-            exit;
-        } else if ($isLoggedIn && $isPublicRoute) {
-            // Logged in and trying to access public route
-            header('Location: /dashboard');
-            exit;
+        // Handle authentication redirects (skip for API routes as they handle their own auth)
+        if (!$isApiRoute) {
+            if (!$isLoggedIn && !$isPublicRoute) {
+                // Not logged in and trying to access protected route
+                header('Location: /auth/login');
+                exit;
+            } else if ($isLoggedIn && $isPublicRoute) {
+                // Logged in and trying to access public route
+                header('Location: /dashboard');
+                exit;
+            }
         }
 
         // Load the controller

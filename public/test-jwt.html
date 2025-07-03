@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWT Token Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-md mx-auto">
+            <h1 class="text-2xl font-bold text-center mb-8">JWT Token Generator</h1>
+            
+            <div class="bg-white rounded-lg shadow p-6">
+                <form id="tokenForm" class="space-y-4">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email:</label>
+                        <input type="email" id="email" name="email" required 
+                               class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password:</label>
+                        <input type="password" id="password" name="password" required 
+                               class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <button type="submit" 
+                            class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+                        Generate Token
+                    </button>
+                </form>
+                
+                <div id="result" class="mt-4 hidden">
+                    <h3 class="font-medium text-gray-700 mb-2">Generated Token:</h3>
+                    <textarea id="tokenOutput" readonly 
+                              class="w-full p-2 border rounded bg-gray-50 text-sm font-mono" 
+                              rows="4"></textarea>
+                    <button id="copyToken" 
+                            class="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        Copy Token
+                    </button>
+                </div>
+                
+                <div id="error" class="mt-4 hidden">
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        <span id="errorMessage"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 text-center">
+                <a href="social.html" class="text-blue-500 hover:text-blue-700">
+                    Go to Social Platform Demo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('tokenForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('/api/auth/test-token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('tokenOutput').value = data.token;
+                    document.getElementById('result').classList.remove('hidden');
+                    document.getElementById('error').classList.add('hidden');
+                } else {
+                    document.getElementById('errorMessage').textContent = data.error;
+                    document.getElementById('error').classList.remove('hidden');
+                    document.getElementById('result').classList.add('hidden');
+                }
+            } catch (error) {
+                document.getElementById('errorMessage').textContent = 'Network error: ' + error.message;
+                document.getElementById('error').classList.remove('hidden');
+                document.getElementById('result').classList.add('hidden');
+            }
+        });
+        
+        document.getElementById('copyToken').addEventListener('click', () => {
+            const tokenOutput = document.getElementById('tokenOutput');
+            tokenOutput.select();
+            document.execCommand('copy');
+            
+            const button = document.getElementById('copyToken');
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        });
+    </script>
+</body>
+</html> 

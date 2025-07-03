@@ -7,6 +7,7 @@ require('dotenv').config();
 const dbConfig = require('./config/database');
 const eventRoutes = require('./routes/events');
 const websocketHandler = require('./handlers/websocket');
+const MessagingHandler = require('./handlers/messaging');
 const fileWatcher = require('./services/file-watcher');
 
 const app = express();
@@ -44,8 +45,16 @@ app.get('/health', (req, res) => {
 // Store io instance for routes to access
 app.set('io', io);
 
+// Initialize messaging handler
+const messagingHandler = new MessagingHandler(io, dbConfig.pool);
+
 // WebSocket handling
 websocketHandler(io);
+
+// Handle messaging connections
+io.on('connection', (socket) => {
+  messagingHandler.handleConnection(socket);
+});
 
 // Start file watcher for real-time updates
 fileWatcher.startWatching(io);
@@ -56,6 +65,7 @@ server.listen(PORT, () => {
   console.log(`🚀 Node.js WebSocket server running on port ${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/health`);
   console.log(`🔌 WebSocket endpoint: ws://localhost:${PORT}`);
+  console.log(`💬 Real-time messaging enabled`);
 });
 
 // Graceful shutdown

@@ -202,6 +202,32 @@ class User extends Model {
         return $this->createUser($data);
     }
 
+    // Search users by username or name
+    public function searchUsers($query, $limit = 20) {
+        $searchTerm = '%' . $query . '%';
+        
+        $sql = "SELECT uid, fname, lname, username, profilepicture, follower_count, following_count, is_student
+                FROM {$this->table} 
+                WHERE (username LIKE ? OR CONCAT(fname, ' ', lname) LIKE ?) 
+                  AND emailverified = 1
+                ORDER BY 
+                  CASE 
+                    WHEN username LIKE ? THEN 1 
+                    WHEN fname LIKE ? THEN 2 
+                    WHEN lname LIKE ? THEN 3 
+                    ELSE 4 
+                  END,
+                  follower_count DESC,
+                  fname, lname
+                LIMIT ?";
+        $stmt = $this->db->prepare($sql);
+        $exactMatch = $query . '%';
+        $stmt->bind_param("sssssi", $searchTerm, $searchTerm, $exactMatch, $exactMatch, $exactMatch, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function update($id, $data) {
         return $this->updateUser($id, $data);
     }
@@ -221,21 +247,5 @@ class User extends Model {
         return $this->getUserById($id);
     }
 
-    public function searchUsers($query, $limit = 10) {
-        $like = '%' . $query . '%';
-        $sql = "SELECT uid, fname, lname, email, profilepicture FROM {$this->table} WHERE fname LIKE ? OR lname LIKE ? OR email LIKE ? ORDER BY fname ASC LIMIT ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("sssi", $like, $like, $like, $limit);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $users = [];
-        while ($row = $result->fetch_assoc()) {
-            // Ensure profile picture has a default
-            if (empty($row['profilepicture'])) {
-                $row['profilepicture'] = '/public/profilePictures/default.png';
-            }
-            $users[] = $row;
-        }
-        return $users;
-    }
+
 } 

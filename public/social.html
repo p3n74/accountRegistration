@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Platform Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.socket.io/4.7.0/socket.io.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-3xl font-bold text-center mb-8">Social Platform Demo</h1>
+            
+            <!-- Authentication Section -->
+            <div id="auth-section" class="mb-8 bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Authentication</h2>
+                <div class="flex gap-4">
+                    <input type="text" id="auth-token" placeholder="Enter your JWT token" class="flex-1 border rounded px-3 py-2">
+                    <button id="connect-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Connect</button>
+                </div>
+                <div id="auth-status" class="mt-2 text-sm"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- User Search Section -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-xl font-semibold mb-4">User Search</h2>
+                    <input type="text" id="search-input" placeholder="Search users..." class="w-full border rounded px-3 py-2 mb-4">
+                    <div id="search-results" class="space-y-2"></div>
+                </div>
+
+                <!-- Messaging Section -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-xl font-semibold mb-4">Messages</h2>
+                    <div id="conversations" class="mb-4 space-y-2"></div>
+                    
+                    <!-- Message Input -->
+                    <div id="message-input-section" class="hidden">
+                        <h3 class="font-medium mb-2">Chat with <span id="chat-with-name"></span></h3>
+                        <div id="messages" class="border rounded p-2 h-64 overflow-y-auto mb-2 bg-gray-50"></div>
+                        <div class="flex gap-2">
+                            <input type="text" id="message-input" placeholder="Type a message..." class="flex-1 border rounded px-3 py-2">
+                            <button id="send-message" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Send</button>
+                        </div>
+                        <div id="typing-indicator" class="text-sm text-gray-500 mt-1"></div>
+                    </div>
+                </div>
+
+                <!-- Activity Feed -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-xl font-semibold mb-4">Activity Feed</h2>
+                    <div id="activity-feed" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <!-- Connection Status -->
+            <div id="connection-status" class="mt-6 text-center text-sm text-gray-600"></div>
+        </div>
+    </div>
+
+    <script>
+        class SocialPlatform {
+            constructor() {
+                this.socket = null;
+                this.currentUser = null;
+                this.currentChatUser = null;
+                this.searchDebounce = null;
+                this.typingTimeout = null;
+                this.isTyping = false;
+                
+                this.initializeEventListeners();
+            }
+
+            initializeEventListeners() {
+                // Authentication
+                document.getElementById('connect-btn').addEventListener('click', () => this.connect());
+                document.getElementById('auth-token').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.connect();
+                });
+
+                // Search
+                document.getElementById('search-input').addEventListener('input', (e) => {
+                    clearTimeout(this.searchDebounce);
+                    this.searchDebounce = setTimeout(() => this.searchUsers(e.target.value), 300);
+                });
+
+                // Messaging
+                document.getElementById('send-message').addEventListener('click', () => this.sendMessage());
+                document.getElementById('message-input').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.sendMessage();
+                    } else {
+                        this.handleTyping();
+                    }
+                });
+            }
+
+            async connect() {
+                const token = document.getElementById('auth-token').value;
+                if (!token) {
+                    this.showAuthStatus('Please enter a JWT token', 'error');
+                    return;
+                }
+
+                this.showAuthStatus('Connecting...', 'info');
+                
+                this.socket = io('http://localhost:3000');
+                
+                this.socket.on('connect', () => {
+                    this.showConnectionStatus('Connected to server', 'success');
+                    this.socket.emit('authenticate', { token });
+                });
+
+                this.socket.on('auth:success', (data) => {
+                    this.currentUser = data.user;
+                    this.showAuthStatus(`Connected as ${data.user.fname} ${data.user.lname}`, 'success');
+                    this.loadConversations();
+                });
+
+                this.socket.on('auth:error', (data) => {
+                    this.showAuthStatus(`Authentication failed: ${data.message}`, 'error');
+                });
+
+                this.socket.on('message:received', (data) => {
+                    this.handleIncomingMessage(data.message);
+                });
+
+                this.socket.on('message:sent', (data) => {
+                    this.handleMessageSent(data);
+                });
+
+                this.socket.on('message:error', (data) => {
+                    this.showActivity(`Message error: ${data.message}`, 'error');
+                });
+
+                this.socket.on('typing:start', (data) => {
+                    this.showTypingIndicator(data.user);
+                });
+
+                this.socket.on('typing:stop', () => {
+                    this.hideTypingIndicator();
+                });
+
+                this.socket.on('user:online', (data) => {
+                    this.showActivity(`User came online`, 'info');
+                });
+
+                this.socket.on('user:offline', (data) => {
+                    this.showActivity(`User went offline`, 'info');
+                });
+
+                this.socket.on('disconnect', () => {
+                    this.showConnectionStatus('Disconnected from server', 'error');
+                });
+            }
+
+            async searchUsers(query) {
+                if (query.length < 2) {
+                    document.getElementById('search-results').innerHTML = '';
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/api/users/search?q=${encodeURIComponent(query)}`);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.displaySearchResults(data.users);
+                    } else {
+                        console.error('Search failed:', data.error);
+                    }
+                } catch (error) {
+                    console.error('Search error:', error);
+                }
+            }
+
+            displaySearchResults(users) {
+                const container = document.getElementById('search-results');
+                container.innerHTML = '';
+
+                users.forEach(user => {
+                    const userDiv = document.createElement('div');
+                    userDiv.className = 'border rounded p-2 hover:bg-gray-50 cursor-pointer';
+                    userDiv.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="font-medium">${user.fname} ${user.lname}</div>
+                                <div class="text-sm text-gray-600">${user.username || 'No username'}</div>
+                                <div class="text-xs text-gray-500">${user.follower_count || 0} followers</div>
+                            </div>
+                            <div class="space-x-2">
+                                <button onclick="socialPlatform.followUser('${user.uid}')" class="bg-blue-500 text-white px-2 py-1 rounded text-sm">Follow</button>
+                                <button onclick="socialPlatform.startChat('${user.uid}', '${user.fname} ${user.lname}')" class="bg-green-500 text-white px-2 py-1 rounded text-sm">Message</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(userDiv);
+                });
+            }
+
+            async followUser(userId) {
+                try {
+                    const response = await fetch(`/api/users/${userId}/follow`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.showActivity(`Successfully followed user`, 'success');
+                    } else {
+                        this.showActivity(`Follow failed: ${data.error}`, 'error');
+                    }
+                } catch (error) {
+                    this.showActivity(`Follow error: ${error.message}`, 'error');
+                }
+            }
+
+            startChat(userId, userName) {
+                this.currentChatUser = { uid: userId, name: userName };
+                document.getElementById('chat-with-name').textContent = userName;
+                document.getElementById('message-input-section').classList.remove('hidden');
+                
+                // Load conversation history
+                this.loadConversationHistory(userId);
+            }
+
+            async loadConversationHistory(userId) {
+                // This would load from PHP API
+                // For now, just clear the messages area
+                document.getElementById('messages').innerHTML = '';
+            }
+
+            loadConversations() {
+                // This would load the conversation list from PHP API
+                const conversationsDiv = document.getElementById('conversations');
+                conversationsDiv.innerHTML = '<div class="text-sm text-gray-500">No conversations yet</div>';
+            }
+
+            sendMessage() {
+                const input = document.getElementById('message-input');
+                const text = input.value.trim();
+                
+                if (!text || !this.currentChatUser || !this.socket) return;
+
+                const clientMessageId = 'temp-' + Date.now();
+                
+                this.socket.emit('message:send', {
+                    recipientId: this.currentChatUser.uid,
+                    text: text,
+                    clientMessageId: clientMessageId
+                });
+
+                // Clear input
+                input.value = '';
+                
+                // Stop typing indicator
+                if (this.isTyping) {
+                    this.socket.emit('typing:stop', { recipientId: this.currentChatUser.uid });
+                    this.isTyping = false;
+                }
+            }
+
+            handleIncomingMessage(message) {
+                if (this.currentChatUser && (message.sender_id === this.currentChatUser.uid || message.recipient_id === this.currentChatUser.uid)) {
+                    this.addMessageToChat(message, false);
+                }
+                this.showActivity(`New message from ${message.sender_fname}`, 'info');
+            }
+
+            handleMessageSent(data) {
+                if (this.currentChatUser && data.message.recipient_id === this.currentChatUser.uid) {
+                    this.addMessageToChat(data.message, true);
+                }
+            }
+
+            addMessageToChat(message, isSent) {
+                const messagesDiv = document.getElementById('messages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `mb-2 ${isSent ? 'text-right' : 'text-left'}`;
+                
+                const time = new Date(message.created_at).toLocaleTimeString();
+                messageDiv.innerHTML = `
+                    <div class="inline-block max-w-xs px-3 py-2 rounded ${isSent ? 'bg-blue-500 text-white' : 'bg-gray-200'}">
+                        <div>${message.message_text}</div>
+                        <div class="text-xs opacity-75">${time}</div>
+                    </div>
+                `;
+                
+                messagesDiv.appendChild(messageDiv);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+
+            handleTyping() {
+                if (!this.currentChatUser || !this.socket) return;
+
+                if (!this.isTyping) {
+                    this.socket.emit('typing:start', { recipientId: this.currentChatUser.uid });
+                    this.isTyping = true;
+                }
+
+                clearTimeout(this.typingTimeout);
+                this.typingTimeout = setTimeout(() => {
+                    if (this.isTyping) {
+                        this.socket.emit('typing:stop', { recipientId: this.currentChatUser.uid });
+                        this.isTyping = false;
+                    }
+                }, 1000);
+            }
+
+            showTypingIndicator(user) {
+                document.getElementById('typing-indicator').textContent = `${user.fname} is typing...`;
+            }
+
+            hideTypingIndicator() {
+                document.getElementById('typing-indicator').textContent = '';
+            }
+
+            showAuthStatus(message, type) {
+                const statusDiv = document.getElementById('auth-status');
+                statusDiv.className = `mt-2 text-sm ${type === 'error' ? 'text-red-600' : type === 'success' ? 'text-green-600' : 'text-blue-600'}`;
+                statusDiv.textContent = message;
+            }
+
+            showConnectionStatus(message, type) {
+                const statusDiv = document.getElementById('connection-status');
+                statusDiv.className = `mt-6 text-center text-sm ${type === 'error' ? 'text-red-600' : type === 'success' ? 'text-green-600' : 'text-blue-600'}`;
+                statusDiv.textContent = message;
+            }
+
+            showActivity(message, type) {
+                const activityDiv = document.getElementById('activity-feed');
+                const item = document.createElement('div');
+                item.className = `text-sm p-2 rounded ${type === 'error' ? 'bg-red-100 text-red-800' : type === 'success' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`;
+                item.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+                activityDiv.insertBefore(item, activityDiv.firstChild);
+                
+                // Keep only last 10 items
+                while (activityDiv.children.length > 10) {
+                    activityDiv.removeChild(activityDiv.lastChild);
+                }
+            }
+        }
+
+        // Initialize the social platform
+        const socialPlatform = new SocialPlatform();
+    </script>
+</body>
+</html> 
