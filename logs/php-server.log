@@ -535,3 +535,106 @@
 [Fri Jul  4 04:43:45 2025] DEBUG Dashboard: Final promoted events count = 1
 [Fri Jul  4 04:43:45 2025] [::1]:56370 [200]: GET /dashboard
 [Fri Jul  4 04:43:45 2025] [::1]:56370 Closing
+[Fri Jul  4 04:47:35 2025] [::1]:56493 Accepted
+[Fri Jul  4 04:47:35 2025] [::1]:56494 Accepted
+[Fri Jul  4 04:47:35 2025] [::1]:56493 [404]: GET /dashboard - No such file or directory
+[Fri Jul  4 04:47:35 2025] [::1]:56493 Closing
+[Fri Jul  4 04:47:35 2025] [::1]:56494 [404]: GET /favicon.ico - No such file or directory
+[Fri Jul  4 04:47:35 2025] [::1]:56494 Closing
+[Fri Jul  4 04:48:06 2025] [::1]:56506 Accepted
+[Fri Jul  4 04:48:06 2025] [::1]:56507 Accepted
+[Fri Jul  4 04:48:07 2025] DEBUG Dashboard: User UID = 79424a31-556d-40f1-8fb2-602497dca725
+[Fri Jul  4 04:48:07 2025] DEBUG Dashboard: User program_id = 10
+[Fri Jul  4 04:48:07 2025] DEBUG Dashboard: Derived school_id = 1
+[Fri Jul  4 04:48:08 2025] DEBUG Dashboard: Derived department_id = 7
+[Fri Jul  4 04:48:08 2025] DEBUG Dashboard: Department events count = 1
+[Fri Jul  4 04:48:08 2025] DEBUG Dashboard: Final promoted events count = 1
+[Fri Jul  4 04:48:08 2025] [::1]:56506 [200]: GET /dashboard
+[Fri Jul  4 04:48:08 2025] [::1]:56506 Closing
+[Fri Jul  4 04:48:08 2025] [::1]:56507 Closed without sending a request; it was probably just an unused speculative preconnection
+[Fri Jul  4 04:48:08 2025] [::1]:56507 Closing
+[Fri Jul  4 04:48:08 2025] [::1]:56513 Accepted
+[Fri Jul  4 04:48:08 2025] [::1]:56513 [200]: GET /dist/output.css
+[Fri Jul  4 04:48:08 2025] [::1]:56513 Closing
+[Fri Jul  4 04:48:08 2025] [::1]:56514 Accepted
+[Fri Jul  4 04:48:08 2025] [::1]:56514 [200]: GET /profilePictures/default.png
+[Fri Jul  4 04:48:08 2025] [::1]:56514 Closing
+[Fri Jul  4 04:50:34 2025] [::1]:56590 Accepted
+[Fri Jul  4 04:50:34 2025] [::1]:56591 Accepted
+[Fri Jul  4 04:50:35 2025] DEBUG Dashboard: User UID = 79424a31-556d-40f1-8fb2-602497dca725
+[Fri Jul  4 04:50:35 2025] DEBUG Dashboard: User program_id = 10
+[Fri Jul  4 04:50:35 2025] DEBUG Dashboard: Derived school_id = 1
+[Fri Jul  4 04:50:36 2025] DEBUG Dashboard: Derived department_id = 7
+[Fri Jul  4 04:50:36 2025] DEBUG Dashboard: Department events count = 1
+[Fri Jul  4 04:50:36 2025] DEBUG Dashboard: Final promoted events count = 1
+[Fri Jul  4 04:50:36 2025] [::1]:56590 [200]: GET /dashboard
+[Fri Jul  4 04:50:36 2025] [::1]:56590 Closing
+[Fri Jul  4 04:50:36 2025] [::1]:56591 [200]: GET /dist/output.css
+[Fri Jul  4 04:50:36 2025] [::1]:56591 Closing
+[Fri Jul  4 04:50:36 2025] [::1]:56599 Accepted
+[Fri Jul  4 04:50:36 2025] [::1]:56599 [200]: GET /profilePictures/default.png
+[Fri Jul  4 04:50:36 2025] [::1]:56599 Closing
+[Fri Jul  4 04:50:38 2025] [::1]:56600 Accepted
+[Fri Jul  4 04:50:38 2025] [::1]:56601 Accepted
+[Fri Jul  4 04:50:40 2025] [::1]:56600 [200]: GET /events/create
+[Fri Jul  4 04:50:40 2025] [::1]:56600 Closing
+[Fri Jul  4 04:50:40 2025] [::1]:56601 [200]: GET /events/dist/output.css - Uncaught TypeError: call_user_func_array(): Argument #1 ($callback) must be a valid callback, class EventsController does not have a method "index" in /opt/homebrew/var/www/accounts/app/core/App.php:96
+Stack trace:
+#0 /opt/homebrew/var/www/accounts/public/index.php(45): App->__construct()
+#1 {main}
+  thrown in /opt/homebrew/var/www/accounts/app/core/App.php on line 96
+[Fri Jul  4 04:50:40 2025] [::1]:56601 Closing
+[Fri Jul  4 04:50:41 2025] [::1]:56605 Accepted
+[Fri Jul  4 04:50:41 2025] [::1]:56606 Accepted
+[Fri Jul  4 04:50:42 2025] DEBUG Dashboard: User UID = 79424a31-556d-40f1-8fb2-602497dca725
+[Fri Jul  4 04:50:42 2025] DEBUG Dashboard: User program_id = 10
+[Fri Jul  4 04:50:43 2025] DEBUG Dashboard: Derived school_id = 1
+[Fri Jul  4 04:50:43 2025] DEBUG Dashboard: Derived department_id = 7
+[Fri Jul  4 04:50:44 2025] DEBUG Dashboard: Department events count = 1
+[Fri Jul  4 04:50:44 2025] DEBUG Dashboard: Final promoted events count = 1
+[Fri Jul  4 04:50:44 2025] [::1]:56605 [200]: GET /dashboard
+[Fri Jul  4 04:50:44 2025] [::1]:56605 Closing
+[Fri Jul  4 04:50:44 2025] [::1]:56606 Closed without sending a request; it was probably just an unused speculative preconnection
+[Fri Jul  4 04:50:44 2025] [::1]:56606 Closing
+[Fri Jul  4 04:50:45 2025] [::1]:56615 Accepted
+[Fri Jul  4 04:50:45 2025] [::1]:56617 Accepted
+[Fri Jul  4 04:50:48 2025] [::1]:56615 [200]: GET /organizations
+[Fri Jul  4 04:50:48 2025] [::1]:56615 Closing
+[Fri Jul  4 04:50:48 2025] [::1]:56617 Closed without sending a request; it was probably just an unused speculative preconnection
+[Fri Jul  4 04:50:48 2025] [::1]:56617 Closing
+[Fri Jul  4 04:50:48 2025] [::1]:56630 Accepted
+[Fri Jul  4 04:50:48 2025] [::1]:56630 [200]: GET /dist/output.css
+[Fri Jul  4 04:50:48 2025] [::1]:56630 Closing
+[Fri Jul  4 04:50:49 2025] [::1]:56632 Accepted
+[Fri Jul  4 04:50:49 2025] [::1]:56633 Accepted
+[Fri Jul  4 04:50:50 2025] DEBUG Dashboard: User UID = 79424a31-556d-40f1-8fb2-602497dca725
+[Fri Jul  4 04:50:50 2025] DEBUG Dashboard: User program_id = 10
+[Fri Jul  4 04:50:51 2025] DEBUG Dashboard: Derived school_id = 1
+[Fri Jul  4 04:50:51 2025] DEBUG Dashboard: Derived department_id = 7
+[Fri Jul  4 04:50:51 2025] DEBUG Dashboard: Department events count = 1
+[Fri Jul  4 04:50:51 2025] DEBUG Dashboard: Final promoted events count = 1
+[Fri Jul  4 04:50:51 2025] [::1]:56632 [200]: GET /dashboard
+[Fri Jul  4 04:50:51 2025] [::1]:56632 Closing
+[Fri Jul  4 04:50:53 2025] [::1]:56633 Closed without sending a request; it was probably just an unused speculative preconnection
+[Fri Jul  4 04:50:53 2025] [::1]:56633 Closing
+[Fri Jul  4 04:50:53 2025] [::1]:56643 Accepted
+[Fri Jul  4 04:50:54 2025] [::1]:56643 [200]: GET /dashboard/badges
+[Fri Jul  4 04:50:54 2025] [::1]:56643 Closing
+[Fri Jul  4 04:50:54 2025] [::1]:56644 Accepted
+[Fri Jul  4 04:50:54 2025] DEBUG Dashboard: User UID = 79424a31-556d-40f1-8fb2-602497dca725
+[Fri Jul  4 04:50:54 2025] DEBUG Dashboard: User program_id = 10
+[Fri Jul  4 04:50:55 2025] DEBUG Dashboard: Derived school_id = 1
+[Fri Jul  4 04:50:55 2025] DEBUG Dashboard: Derived department_id = 7
+[Fri Jul  4 04:50:55 2025] DEBUG Dashboard: Department events count = 1
+[Fri Jul  4 04:50:55 2025] DEBUG Dashboard: Final promoted events count = 1
+[Fri Jul  4 04:50:55 2025] [::1]:56644 [200]: GET /dashboard/dist/output.css
+[Fri Jul  4 04:50:55 2025] [::1]:56644 Closing
+[Fri Jul  4 04:50:56 2025] [::1]:56652 Accepted
+[Fri Jul  4 04:50:56 2025] [::1]:56653 Accepted
+[Fri Jul  4 04:50:58 2025] [::1]:56652 [200]: GET /social
+[Fri Jul  4 04:50:58 2025] [::1]:56652 Closing
+[Fri Jul  4 04:50:58 2025] [::1]:56653 [200]: GET /dist/output.css
+[Fri Jul  4 04:50:58 2025] [::1]:56653 Closing
+[Fri Jul  4 04:50:58 2025] [::1]:56660 Accepted
+[Fri Jul  4 04:50:59 2025] [::1]:56660 [200]: POST /api/auth/token
+[Fri Jul  4 04:50:59 2025] [::1]:56660 Closing
