@@ -69,8 +69,9 @@
                                                     <p class="text-sm text-gray-600">@<?= htmlspecialchars($user['username']) ?></p>
                                                 <?php endif; ?>
                                                 <div class="flex items-center space-x-4 mt-1 text-xs text-gray-500">
-                                                    <span><?= $user['follower_count'] ?? 0 ?> followers</span>
-                                                    <span><?= $user['following_count'] ?? 0 ?> following</span>
+                                                    <?php $fc = $user['follower_count'] ?? 0; $flwc = $user['following_count'] ?? 0; ?>
+                                                    <span id="followers-text-<?= $user['uid'] ?>"><?= $fc ?> <?= $fc == 1 ? 'follower' : 'followers' ?></span>
+                                                    <span id="following-text-<?= $user['uid'] ?>"><?= $flwc ?> following</span>
                                                     <?php if ($user['is_student']): ?>
                                                         <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Student</span>
                                                     <?php endif; ?>
@@ -88,12 +89,12 @@
                                             </a>
                                             
                                             <?php if (isset($user['is_following']) && $user['is_following']): ?>
-                                                <button onclick="unfollowUser('<?= $user['uid'] ?>')" 
+                                                <button onclick="unfollowUser('<?= $user['uid'] ?>', this)" 
                                                         class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">
                                                     Following
                                                 </button>
                                             <?php else: ?>
-                                                <button onclick="followUser('<?= $user['uid'] ?>')" 
+                                                <button onclick="followUser('<?= $user['uid'] ?>', this)" 
                                                         class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
                                                     Follow
                                                 </button>

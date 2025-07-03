@@ -1,161 +1,11 @@
 
 ==> ./logs/php-server.log <==
-#3 /opt/homebrew/var/www/accounts/app/core/Controller.php(7): User->__construct()
-#4 /opt/homebrew/var/www/accounts/app/controllers/AuthController.php(9): Controller->model('User')
-#5 /opt/homebrew/var/www/accounts/app/core/App.php(79): AuthController->__construct()
-#6 /opt/homebrew/var/www/accounts/public/index.php(45): App->__construct()
-#7 {main}
-  thrown in /opt/homebrew/var/www/accounts/app/core/Database.php on line 36
-[Thu Jul  3 22:36:29 2025] [::1]:54058 Closing
-[Thu Jul  3 22:36:29 2025] [::1]:54065 Accepted
-[Thu Jul  3 22:36:29 2025] [::1]:54065 [302]: GET /
-[Thu Jul  3 22:36:29 2025] [::1]:54065 Closing
+[Thu Jul  3 23:25:25 2025] PHP 8.4.8 Development Server (http://localhost:8000) started
+[Thu Jul  3 23:25:32 2025] [::1]:59521 Accepted
+[Thu Jul  3 23:25:32 2025] [::1]:59521 [302]: GET /
+[Thu Jul  3 23:25:32 2025] [::1]:59521 Closing
 
 ==> ./logs/node-server.log <==
-Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-👀 Starting file watchers...
-✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
-✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
-✅ File watchers started successfully
-🚀 Node.js WebSocket server running on port 3000
-📊 Health check: http://localhost:3000/health
-🔌 WebSocket endpoint: ws://localhost:3000
-💬 Real-time messaging enabled
-❌ Database connection failed: connect ECONNREFUSED 127.0.0.1:3306
-
-==> ./logs/php-server.log <==
-[Thu Jul  3 22:36:29 2025] [::1]:54059 [302]: GET /favicon.ico
-[Thu Jul  3 22:36:29 2025] [::1]:54059 Closing
-[Thu Jul  3 22:36:29 2025] [::1]:54068 Accepted
-[Thu Jul  3 22:36:31 2025] [::1]:54068 [200]: GET /auth/login - Uncaught Exception: Database connection failed after 3 attempts: Connection refused in /opt/homebrew/var/www/accounts/app/core/Database.php:36
-Stack trace:
-#0 /opt/homebrew/var/www/accounts/app/core/Database.php(13): Database->connect()
-#1 /opt/homebrew/var/www/accounts/app/core/Model.php(8): Database->__construct()
-#2 /opt/homebrew/var/www/accounts/app/models/User.php(7): Model->__construct()
-#3 /opt/homebrew/var/www/accounts/app/core/Controller.php(7): User->__construct()
-#4 /opt/homebrew/var/www/accounts/app/controllers/AuthController.php(9): Controller->model('User')
-#5 /opt/homebrew/var/www/accounts/app/core/App.php(79): AuthController->__construct()
-#6 /opt/homebrew/var/www/accounts/public/index.php(45): App->__construct()
-#7 {main}
-  thrown in /opt/homebrew/var/www/accounts/app/core/Database.php on line 36
-[Thu Jul  3 22:36:31 2025] [::1]:54068 Closing
-[Thu Jul  3 22:36:45 2025] [::1]:54081 Accepted
-[Thu Jul  3 22:36:45 2025] [::1]:54082 Accepted
-[Thu Jul  3 22:36:45 2025] [::1]:54081 [200]: GET /auth/login
-[Thu Jul  3 22:36:45 2025] [::1]:54081 Closing
-[Thu Jul  3 22:36:45 2025] [::1]:54082 [302]: GET /auth/dist/output.css
-[Thu Jul  3 22:36:45 2025] [::1]:54082 Closing
-[Thu Jul  3 22:36:45 2025] [::1]:54087 Accepted
-[Thu Jul  3 22:36:46 2025] [::1]:54087 [200]: GET /auth/login
-[Thu Jul  3 22:36:46 2025] [::1]:54087 Closing
-[Thu Jul  3 22:36:47 2025] [::1]:54092 Accepted
-[Thu Jul  3 22:36:47 2025] [::1]:54092 [302]: GET /favicon.ico
-[Thu Jul  3 22:36:47 2025] [::1]:54092 Closing
-[Thu Jul  3 22:36:47 2025] [::1]:54093 Accepted
-[Thu Jul  3 22:36:47 2025] [::1]:54093 [200]: GET /auth/login
-[Thu Jul  3 22:36:47 2025] [::1]:54093 Closing
-[Thu Jul  3 22:37:18 2025] [::1]:54111 Accepted
-[Thu Jul  3 22:37:18 2025] [::1]:54112 Accepted
-[Thu Jul  3 22:37:18 2025] [::1]:54111 [302]: POST /auth/login
-[Thu Jul  3 22:37:18 2025] [::1]:54111 Closing
-[Thu Jul  3 22:37:19 2025] [::1]:54112 [200]: GET /dashboard
-[Thu Jul  3 22:37:19 2025] [::1]:54112 Closing
-[Thu Jul  3 22:37:19 2025] [::1]:54119 Accepted
-[Thu Jul  3 22:37:19 2025] [::1]:54119 [200]: GET /dist/output.css
-[Thu Jul  3 22:37:19 2025] [::1]:54119 Closing
-[Thu Jul  3 22:37:20 2025] [::1]:54120 Accepted
-[Thu Jul  3 22:37:20 2025] [::1]:54120 [302]: GET /favicon.ico
-[Thu Jul  3 22:37:20 2025] [::1]:54120 Closing
-[Thu Jul  3 22:37:20 2025] [::1]:54121 Accepted
-[Thu Jul  3 22:37:21 2025] [::1]:54121 [200]: GET /dashboard
-[Thu Jul  3 22:37:21 2025] [::1]:54121 Closing
-[Thu Jul  3 22:37:21 2025] [::1]:54124 Accepted
-[Thu Jul  3 22:37:21 2025] [::1]:54125 Accepted
-[Thu Jul  3 22:37:22 2025] [::1]:54124 [200]: GET /social
-[Thu Jul  3 22:37:22 2025] [::1]:54124 Closing
-[Thu Jul  3 22:37:22 2025] [::1]:54125 [200]: GET /dist/output.css
-[Thu Jul  3 22:37:22 2025] [::1]:54125 Closing
-[Thu Jul  3 22:37:23 2025] [::1]:54132 Accepted
-[Thu Jul  3 22:37:23 2025] [::1]:54132 [302]: GET /favicon.ico
-[Thu Jul  3 22:37:23 2025] [::1]:54132 Closing
-[Thu Jul  3 22:37:23 2025] [::1]:54133 Accepted
-
-==> ./logs/node-server.log <==
-👤 User connected: v_sbTV7FG8Tb-dD9AAAB
-Socket connected: v_sbTV7FG8Tb-dD9AAAB
-
-==> ./logs/php-server.log <==
-[Thu Jul  3 22:37:23 2025] [::1]:54133 [200]: GET /dashboard
-[Thu Jul  3 22:37:23 2025] [::1]:54133 Closing
-[Thu Jul  3 22:37:25 2025] [::1]:54138 Accepted
-
-==> ./logs/node-server.log <==
-👋 User disconnected: v_sbTV7FG8Tb-dD9AAAB
-
-==> ./logs/php-server.log <==
-[Thu Jul  3 22:37:25 2025] [::1]:54139 Accepted
-[Thu Jul  3 22:37:26 2025] [::1]:54138 [200]: GET /social/search
-[Thu Jul  3 22:37:26 2025] [::1]:54138 Closing
-[Thu Jul  3 22:37:27 2025] [::1]:54139 [200]: GET /social/dist/output.css
-[Thu Jul  3 22:37:27 2025] [::1]:54139 Closing
-[Thu Jul  3 22:37:27 2025] [::1]:54148 Accepted
-[Thu Jul  3 22:37:27 2025] [::1]:54148 [302]: GET /favicon.ico
-[Thu Jul  3 22:37:27 2025] [::1]:54148 Closing
-[Thu Jul  3 22:37:27 2025] [::1]:54149 Accepted
-[Thu Jul  3 22:37:28 2025] [::1]:54149 [200]: GET /dashboard
-[Thu Jul  3 22:37:28 2025] [::1]:54149 Closing
-[Thu Jul  3 22:37:31 2025] [::1]:54152 Accepted
-[Thu Jul  3 22:37:31 2025] [::1]:54153 Accepted
-[Thu Jul  3 22:37:32 2025] [::1]:54152 [200]: GET /social/search?q=zeus
-[Thu Jul  3 22:37:32 2025] [::1]:54152 Closing
-[Thu Jul  3 22:37:34 2025] [::1]:54153 [200]: GET /social/dist/output.css
-[Thu Jul  3 22:37:34 2025] [::1]:54153 Closing
-[Thu Jul  3 22:37:34 2025] [::1]:54162 Accepted
-[Thu Jul  3 22:37:34 2025] [::1]:54162 [302]: GET /favicon.ico
-[Thu Jul  3 22:37:34 2025] [::1]:54162 Closing
-[Thu Jul  3 22:37:34 2025] [::1]:54163 Accepted
-[Thu Jul  3 22:37:35 2025] [::1]:54163 [200]: GET /dashboard
-[Thu Jul  3 22:37:35 2025] [::1]:54163 Closing
-[Thu Jul  3 22:37:36 2025] [::1]:54168 Accepted
-[Thu Jul  3 22:37:36 2025] [::1]:54168 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
-[Thu Jul  3 22:37:36 2025] [::1]:54168 Closing
-[Thu Jul  3 22:37:36 2025] [::1]:54172 Accepted
-[Thu Jul  3 22:37:36 2025] [::1]:54173 Accepted
-[Thu Jul  3 22:37:38 2025] [::1]:54172 [200]: GET /social/messages/79424a31-556d-40f1-8fb2-602497dca725
-[Thu Jul  3 22:37:38 2025] [::1]:54172 Closing
-[Thu Jul  3 22:37:38 2025] [::1]:54173 [302]: GET /social/messages/dist/output.css
-[Thu Jul  3 22:37:38 2025] [::1]:54173 Closing
-[Thu Jul  3 22:37:38 2025] [::1]:54181 Accepted
-[Thu Jul  3 22:37:40 2025] [::1]:54181 [200]: GET /social
-[Thu Jul  3 22:37:40 2025] [::1]:54181 Closing
-[Thu Jul  3 22:37:40 2025] [::1]:54189 Accepted
-[Thu Jul  3 22:37:40 2025] [::1]:54189 [302]: GET /favicon.ico
-[Thu Jul  3 22:37:40 2025] [::1]:54189 Closing
-[Thu Jul  3 22:37:40 2025] [::1]:54190 Accepted
-
-==> ./logs/node-server.log <==
-👤 User connected: M3HGEmYavV6a8Dx-AAAD
-Socket connected: M3HGEmYavV6a8Dx-AAAD
-
-==> ./logs/php-server.log <==
-[Thu Jul  3 22:37:41 2025] [::1]:54190 [200]: GET /dashboard
-[Thu Jul  3 22:37:41 2025] [::1]:54190 Closing
-[Thu Jul  3 22:38:37 2025] [::1]:54223 Accepted
-[Thu Jul  3 22:38:38 2025] [::1]:54223 [302]: GET /social/messages/dist/output.css
-[Thu Jul  3 22:38:38 2025] [::1]:54223 Closing
-[Thu Jul  3 22:38:38 2025] [::1]:54228 Accepted
-[Thu Jul  3 22:38:42 2025] [::1]:54228 [200]: GET /social
-[Thu Jul  3 22:38:42 2025] [::1]:54228 Closing
-
-==> ./logs/node-server.log <==
-👋 User disconnected: M3HGEmYavV6a8Dx-AAAD
-👤 User connected: VEz5FcV_pHDuXPpYAAAF
-Socket connected: VEz5FcV_pHDuXPpYAAAF
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node nodejs-server/server.js`[39m
-Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
 Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
 👀 Starting file watchers...
 ✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
@@ -166,328 +16,276 @@ Ignoring invalid configuration option passed to Connection: reconnect. This is c
 🔌 WebSocket endpoint: ws://localhost:3000
 💬 Real-time messaging enabled
 ✅ Database connected successfully
-👤 User connected: ZP8WQqxrwJ6vpNSzAAAB
-Socket connected: ZP8WQqxrwJ6vpNSzAAAB
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node nodejs-server/server.js`[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node nodejs-server/server.js`[39m
-Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-👀 Starting file watchers...
-✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
-✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
-✅ File watchers started successfully
-🚀 Node.js WebSocket server running on port 3000
-📊 Health check: http://localhost:3000/health
-🔌 WebSocket endpoint: ws://localhost:3000
-💬 Real-time messaging enabled
-✅ Database connected successfully
-👤 User connected: ILqZexpD5RCh8PJxAAAB
-Socket connected: ILqZexpD5RCh8PJxAAAB
 
 ==> ./logs/php-server.log <==
-[Thu Jul  3 22:46:34 2025] [::1]:56407 Accepted
-[Thu Jul  3 22:46:34 2025] [::1]:56408 Accepted
+[Thu Jul  3 23:25:37 2025] [::1]:59530 Accepted
+[Thu Jul  3 23:25:37 2025] [::1]:59531 Accepted
+[Thu Jul  3 23:25:38 2025] [::1]:59530 [200]: GET /social/following
+[Thu Jul  3 23:25:38 2025] [::1]:59530 Closing
+[Thu Jul  3 23:25:39 2025] [::1]:59531 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:25:39 2025] [::1]:59531 Closing
+[Thu Jul  3 23:25:39 2025] [::1]:59538 Accepted
+[Thu Jul  3 23:25:39 2025] [::1]:59538 [302]: GET /favicon.ico
+[Thu Jul  3 23:25:39 2025] [::1]:59538 Closing
+[Thu Jul  3 23:25:39 2025] [::1]:59539 Accepted
+[Thu Jul  3 23:25:40 2025] [::1]:59539 [200]: GET /dashboard
+[Thu Jul  3 23:25:40 2025] [::1]:59539 Closing
+[Thu Jul  3 23:26:18 2025] [::1]:59566 Accepted
+[Thu Jul  3 23:26:19 2025] [::1]:59566 [200]: GET /social/following
+[Thu Jul  3 23:26:19 2025] [::1]:59566 Closing
+[Thu Jul  3 23:26:19 2025] [::1]:59567 Accepted
+[Thu Jul  3 23:26:21 2025] [::1]:59567 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:26:21 2025] [::1]:59567 Closing
+[Thu Jul  3 23:26:21 2025] [::1]:59577 Accepted
+[Thu Jul  3 23:26:21 2025] [::1]:59577 [302]: GET /favicon.ico
+[Thu Jul  3 23:26:21 2025] [::1]:59577 Closing
+[Thu Jul  3 23:26:21 2025] [::1]:59578 Accepted
+[Thu Jul  3 23:26:22 2025] [::1]:59578 [200]: GET /dashboard
+[Thu Jul  3 23:26:22 2025] [::1]:59578 Closing
+[Thu Jul  3 23:26:23 2025] [::1]:59582 Accepted
+[Thu Jul  3 23:26:23 2025] [::1]:59583 Accepted
+[Thu Jul  3 23:26:25 2025] [::1]:59582 [200]: GET /social
+[Thu Jul  3 23:26:25 2025] [::1]:59582 Closing
+[Thu Jul  3 23:26:25 2025] [::1]:59583 [200]: GET /dist/output.css
+[Thu Jul  3 23:26:25 2025] [::1]:59583 Closing
+[Thu Jul  3 23:26:25 2025] [::1]:59589 Accepted
+[Thu Jul  3 23:26:25 2025] [::1]:59589 [302]: GET /favicon.ico
+[Thu Jul  3 23:26:25 2025] [::1]:59589 Closing
+[Thu Jul  3 23:26:25 2025] [::1]:59590 Accepted
 
 ==> ./logs/node-server.log <==
-👋 User disconnected: ILqZexpD5RCh8PJxAAAB
+👤 User connected: baCkZLLzzA8hpeAXAAAB
+Socket connected: baCkZLLzzA8hpeAXAAAB
 
 ==> ./logs/php-server.log <==
-[Thu Jul  3 22:46:36 2025] [::1]:56407 [200]: GET /social/messages/79424a31-556d-40f1-8fb2-602497dca725
-[Thu Jul  3 22:46:36 2025] [::1]:56407 Closing
-[Thu Jul  3 22:46:37 2025] [::1]:56408 [302]: GET /social/messages/dist/output.css
-[Thu Jul  3 22:46:37 2025] [::1]:56408 Closing
-[Thu Jul  3 22:46:37 2025] [::1]:56423 Accepted
-[Thu Jul  3 22:46:38 2025] [::1]:56423 [200]: GET /social
-[Thu Jul  3 22:46:38 2025] [::1]:56423 Closing
-[Thu Jul  3 22:46:38 2025] [::1]:56440 Accepted
-[Thu Jul  3 22:46:38 2025] [::1]:56440 [302]: GET /favicon.ico
-[Thu Jul  3 22:46:38 2025] [::1]:56440 Closing
+[Thu Jul  3 23:26:26 2025] [::1]:59590 [200]: GET /dashboard
+[Thu Jul  3 23:26:26 2025] [::1]:59590 Closing
+[Thu Jul  3 23:26:26 2025] [::1]:59594 Accepted
 
 ==> ./logs/node-server.log <==
-👤 User connected: 5JAs9FWT-DRrNmE7AAAD
-Socket connected: 5JAs9FWT-DRrNmE7AAAD
+👋 User disconnected: baCkZLLzzA8hpeAXAAAB
 
 ==> ./logs/php-server.log <==
-[Thu Jul  3 22:46:38 2025] [::1]:56441 Accepted
+[Thu Jul  3 23:26:27 2025] API Debug: resource=auth, action=token, id=, method=POST
+[Thu Jul  3 23:26:27 2025] [::1]:59594 [200]: POST /api/auth/token
+[Thu Jul  3 23:26:27 2025] [::1]:59594 Closing
+[Thu Jul  3 23:26:27 2025] [::1]:59598 Accepted
+[Thu Jul  3 23:26:28 2025] [::1]:59598 [200]: GET /social/following
+[Thu Jul  3 23:26:28 2025] [::1]:59598 Closing
+[Thu Jul  3 23:26:28 2025] [::1]:59604 Accepted
+[Thu Jul  3 23:26:29 2025] [::1]:59604 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:26:29 2025] [::1]:59604 Closing
+[Thu Jul  3 23:26:29 2025] [::1]:59608 Accepted
+[Thu Jul  3 23:26:29 2025] [::1]:59608 [302]: GET /favicon.ico
+[Thu Jul  3 23:26:29 2025] [::1]:59608 Closing
+[Thu Jul  3 23:26:29 2025] [::1]:59609 Accepted
+[Thu Jul  3 23:26:30 2025] [::1]:59609 [200]: GET /dashboard
+[Thu Jul  3 23:26:30 2025] [::1]:59609 Closing
+[Thu Jul  3 23:32:20 2025] [::1]:59865 Accepted
+[Thu Jul  3 23:32:20 2025] [::1]:59866 Accepted
+[Thu Jul  3 23:32:21 2025] [::1]:59865 [200]: GET /social/following
+[Thu Jul  3 23:32:21 2025] [::1]:59865 Closing
+[Thu Jul  3 23:32:21 2025] [::1]:59866 Closed without sending a request; it was probably just an unused speculative preconnection
+[Thu Jul  3 23:32:21 2025] [::1]:59866 Closing
+[Thu Jul  3 23:32:21 2025] [::1]:59871 Accepted
+[Thu Jul  3 23:32:23 2025] [::1]:59871 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:32:23 2025] [::1]:59871 Closing
+[Thu Jul  3 23:32:23 2025] [::1]:59875 Accepted
+[Thu Jul  3 23:32:23 2025] [::1]:59875 [302]: GET /favicon.ico
+[Thu Jul  3 23:32:23 2025] [::1]:59875 Closing
+[Thu Jul  3 23:32:23 2025] [::1]:59876 Accepted
+[Thu Jul  3 23:32:24 2025] [::1]:59876 [200]: GET /dashboard
+[Thu Jul  3 23:32:24 2025] [::1]:59876 Closing
+[Thu Jul  3 23:33:05 2025] [::1]:59904 Accepted
+[Thu Jul  3 23:33:05 2025] [::1]:59905 Accepted
+[Thu Jul  3 23:33:06 2025] [::1]:59904 [200]: GET /social/messages/79424a31-556d-40f1-8fb2-602497dca725
+[Thu Jul  3 23:33:06 2025] [::1]:59904 Closing
+[Thu Jul  3 23:33:06 2025] [::1]:59905 Closed without sending a request; it was probably just an unused speculative preconnection
+[Thu Jul  3 23:33:06 2025] [::1]:59905 Closing
+[Thu Jul  3 23:33:06 2025] [::1]:59910 Accepted
+[Thu Jul  3 23:33:07 2025] [::1]:59910 [302]: GET /social/messages/dist/output.css
+[Thu Jul  3 23:33:07 2025] [::1]:59910 Closing
+[Thu Jul  3 23:33:07 2025] [::1]:59914 Accepted
+[Thu Jul  3 23:33:08 2025] [::1]:59914 [200]: GET /social
+[Thu Jul  3 23:33:08 2025] [::1]:59914 Closing
+[Thu Jul  3 23:33:09 2025] [::1]:59921 Accepted
+[Thu Jul  3 23:33:09 2025] [::1]:59921 [302]: GET /favicon.ico
+[Thu Jul  3 23:33:09 2025] [::1]:59921 Closing
+[Thu Jul  3 23:33:09 2025] [::1]:59922 Accepted
+
+==> ./logs/node-server.log <==
+👤 User connected: Z1xbUx21g1h99jAoAAAD
+Socket connected: Z1xbUx21g1h99jAoAAAD
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:33:09 2025] [::1]:59922 [200]: GET /dashboard
+[Thu Jul  3 23:33:09 2025] [::1]:59922 Closing
+[Thu Jul  3 23:33:09 2025] [::1]:59926 Accepted
+[Thu Jul  3 23:33:10 2025] [::1]:59926 [200]: POST /api/auth/token
+[Thu Jul  3 23:33:10 2025] [::1]:59926 Closing
 
 ==> ./logs/node-server.log <==
 User authenticated: NIKOLAI TRISTAN PAZON (f1c72308-9be5-4865-a034-23afb7caf390)
 
 ==> ./logs/php-server.log <==
-[Thu Jul  3 22:46:39 2025] [::1]:56441 [200]: GET /dashboard
-[Thu Jul  3 22:46:39 2025] [::1]:56441 Closing
+[Thu Jul  3 23:35:06 2025] [::1]:60021 Accepted
 
 ==> ./logs/node-server.log <==
-Message sent: f1c72308-9be5-4865-a034-23afb7caf390 -> 79424a31-556d-40f1-8fb2-602497dca725
+👋 User disconnected: Z1xbUx21g1h99jAoAAAD
 
 ==> ./logs/php-server.log <==
-[Thu Jul  3 22:46:46 2025] [::1]:56472 Accepted
-
-==> ./logs/node-server.log <==
-👋 User disconnected: 5JAs9FWT-DRrNmE7AAAD
-
-==> ./logs/php-server.log <==
-[Thu Jul  3 22:46:46 2025] [::1]:56474 Accepted
+[Thu Jul  3 23:35:06 2025] [::1]:60022 Accepted
 
 ==> ./logs/node-server.log <==
 User disconnected: f1c72308-9be5-4865-a034-23afb7caf390
 
 ==> ./logs/php-server.log <==
-[Thu Jul  3 22:46:47 2025] [::1]:56472 [200]: GET /dashboard
-[Thu Jul  3 22:46:47 2025] [::1]:56472 Closing
-[Thu Jul  3 22:46:47 2025] [::1]:56474 [200]: GET /dist/output.css
-[Thu Jul  3 22:46:47 2025] [::1]:56474 Closing
-[Thu Jul  3 22:46:47 2025] [::1]:56485 Accepted
-[Thu Jul  3 22:46:47 2025] [::1]:56485 [302]: GET /favicon.ico
-[Thu Jul  3 22:46:47 2025] [::1]:56485 Closing
-[Thu Jul  3 22:46:47 2025] [::1]:56486 Accepted
-[Thu Jul  3 22:46:48 2025] [::1]:56486 [200]: GET /dashboard
-[Thu Jul  3 22:46:48 2025] [::1]:56486 Closing
-[Thu Jul  3 22:46:50 2025] [::1]:56501 Accepted
-[Thu Jul  3 22:46:50 2025] [::1]:56502 Accepted
-[Thu Jul  3 22:46:50 2025] [::1]:56501 [302]: GET /auth/logout
-[Thu Jul  3 22:46:50 2025] [::1]:56501 Closing
-[Thu Jul  3 22:46:51 2025] [::1]:56502 [200]: GET /auth/login
-[Thu Jul  3 22:46:51 2025] [::1]:56502 Closing
-[Thu Jul  3 22:46:51 2025] [::1]:56519 Accepted
-[Thu Jul  3 22:46:51 2025] [::1]:56519 [302]: GET /auth/dist/output.css
-[Thu Jul  3 22:46:51 2025] [::1]:56519 Closing
-[Thu Jul  3 22:46:51 2025] [::1]:56520 Accepted
-[Thu Jul  3 22:46:52 2025] [::1]:56520 [200]: GET /auth/login
-[Thu Jul  3 22:46:52 2025] [::1]:56520 Closing
-[Thu Jul  3 22:46:52 2025] [::1]:56524 Accepted
-[Thu Jul  3 22:46:52 2025] [::1]:56524 [302]: GET /favicon.ico
-[Thu Jul  3 22:46:52 2025] [::1]:56524 Closing
-[Thu Jul  3 22:46:52 2025] [::1]:56525 Accepted
-[Thu Jul  3 22:46:52 2025] [::1]:56525 [200]: GET /auth/login
-[Thu Jul  3 22:46:52 2025] [::1]:56525 Closing
-[Thu Jul  3 22:47:21 2025] [::1]:56689 Accepted
-[Thu Jul  3 22:47:22 2025] [::1]:56689 [200]: POST /auth/login
-[Thu Jul  3 22:47:22 2025] [::1]:56689 Closing
-[Thu Jul  3 22:47:22 2025] [::1]:56690 Accepted
-[Thu Jul  3 22:47:22 2025] [::1]:56690 [302]: GET /auth/dist/output.css
-[Thu Jul  3 22:47:22 2025] [::1]:56690 Closing
-[Thu Jul  3 22:47:22 2025] [::1]:56699 Accepted
-[Thu Jul  3 22:47:22 2025] [::1]:56699 [200]: GET /auth/login
-[Thu Jul  3 22:47:22 2025] [::1]:56699 Closing
-[Thu Jul  3 22:47:22 2025] [::1]:56707 Accepted
-[Thu Jul  3 22:47:22 2025] [::1]:56707 [302]: GET /favicon.ico
-[Thu Jul  3 22:47:22 2025] [::1]:56707 Closing
-[Thu Jul  3 22:47:22 2025] [::1]:56708 Accepted
-[Thu Jul  3 22:47:23 2025] [::1]:56708 [200]: GET /auth/login
-[Thu Jul  3 22:47:23 2025] [::1]:56708 Closing
-[Thu Jul  3 22:47:43 2025] [::1]:56808 Accepted
-[Thu Jul  3 22:47:43 2025] [::1]:56809 Accepted
-[Thu Jul  3 22:47:44 2025] [::1]:56808 [302]: POST /auth/login
-[Thu Jul  3 22:47:44 2025] [::1]:56808 Closing
-[Thu Jul  3 22:47:44 2025] [::1]:56809 Closed without sending a request; it was probably just an unused speculative preconnection
-[Thu Jul  3 22:47:44 2025] [::1]:56809 Closing
-[Thu Jul  3 22:47:44 2025] [::1]:56818 Accepted
-[Thu Jul  3 22:47:45 2025] [::1]:56818 [200]: GET /dashboard
-[Thu Jul  3 22:47:45 2025] [::1]:56818 Closing
-[Thu Jul  3 22:47:45 2025] [::1]:56821 Accepted
-[Thu Jul  3 22:47:45 2025] [::1]:56821 [200]: GET /dist/output.css
-[Thu Jul  3 22:47:45 2025] [::1]:56821 Closing
-[Thu Jul  3 22:47:45 2025] [::1]:56822 Accepted
-[Thu Jul  3 22:47:45 2025] [::1]:56822 [200]: GET /profilePictures/default.png
-[Thu Jul  3 22:47:45 2025] [::1]:56822 Closing
-[Thu Jul  3 22:47:45 2025] [::1]:56827 Accepted
-[Thu Jul  3 22:47:45 2025] [::1]:56827 [302]: GET /favicon.ico
-[Thu Jul  3 22:47:45 2025] [::1]:56827 Closing
-[Thu Jul  3 22:47:45 2025] [::1]:56828 Accepted
-[Thu Jul  3 22:47:46 2025] [::1]:56828 [200]: GET /dashboard
-[Thu Jul  3 22:47:46 2025] [::1]:56828 Closing
-[Thu Jul  3 22:47:48 2025] [::1]:56835 Accepted
-[Thu Jul  3 22:47:48 2025] [::1]:56836 Accepted
-[Thu Jul  3 22:47:50 2025] [::1]:56835 [200]: GET /social
-[Thu Jul  3 22:47:50 2025] [::1]:56835 Closing
-[Thu Jul  3 22:47:50 2025] [::1]:56836 Closed without sending a request; it was probably just an unused speculative preconnection
-[Thu Jul  3 22:47:50 2025] [::1]:56836 Closing
-[Thu Jul  3 22:47:50 2025] [::1]:56842 Accepted
-[Thu Jul  3 22:47:50 2025] [::1]:56842 [200]: GET /dist/output.css
-[Thu Jul  3 22:47:50 2025] [::1]:56842 Closing
-[Thu Jul  3 22:47:50 2025] [::1]:56845 Accepted
-[Thu Jul  3 22:47:50 2025] [::1]:56845 [302]: GET /favicon.ico
-[Thu Jul  3 22:47:50 2025] [::1]:56845 Closing
-[Thu Jul  3 22:47:50 2025] [::1]:56846 Accepted
+[Thu Jul  3 23:35:08 2025] [::1]:60021 [200]: GET /social
+[Thu Jul  3 23:35:08 2025] [::1]:60021 Closing
+[Thu Jul  3 23:35:08 2025] [::1]:60026 Accepted
+[Thu Jul  3 23:35:09 2025] [::1]:60022 [200]: GET /social
+[Thu Jul  3 23:35:09 2025] [::1]:60022 Closing
+[Thu Jul  3 23:35:09 2025] [::1]:60026 [200]: GET /dist/output.css
+[Thu Jul  3 23:35:09 2025] [::1]:60026 Closing
+[Thu Jul  3 23:35:09 2025] [::1]:60032 Accepted
+[Thu Jul  3 23:35:09 2025] [::1]:60032 [302]: GET /favicon.ico
+[Thu Jul  3 23:35:09 2025] [::1]:60032 Closing
+[Thu Jul  3 23:35:09 2025] [::1]:60033 Accepted
 
 ==> ./logs/node-server.log <==
-👤 User connected: nrIo946NDx11M5rBAAAF
-Socket connected: nrIo946NDx11M5rBAAAF
-User authenticated: ZEUS ELDERFIELD (79424a31-556d-40f1-8fb2-602497dca725)
+👤 User connected: 7IDcRGoKMKaViyf5AAAF
+Socket connected: 7IDcRGoKMKaViyf5AAAF
 
 ==> ./logs/php-server.log <==
-[Thu Jul  3 22:47:50 2025] [::1]:56846 [200]: GET /dashboard
-[Thu Jul  3 22:47:50 2025] [::1]:56846 Closing
-[Thu Jul  3 22:47:51 2025] [::1]:56852 Accepted
+[Thu Jul  3 23:35:10 2025] [::1]:60033 [200]: GET /dashboard
+[Thu Jul  3 23:35:10 2025] [::1]:60033 Closing
+[Thu Jul  3 23:35:10 2025] [::1]:60037 Accepted
+[Thu Jul  3 23:35:11 2025] [::1]:60037 [200]: POST /api/auth/token
+[Thu Jul  3 23:35:11 2025] [::1]:60037 Closing
+[Thu Jul  3 23:35:11 2025] [::1]:60042 Accepted
 
 ==> ./logs/node-server.log <==
-👋 User disconnected: nrIo946NDx11M5rBAAAF
+👋 User disconnected: 7IDcRGoKMKaViyf5AAAF
 
 ==> ./logs/php-server.log <==
-[Thu Jul  3 22:47:51 2025] [::1]:56853 Accepted
+[Thu Jul  3 23:35:11 2025] [::1]:60043 Accepted
 
 ==> ./logs/node-server.log <==
-User disconnected: 79424a31-556d-40f1-8fb2-602497dca725
+User authenticated: NIKOLAI TRISTAN PAZON (f1c72308-9be5-4865-a034-23afb7caf390)
 
 ==> ./logs/php-server.log <==
-[Thu Jul  3 22:47:52 2025] [::1]:56852 [200]: GET /social/messages/f1c72308-9be5-4865-a034-23afb7caf390
-[Thu Jul  3 22:47:52 2025] [::1]:56852 Closing
-[Thu Jul  3 22:47:53 2025] [::1]:56853 [302]: GET /social/messages/dist/output.css
-[Thu Jul  3 22:47:53 2025] [::1]:56853 Closing
-[Thu Jul  3 22:47:53 2025] [::1]:56862 Accepted
-[Thu Jul  3 22:47:54 2025] [::1]:56862 [200]: GET /social
-[Thu Jul  3 22:47:54 2025] [::1]:56862 Closing
-[Thu Jul  3 22:47:54 2025] [::1]:56871 Accepted
-[Thu Jul  3 22:47:54 2025] [::1]:56871 [302]: GET /favicon.ico
-[Thu Jul  3 22:47:54 2025] [::1]:56871 Closing
-[Thu Jul  3 22:47:54 2025] [::1]:56872 Accepted
+[Thu Jul  3 23:35:12 2025] [::1]:60042 [200]: GET /social/following
+[Thu Jul  3 23:35:12 2025] [::1]:60042 Closing
+[Thu Jul  3 23:35:14 2025] [::1]:60043 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:35:14 2025] [::1]:60043 Closing
+[Thu Jul  3 23:35:14 2025] [::1]:60051 Accepted
+[Thu Jul  3 23:35:14 2025] [::1]:60051 [302]: GET /favicon.ico
+[Thu Jul  3 23:35:14 2025] [::1]:60051 Closing
+[Thu Jul  3 23:35:14 2025] [::1]:60052 Accepted
+[Thu Jul  3 23:35:15 2025] [::1]:60052 [200]: GET /dashboard
+[Thu Jul  3 23:35:15 2025] [::1]:60052 Closing
+[Thu Jul  3 23:35:47 2025] [::1]:60085 Accepted
+[Thu Jul  3 23:35:47 2025] [::1]:60086 Accepted
+[Thu Jul  3 23:35:48 2025] [::1]:60085 [200]: GET /social/following
+[Thu Jul  3 23:35:48 2025] [::1]:60085 Closing
+[Thu Jul  3 23:35:49 2025] [::1]:60086 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:35:49 2025] [::1]:60086 Closing
+[Thu Jul  3 23:35:50 2025] [::1]:60093 Accepted
+[Thu Jul  3 23:35:50 2025] [::1]:60093 [302]: GET /favicon.ico
+[Thu Jul  3 23:35:50 2025] [::1]:60093 Closing
+[Thu Jul  3 23:35:50 2025] [::1]:60094 Accepted
+[Thu Jul  3 23:35:50 2025] [::1]:60094 [200]: GET /dashboard
+[Thu Jul  3 23:35:50 2025] [::1]:60094 Closing
+[Thu Jul  3 23:35:52 2025] [::1]:60099 Accepted
+[Thu Jul  3 23:35:53 2025] [::1]:60099 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:35:53 2025] [::1]:60099 Closing
+[Thu Jul  3 23:36:13 2025] [::1]:60122 Accepted
+[Thu Jul  3 23:36:15 2025] [::1]:60122 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:36:15 2025] [::1]:60122 Closing
+[Thu Jul  3 23:38:17 2025] [::1]:60701 Accepted
+[Thu Jul  3 23:38:17 2025] [::1]:60702 Accepted
+[Thu Jul  3 23:38:18 2025] [::1]:60701 [200]: GET /social/following
+[Thu Jul  3 23:38:18 2025] [::1]:60701 Closing
+[Thu Jul  3 23:38:19 2025] [::1]:60702 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:38:19 2025] [::1]:60702 Closing
+[Thu Jul  3 23:38:20 2025] [::1]:60712 Accepted
+[Thu Jul  3 23:38:20 2025] [::1]:60712 [302]: GET /favicon.ico
+[Thu Jul  3 23:38:20 2025] [::1]:60712 Closing
+[Thu Jul  3 23:38:20 2025] [::1]:60713 Accepted
+[Thu Jul  3 23:38:20 2025] [::1]:60713 [200]: GET /dashboard
+[Thu Jul  3 23:38:20 2025] [::1]:60713 Closing
+[Thu Jul  3 23:38:22 2025] [::1]:60716 Accepted
+[Thu Jul  3 23:38:23 2025] [::1]:60716 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:38:23 2025] [::1]:60716 Closing
+[Thu Jul  3 23:38:28 2025] [::1]:60721 Accepted
+[Thu Jul  3 23:38:28 2025] [::1]:60722 Accepted
+[Thu Jul  3 23:38:29 2025] [::1]:60721 [200]: GET /social/following
+[Thu Jul  3 23:38:29 2025] [::1]:60721 Closing
+[Thu Jul  3 23:38:31 2025] [::1]:60722 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:38:31 2025] [::1]:60722 Closing
+[Thu Jul  3 23:38:31 2025] [::1]:60729 Accepted
+[Thu Jul  3 23:38:31 2025] [::1]:60729 [302]: GET /favicon.ico
+[Thu Jul  3 23:38:31 2025] [::1]:60729 Closing
+[Thu Jul  3 23:38:31 2025] [::1]:60730 Accepted
+[Thu Jul  3 23:38:32 2025] [::1]:60730 [200]: GET /dashboard
+[Thu Jul  3 23:38:32 2025] [::1]:60730 Closing
+[Thu Jul  3 23:39:04 2025] [::1]:60744 Accepted
+[Thu Jul  3 23:39:04 2025] [::1]:60745 Accepted
+[Thu Jul  3 23:39:05 2025] [::1]:60744 [200]: GET /social/following
+[Thu Jul  3 23:39:05 2025] [::1]:60744 Closing
+[Thu Jul  3 23:39:06 2025] [::1]:60745 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:39:06 2025] [::1]:60745 Closing
+[Thu Jul  3 23:39:06 2025] [::1]:60752 Accepted
+[Thu Jul  3 23:39:06 2025] [::1]:60752 [302]: GET /favicon.ico
+[Thu Jul  3 23:39:06 2025] [::1]:60752 Closing
+[Thu Jul  3 23:39:06 2025] [::1]:60753 Accepted
+[Thu Jul  3 23:39:07 2025] [::1]:60753 [200]: GET /dashboard
+[Thu Jul  3 23:39:07 2025] [::1]:60753 Closing
+[Thu Jul  3 23:39:12 2025] [::1]:60756 Accepted
+[Thu Jul  3 23:39:12 2025] [::1]:60756 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:39:12 2025] [::1]:60756 Closing
+[Thu Jul  3 23:44:04 2025] [::1]:60942 Accepted
+[Thu Jul  3 23:44:04 2025] [::1]:60943 Accepted
+[Thu Jul  3 23:44:05 2025] [::1]:60942 [200]: GET /social/following
+[Thu Jul  3 23:44:05 2025] [::1]:60942 Closing
+[Thu Jul  3 23:44:07 2025] [::1]:60943 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:44:07 2025] [::1]:60943 Closing
+[Thu Jul  3 23:44:07 2025] [::1]:60951 Accepted
+[Thu Jul  3 23:44:07 2025] [::1]:60951 [302]: GET /favicon.ico
+[Thu Jul  3 23:44:07 2025] [::1]:60951 Closing
+[Thu Jul  3 23:44:07 2025] [::1]:60952 Accepted
+[Thu Jul  3 23:44:09 2025] [::1]:60952 [200]: GET /dashboard
+[Thu Jul  3 23:44:09 2025] [::1]:60952 Closing
+[Thu Jul  3 23:44:15 2025] [::1]:60957 Accepted
+[Thu Jul  3 23:44:16 2025] [::1]:60957 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:44:16 2025] [::1]:60957 Closing
+[Thu Jul  3 23:44:16 2025] [::1]:60961 Accepted
+[Thu Jul  3 23:44:17 2025] [::1]:60961 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:44:17 2025] [::1]:60961 Closing
+[Thu Jul  3 23:55:11 2025] [::1]:61141 Accepted
+[Thu Jul  3 23:55:11 2025] [::1]:61142 Accepted
+[Thu Jul  3 23:55:26 2025] [::1]:61141 [200]: GET /social/following
+[Thu Jul  3 23:55:26 2025] [::1]:61141 Closing
+[Thu Jul  3 23:55:29 2025] [::1]:61142 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:55:29 2025] [::1]:61142 Closing
+[Thu Jul  3 23:55:29 2025] [::1]:61160 Accepted
+[Thu Jul  3 23:55:29 2025] [::1]:61161 Accepted
+[Thu Jul  3 23:55:30 2025] [::1]:61160 [200]: GET /social/following
+[Thu Jul  3 23:55:30 2025] [::1]:61160 Closing
+[Thu Jul  3 23:55:32 2025] [::1]:61161 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:55:32 2025] [::1]:61161 Closing
+[Thu Jul  3 23:55:32 2025] [::1]:61173 Accepted
+[Thu Jul  3 23:55:32 2025] [::1]:61173 [302]: GET /favicon.ico
+[Thu Jul  3 23:55:32 2025] [::1]:61173 Closing
+[Thu Jul  3 23:55:32 2025] [::1]:61174 Accepted
+[Thu Jul  3 23:55:33 2025] [::1]:61174 [200]: GET /dashboard
+[Thu Jul  3 23:55:33 2025] [::1]:61174 Closing
+[Thu Jul  3 23:55:37 2025] [::1]:61178 Accepted
+[Thu Jul  3 23:55:40 2025] [::1]:61178 [200]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:55:40 2025] [::1]:61178 Closing
 
 ==> ./logs/node-server.log <==
-👤 User connected: bNXpk_WkgZZ6r151AAAH
-Socket connected: bNXpk_WkgZZ6r151AAAH
-User authenticated: ZEUS ELDERFIELD (79424a31-556d-40f1-8fb2-602497dca725)
-
-==> ./logs/php-server.log <==
-[Thu Jul  3 22:47:55 2025] [::1]:56872 [200]: GET /dashboard
-[Thu Jul  3 22:47:55 2025] [::1]:56872 Closing
-
-==> ./logs/node-server.log <==
-Message sent: 79424a31-556d-40f1-8fb2-602497dca725 -> f1c72308-9be5-4865-a034-23afb7caf390
-
-==> ./logs/php-server.log <==
-[Thu Jul  3 22:48:07 2025] [::1]:56877 Accepted
-
-==> ./logs/node-server.log <==
-👋 User disconnected: bNXpk_WkgZZ6r151AAAH
-
-==> ./logs/php-server.log <==
-[Thu Jul  3 22:48:07 2025] [::1]:56878 Accepted
-
-==> ./logs/node-server.log <==
-User disconnected: 79424a31-556d-40f1-8fb2-602497dca725
-
-==> ./logs/php-server.log <==
-[Thu Jul  3 22:48:09 2025] [::1]:56877 [200]: GET /social
-[Thu Jul  3 22:48:09 2025] [::1]:56877 Closing
-[Thu Jul  3 22:48:09 2025] [::1]:56878 [200]: GET /dist/output.css
-[Thu Jul  3 22:48:09 2025] [::1]:56878 Closing
-[Thu Jul  3 22:48:09 2025] [::1]:56885 Accepted
-[Thu Jul  3 22:48:09 2025] [::1]:56885 [302]: GET /favicon.ico
-[Thu Jul  3 22:48:09 2025] [::1]:56885 Closing
-[Thu Jul  3 22:48:09 2025] [::1]:56888 Accepted
-
-==> ./logs/node-server.log <==
-👤 User connected: Vj2JHdJUPh3PDXpLAAAJ
-Socket connected: Vj2JHdJUPh3PDXpLAAAJ
-User authenticated: ZEUS ELDERFIELD (79424a31-556d-40f1-8fb2-602497dca725)
-
-==> ./logs/php-server.log <==
-[Thu Jul  3 22:48:09 2025] [::1]:56888 [200]: GET /dashboard
-[Thu Jul  3 22:48:09 2025] [::1]:56888 Closing
-[Thu Jul  3 22:48:16 2025] [::1]:56898 Accepted
-
-==> ./logs/node-server.log <==
-👋 User disconnected: Vj2JHdJUPh3PDXpLAAAJ
-
-==> ./logs/php-server.log <==
-[Thu Jul  3 22:48:16 2025] [::1]:56899 Accepted
-
-==> ./logs/node-server.log <==
-User disconnected: 79424a31-556d-40f1-8fb2-602497dca725
-
-==> ./logs/php-server.log <==
-[Thu Jul  3 22:48:17 2025] [::1]:56898 [200]: GET /social/search
-[Thu Jul  3 22:48:17 2025] [::1]:56898 Closing
-[Thu Jul  3 22:48:19 2025] [::1]:56899 [200]: GET /social/dist/output.css
-[Thu Jul  3 22:48:19 2025] [::1]:56899 Closing
-[Thu Jul  3 22:48:19 2025] [::1]:56908 Accepted
-[Thu Jul  3 22:48:19 2025] [::1]:56908 [302]: GET /favicon.ico
-[Thu Jul  3 22:48:19 2025] [::1]:56908 Closing
-[Thu Jul  3 22:48:19 2025] [::1]:56909 Accepted
-[Thu Jul  3 22:48:20 2025] [::1]:56909 [200]: GET /dashboard
-[Thu Jul  3 22:48:20 2025] [::1]:56909 Closing
-[Thu Jul  3 22:48:23 2025] [::1]:56913 Accepted
-[Thu Jul  3 22:48:23 2025] [::1]:56914 Accepted
-[Thu Jul  3 22:48:24 2025] [::1]:56913 [200]: GET /social/search?q=nikolai
-[Thu Jul  3 22:48:24 2025] [::1]:56913 Closing
-[Thu Jul  3 22:48:24 2025] [::1]:56914 Closed without sending a request; it was probably just an unused speculative preconnection
-[Thu Jul  3 22:48:24 2025] [::1]:56914 Closing
-[Thu Jul  3 22:48:25 2025] [::1]:56919 Accepted
-[Thu Jul  3 22:48:26 2025] [::1]:56919 [200]: GET /social/dist/output.css
-[Thu Jul  3 22:48:26 2025] [::1]:56919 Closing
-[Thu Jul  3 22:48:26 2025] [::1]:56924 Accepted
-[Thu Jul  3 22:48:26 2025] [::1]:56924 [302]: GET /favicon.ico
-[Thu Jul  3 22:48:26 2025] [::1]:56924 Closing
-[Thu Jul  3 22:48:26 2025] [::1]:56925 Accepted
-[Thu Jul  3 22:48:27 2025] [::1]:56925 [200]: GET /dashboard
-[Thu Jul  3 22:48:27 2025] [::1]:56925 Closing
-[Thu Jul  3 22:48:28 2025] [::1]:56928 Accepted
-[Thu Jul  3 22:48:28 2025] [::1]:56928 [405]: POST /api/users/f1c72308-9be5-4865-a034-23afb7caf390/follow
-[Thu Jul  3 22:48:28 2025] [::1]:56928 Closing
-
-==> ./logs/node-server.log <==
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node nodejs-server/server.js`[39m
-Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-👀 Starting file watchers...
-✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
-✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
-✅ File watchers started successfully
-🚀 Node.js WebSocket server running on port 3000
-📊 Health check: http://localhost:3000/health
-🔌 WebSocket endpoint: ws://localhost:3000
-💬 Real-time messaging enabled
-✅ Database connected successfully
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node nodejs-server/server.js`[39m
-Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-👀 Starting file watchers...
-✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
-✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
-✅ File watchers started successfully
-🚀 Node.js WebSocket server running on port 3000
-📊 Health check: http://localhost:3000/health
-🔌 WebSocket endpoint: ws://localhost:3000
-💬 Real-time messaging enabled
-✅ Database connected successfully
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node nodejs-server/server.js`[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node nodejs-server/server.js`[39m
-Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-👀 Starting file watchers...
-✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
-✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
-✅ File watchers started successfully
-🚀 Node.js WebSocket server running on port 3000
-📊 Health check: http://localhost:3000/health
-🔌 WebSocket endpoint: ws://localhost:3000
-💬 Real-time messaging enabled
-✅ Database connected successfully
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node nodejs-server/server.js`[39m
-Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-👀 Starting file watchers...
-✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
-✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
-✅ File watchers started successfully
-🚀 Node.js WebSocket server running on port 3000
-📊 Health check: http://localhost:3000/health
-🔌 WebSocket endpoint: ws://localhost:3000
-💬 Real-time messaging enabled
-✅ Database connected successfully
+📝 Event file changed: follow_events
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `node nodejs-server/server.js`[39m
 Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
@@ -504,34 +302,862 @@ Ignoring invalid configuration option passed to Connection: reconnect. This is c
 ✅ Database connected successfully
 
 ==> ./logs/php-server.log <==
-[Thu Jul  3 22:54:12 2025] [::1]:57154 Accepted
-[Thu Jul  3 22:54:12 2025] [::1]:57154 Closed without sending a request; it was probably just an unused speculative preconnection
-[Thu Jul  3 22:54:12 2025] [::1]:57154 Closing
-[Thu Jul  3 22:54:12 2025] [::1]:57156 Accepted
-[Thu Jul  3 22:54:12 2025] [::1]:57157 Accepted
-[Thu Jul  3 22:54:13 2025] [::1]:57156 [200]: GET /social/messages/f1c72308-9be5-4865-a034-23afb7caf390
-[Thu Jul  3 22:54:13 2025] [::1]:57156 Closing
-[Thu Jul  3 22:54:14 2025] [::1]:57157 [302]: GET /social/messages/dist/output.css
-[Thu Jul  3 22:54:14 2025] [::1]:57157 Closing
-[Thu Jul  3 22:54:14 2025] [::1]:57166 Accepted
-[Thu Jul  3 22:54:16 2025] [::1]:57166 [200]: GET /social
-[Thu Jul  3 22:54:16 2025] [::1]:57166 Closing
-[Thu Jul  3 22:54:16 2025] [::1]:57172 Accepted
-[Thu Jul  3 22:54:16 2025] [::1]:57172 [302]: GET /favicon.ico
-[Thu Jul  3 22:54:16 2025] [::1]:57172 Closing
-[Thu Jul  3 22:54:16 2025] [::1]:57173 Accepted
+[Thu Jul  3 23:55:43 2025] [::1]:61183 Accepted
+[Thu Jul  3 23:55:43 2025] [::1]:61184 Accepted
+[Thu Jul  3 23:55:45 2025] [::1]:61183 [200]: GET /social/following
+[Thu Jul  3 23:55:45 2025] [::1]:61183 Closing
+[Thu Jul  3 23:55:46 2025] [::1]:61184 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:55:46 2025] [::1]:61184 Closing
+[Thu Jul  3 23:55:46 2025] [::1]:61191 Accepted
+[Thu Jul  3 23:55:46 2025] [::1]:61191 [302]: GET /favicon.ico
+[Thu Jul  3 23:55:46 2025] [::1]:61191 Closing
+[Thu Jul  3 23:55:46 2025] [::1]:61192 Accepted
+[Thu Jul  3 23:55:49 2025] [::1]:61192 [200]: GET /dashboard
+[Thu Jul  3 23:55:49 2025] [::1]:61192 Closing
+[Thu Jul  3 23:55:54 2025] [::1]:61201 Accepted
+[Thu Jul  3 23:55:56 2025] [::1]:61201 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:55:56 2025] [::1]:61201 Closing
+[Thu Jul  3 23:56:01 2025] [::1]:61238 Accepted
+[Thu Jul  3 23:56:03 2025] [::1]:61238 [200]: DELETE /api/users/79424a31-556d-40f1-8fb2-602497dca725/unfollow
+[Thu Jul  3 23:56:03 2025] [::1]:61238 Closing
 
 ==> ./logs/node-server.log <==
-👤 User connected: TvejpPJq2SM1bRvCAAAB
-Socket connected: TvejpPJq2SM1bRvCAAAB
+📝 Event file changed: follow_events
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
 
 ==> ./logs/php-server.log <==
-[Thu Jul  3 22:54:17 2025] [::1]:57173 [200]: GET /dashboard
-[Thu Jul  3 22:54:17 2025] [::1]:57173 Closing
-[Thu Jul  3 22:54:17 2025] [::1]:57177 Accepted
-[Thu Jul  3 22:54:17 2025] [::1]:57177 [200]: POST /api/auth/token
-[Thu Jul  3 22:54:17 2025] [::1]:57177 Closing
+[Thu Jul  3 23:56:05 2025] [::1]:61259 Accepted
 
 ==> ./logs/node-server.log <==
-User authenticated: ZEUS ELDERFIELD (79424a31-556d-40f1-8fb2-602497dca725)
-Message sent: 79424a31-556d-40f1-8fb2-602497dca725 -> f1c72308-9be5-4865-a034-23afb7caf390
+[32m[nodemon] restarting due to changes...[39m
+📝 Event file changed: follow_events
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:56:06 2025] [::1]:61259 [200]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:56:06 2025] [::1]:61259 Closing
+
+==> ./logs/node-server.log <==
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:56:10 2025] [::1]:61289 Accepted
+[Thu Jul  3 23:56:11 2025] [::1]:61289 [405]: GET /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:56:11 2025] [::1]:61289 Closing
+[Thu Jul  3 23:56:11 2025] [::1]:61290 Accepted
+[Thu Jul  3 23:56:12 2025] [::1]:61290 [302]: GET /favicon.ico
+[Thu Jul  3 23:56:12 2025] [::1]:61290 Closing
+[Thu Jul  3 23:56:12 2025] [::1]:61299 Accepted
+[Thu Jul  3 23:56:13 2025] [::1]:61299 [200]: GET /dashboard
+[Thu Jul  3 23:56:13 2025] [::1]:61299 Closing
+[Thu Jul  3 23:56:31 2025] [::1]:61372 Accepted
+[Thu Jul  3 23:56:31 2025] [::1]:61373 Accepted
+[Thu Jul  3 23:56:32 2025] [::1]:61372 [200]: GET /dashboard
+[Thu Jul  3 23:56:32 2025] [::1]:61372 Closing
+[Thu Jul  3 23:56:32 2025] [::1]:61373 [200]: GET /dist/output.css
+[Thu Jul  3 23:56:32 2025] [::1]:61373 Closing
+[Thu Jul  3 23:56:32 2025] [::1]:61377 Accepted
+[Thu Jul  3 23:56:32 2025] [::1]:61377 [302]: GET /favicon.ico
+[Thu Jul  3 23:56:32 2025] [::1]:61377 Closing
+[Thu Jul  3 23:56:32 2025] [::1]:61378 Accepted
+[Thu Jul  3 23:56:33 2025] [::1]:61378 [200]: GET /dashboard
+[Thu Jul  3 23:56:33 2025] [::1]:61378 Closing
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   [Thu Jul  3 23:25:37 2025] [::1]:59530 Accepted
+[Thu Jul  3 23:25:37 2025] [::1]:59531 Accepted
+[Thu Jul  3 23:25:38 2025] [::1]:59530 [200]: GET /social/following
+[Thu Jul  3 23:25:38 2025] [::1]:59530 Closing
+[Thu Jul  3 23:25:39 2025] [::1]:59531 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:25:39 2025] [::1]:59531 Closing
+[Thu Jul  3 23:25:39 2025] [::1]:59538 Accepted
+[Thu Jul  3 23:25:39 2025] [::1]:59538 [302]: GET /favicon.ico
+[Thu Jul  3 23:25:39 2025] [::1]:59538 Closing
+[Thu Jul  3 23:25:39 2025] [::1]:59539 Accepted
+[Thu Jul  3 23:25:40 2025] [::1]:59539 [200]: GET /dashboard
+[Thu Jul  3 23:25:40 2025] [::1]:59539 Closing
+[Thu Jul  3 23:26:18 2025] [::1]:59566 Accepted
+[Thu Jul  3 23:26:19 2025] [::1]:59566 [200]: GET /social/following
+[Thu Jul  3 23:26:19 2025] [::1]:59566 Closing
+[Thu Jul  3 23:26:19 2025] [::1]:59567 Accepted
+[Thu Jul  3 23:26:21 2025] [::1]:59567 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:26:21 2025] [::1]:59567 Closing
+[Thu Jul  3 23:26:21 2025] [::1]:59577 Accepted
+[Thu Jul  3 23:26:21 2025] [::1]:59577 [302]: GET /favicon.ico
+[Thu Jul  3 23:26:21 2025] [::1]:59577 Closing
+[Thu Jul  3 23:26:21 2025] [::1]:59578 Accepted
+[Thu Jul  3 23:26:22 2025] [::1]:59578 [200]: GET /dashboard
+[Thu Jul  3 23:26:22 2025] [::1]:59578 Closing
+[Thu Jul  3 23:26:23 2025] [::1]:59582 Accepted
+[Thu Jul  3 23:26:23 2025] [::1]:59583 Accepted
+[Thu Jul  3 23:26:25 2025] [::1]:59582 [200]: GET /social
+[Thu Jul  3 23:26:25 2025] [::1]:59582 Closing
+[Thu Jul  3 23:26:25 2025] [::1]:59583 [200]: GET /dist/output.css
+[Thu Jul  3 23:26:25 2025] [::1]:59583 Closing
+[Thu Jul  3 23:26:25 2025] [::1]:59589 Accepted
+[Thu Jul  3 23:26:25 2025] [::1]:59589 [302]: GET /favicon.ico
+[Thu Jul  3 23:26:25 2025] [::1]:59589 Closing
+[Thu Jul  3 23:26:25 2025] [::1]:59590 Accepted
+
+==> ./logs/node-server.log <==
+👤 User connected: baCkZLLzzA8hpeAXAAAB
+Socket connected: baCkZLLzzA8hpeAXAAAB
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:26:26 2025] [::1]:59590 [200]: GET /dashboard
+[Thu Jul  3 23:26:26 2025] [::1]:59590 Closing
+[Thu Jul  3 23:26:26 2025] [::1]:59594 Accepted
+
+==> ./logs/node-server.log <==
+👋 User disconnected: baCkZLLzzA8hpeAXAAAB
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:26:27 2025] API Debug: resource=auth, action=token, id=, method=POST
+[Thu Jul  3 23:26:27 2025] [::1]:59594 [200]: POST /api/auth/token
+[Thu Jul  3 23:26:27 2025] [::1]:59594 Closing
+[Thu Jul  3 23:26:27 2025] [::1]:59598 Accepted
+[Thu Jul  3 23:26:28 2025] [::1]:59598 [200]: GET /social/following
+[Thu Jul  3 23:26:28 2025] [::1]:59598 Closing
+[Thu Jul  3 23:26:28 2025] [::1]:59604 Accepted
+[Thu Jul  3 23:26:29 2025] [::1]:59604 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:26:29 2025] [::1]:59604 Closing
+[Thu Jul  3 23:26:29 2025] [::1]:59608 Accepted
+[Thu Jul  3 23:26:29 2025] [::1]:59608 [302]: GET /favicon.ico
+[Thu Jul  3 23:26:29 2025] [::1]:59608 Closing
+[Thu Jul  3 23:26:29 2025] [::1]:59609 Accepted
+[Thu Jul  3 23:26:30 2025] [::1]:59609 [200]: GET /dashboard
+[Thu Jul  3 23:26:30 2025] [::1]:59609 Closing
+[Thu Jul  3 23:32:20 2025] [::1]:59865 Accepted
+[Thu Jul  3 23:32:20 2025] [::1]:59866 Accepted
+[Thu Jul  3 23:32:21 2025] [::1]:59865 [200]: GET /social/following
+[Thu Jul  3 23:32:21 2025] [::1]:59865 Closing
+[Thu Jul  3 23:32:21 2025] [::1]:59866 Closed without sending a request; it was probably just an unused speculative preconnection
+[Thu Jul  3 23:32:21 2025] [::1]:59866 Closing
+[Thu Jul  3 23:32:21 2025] [::1]:59871 Accepted
+[Thu Jul  3 23:32:23 2025] [::1]:59871 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:32:23 2025] [::1]:59871 Closing
+[Thu Jul  3 23:32:23 2025] [::1]:59875 Accepted
+[Thu Jul  3 23:32:23 2025] [::1]:59875 [302]: GET /favicon.ico
+[Thu Jul  3 23:32:23 2025] [::1]:59875 Closing
+[Thu Jul  3 23:32:23 2025] [::1]:59876 Accepted
+[Thu Jul  3 23:32:24 2025] [::1]:59876 [200]: GET /dashboard
+[Thu Jul  3 23:32:24 2025] [::1]:59876 Closing
+[Thu Jul  3 23:33:05 2025] [::1]:59904 Accepted
+[Thu Jul  3 23:33:05 2025] [::1]:59905 Accepted
+[Thu Jul  3 23:33:06 2025] [::1]:59904 [200]: GET /social/messages/79424a31-556d-40f1-8fb2-602497dca725
+[Thu Jul  3 23:33:06 2025] [::1]:59904 Closing
+[Thu Jul  3 23:33:06 2025] [::1]:59905 Closed without sending a request; it was probably just an unused speculative preconnection
+[Thu Jul  3 23:33:06 2025] [::1]:59905 Closing
+[Thu Jul  3 23:33:06 2025] [::1]:59910 Accepted
+[Thu Jul  3 23:33:07 2025] [::1]:59910 [302]: GET /social/messages/dist/output.css
+[Thu Jul  3 23:33:07 2025] [::1]:59910 Closing
+[Thu Jul  3 23:33:07 2025] [::1]:59914 Accepted
+[Thu Jul  3 23:33:08 2025] [::1]:59914 [200]: GET /social
+[Thu Jul  3 23:33:08 2025] [::1]:59914 Closing
+[Thu Jul  3 23:33:09 2025] [::1]:59921 Accepted
+[Thu Jul  3 23:33:09 2025] [::1]:59921 [302]: GET /favicon.ico
+[Thu Jul  3 23:33:09 2025] [::1]:59921 Closing
+[Thu Jul  3 23:33:09 2025] [::1]:59922 Accepted
+
+==> ./logs/node-server.log <==
+👤 User connected: Z1xbUx21g1h99jAoAAAD
+Socket connected: Z1xbUx21g1h99jAoAAAD
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:33:09 2025] [::1]:59922 [200]: GET /dashboard
+[Thu Jul  3 23:33:09 2025] [::1]:59922 Closing
+[Thu Jul  3 23:33:09 2025] [::1]:59926 Accepted
+[Thu Jul  3 23:33:10 2025] [::1]:59926 [200]: POST /api/auth/token
+[Thu Jul  3 23:33:10 2025] [::1]:59926 Closing
+
+==> ./logs/node-server.log <==
+User authenticated: NIKOLAI TRISTAN PAZON (f1c72308-9be5-4865-a034-23afb7caf390)
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:35:06 2025] [::1]:60021 Accepted
+
+==> ./logs/node-server.log <==
+👋 User disconnected: Z1xbUx21g1h99jAoAAAD
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:35:06 2025] [::1]:60022 Accepted
+
+==> ./logs/node-server.log <==
+User disconnected: f1c72308-9be5-4865-a034-23afb7caf390
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:35:08 2025] [::1]:60021 [200]: GET /social
+[Thu Jul  3 23:35:08 2025] [::1]:60021 Closing
+[Thu Jul  3 23:35:08 2025] [::1]:60026 Accepted
+[Thu Jul  3 23:35:09 2025] [::1]:60022 [200]: GET /social
+[Thu Jul  3 23:35:09 2025] [::1]:60022 Closing
+[Thu Jul  3 23:35:09 2025] [::1]:60026 [200]: GET /dist/output.css
+[Thu Jul  3 23:35:09 2025] [::1]:60026 Closing
+[Thu Jul  3 23:35:09 2025] [::1]:60032 Accepted
+[Thu Jul  3 23:35:09 2025] [::1]:60032 [302]: GET /favicon.ico
+[Thu Jul  3 23:35:09 2025] [::1]:60032 Closing
+[Thu Jul  3 23:35:09 2025] [::1]:60033 Accepted
+
+==> ./logs/node-server.log <==
+👤 User connected: 7IDcRGoKMKaViyf5AAAF
+Socket connected: 7IDcRGoKMKaViyf5AAAF
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:35:10 2025] [::1]:60033 [200]: GET /dashboard
+[Thu Jul  3 23:35:10 2025] [::1]:60033 Closing
+[Thu Jul  3 23:35:10 2025] [::1]:60037 Accepted
+[Thu Jul  3 23:35:11 2025] [::1]:60037 [200]: POST /api/auth/token
+[Thu Jul  3 23:35:11 2025] [::1]:60037 Closing
+[Thu Jul  3 23:35:11 2025] [::1]:60042 Accepted
+
+==> ./logs/node-server.log <==
+👋 User disconnected: 7IDcRGoKMKaViyf5AAAF
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:35:11 2025] [::1]:60043 Accepted
+
+==> ./logs/node-server.log <==
+User authenticated: NIKOLAI TRISTAN PAZON (f1c72308-9be5-4865-a034-23afb7caf390)
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:35:12 2025] [::1]:60042 [200]: GET /social/following
+[Thu Jul  3 23:35:12 2025] [::1]:60042 Closing
+[Thu Jul  3 23:35:14 2025] [::1]:60043 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:35:14 2025] [::1]:60043 Closing
+[Thu Jul  3 23:35:14 2025] [::1]:60051 Accepted
+[Thu Jul  3 23:35:14 2025] [::1]:60051 [302]: GET /favicon.ico
+[Thu Jul  3 23:35:14 2025] [::1]:60051 Closing
+[Thu Jul  3 23:35:14 2025] [::1]:60052 Accepted
+[Thu Jul  3 23:35:15 2025] [::1]:60052 [200]: GET /dashboard
+[Thu Jul  3 23:35:15 2025] [::1]:60052 Closing
+[Thu Jul  3 23:35:47 2025] [::1]:60085 Accepted
+[Thu Jul  3 23:35:47 2025] [::1]:60086 Accepted
+[Thu Jul  3 23:35:48 2025] [::1]:60085 [200]: GET /social/following
+[Thu Jul  3 23:35:48 2025] [::1]:60085 Closing
+[Thu Jul  3 23:35:49 2025] [::1]:60086 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:35:49 2025] [::1]:60086 Closing
+[Thu Jul  3 23:35:50 2025] [::1]:60093 Accepted
+[Thu Jul  3 23:35:50 2025] [::1]:60093 [302]: GET /favicon.ico
+[Thu Jul  3 23:35:50 2025] [::1]:60093 Closing
+[Thu Jul  3 23:35:50 2025] [::1]:60094 Accepted
+[Thu Jul  3 23:35:50 2025] [::1]:60094 [200]: GET /dashboard
+[Thu Jul  3 23:35:50 2025] [::1]:60094 Closing
+[Thu Jul  3 23:35:52 2025] [::1]:60099 Accepted
+[Thu Jul  3 23:35:53 2025] [::1]:60099 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:35:53 2025] [::1]:60099 Closing
+[Thu Jul  3 23:36:13 2025] [::1]:60122 Accepted
+[Thu Jul  3 23:36:15 2025] [::1]:60122 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:36:15 2025] [::1]:60122 Closing
+[Thu Jul  3 23:38:17 2025] [::1]:60701 Accepted
+[Thu Jul  3 23:38:17 2025] [::1]:60702 Accepted
+[Thu Jul  3 23:38:18 2025] [::1]:60701 [200]: GET /social/following
+[Thu Jul  3 23:38:18 2025] [::1]:60701 Closing
+[Thu Jul  3 23:38:19 2025] [::1]:60702 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:38:19 2025] [::1]:60702 Closing
+[Thu Jul  3 23:38:20 2025] [::1]:60712 Accepted
+[Thu Jul  3 23:38:20 2025] [::1]:60712 [302]: GET /favicon.ico
+[Thu Jul  3 23:38:20 2025] [::1]:60712 Closing
+[Thu Jul  3 23:38:20 2025] [::1]:60713 Accepted
+[Thu Jul  3 23:38:20 2025] [::1]:60713 [200]: GET /dashboard
+[Thu Jul  3 23:38:20 2025] [::1]:60713 Closing
+[Thu Jul  3 23:38:22 2025] [::1]:60716 Accepted
+[Thu Jul  3 23:38:23 2025] [::1]:60716 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:38:23 2025] [::1]:60716 Closing
+[Thu Jul  3 23:38:28 2025] [::1]:60721 Accepted
+[Thu Jul  3 23:38:28 2025] [::1]:60722 Accepted
+[Thu Jul  3 23:38:29 2025] [::1]:60721 [200]: GET /social/following
+[Thu Jul  3 23:38:29 2025] [::1]:60721 Closing
+[Thu Jul  3 23:38:31 2025] [::1]:60722 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:38:31 2025] [::1]:60722 Closing
+[Thu Jul  3 23:38:31 2025] [::1]:60729 Accepted
+[Thu Jul  3 23:38:31 2025] [::1]:60729 [302]: GET /favicon.ico
+[Thu Jul  3 23:38:31 2025] [::1]:60729 Closing
+[Thu Jul  3 23:38:31 2025] [::1]:60730 Accepted
+[Thu Jul  3 23:38:32 2025] [::1]:60730 [200]: GET /dashboard
+[Thu Jul  3 23:38:32 2025] [::1]:60730 Closing
+[Thu Jul  3 23:39:04 2025] [::1]:60744 Accepted
+[Thu Jul  3 23:39:04 2025] [::1]:60745 Accepted
+[Thu Jul  3 23:39:05 2025] [::1]:60744 [200]: GET /social/following
+[Thu Jul  3 23:39:05 2025] [::1]:60744 Closing
+[Thu Jul  3 23:39:06 2025] [::1]:60745 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:39:06 2025] [::1]:60745 Closing
+[Thu Jul  3 23:39:06 2025] [::1]:60752 Accepted
+[Thu Jul  3 23:39:06 2025] [::1]:60752 [302]: GET /favicon.ico
+[Thu Jul  3 23:39:06 2025] [::1]:60752 Closing
+[Thu Jul  3 23:39:06 2025] [::1]:60753 Accepted
+[Thu Jul  3 23:39:07 2025] [::1]:60753 [200]: GET /dashboard
+[Thu Jul  3 23:39:07 2025] [::1]:60753 Closing
+[Thu Jul  3 23:39:12 2025] [::1]:60756 Accepted
+[Thu Jul  3 23:39:12 2025] [::1]:60756 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:39:12 2025] [::1]:60756 Closing
+[Thu Jul  3 23:44:04 2025] [::1]:60942 Accepted
+[Thu Jul  3 23:44:04 2025] [::1]:60943 Accepted
+[Thu Jul  3 23:44:05 2025] [::1]:60942 [200]: GET /social/following
+[Thu Jul  3 23:44:05 2025] [::1]:60942 Closing
+[Thu Jul  3 23:44:07 2025] [::1]:60943 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:44:07 2025] [::1]:60943 Closing
+[Thu Jul  3 23:44:07 2025] [::1]:60951 Accepted
+[Thu Jul  3 23:44:07 2025] [::1]:60951 [302]: GET /favicon.ico
+[Thu Jul  3 23:44:07 2025] [::1]:60951 Closing
+[Thu Jul  3 23:44:07 2025] [::1]:60952 Accepted
+[Thu Jul  3 23:44:09 2025] [::1]:60952 [200]: GET /dashboard
+[Thu Jul  3 23:44:09 2025] [::1]:60952 Closing
+[Thu Jul  3 23:44:15 2025] [::1]:60957 Accepted
+[Thu Jul  3 23:44:16 2025] [::1]:60957 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:44:16 2025] [::1]:60957 Closing
+[Thu Jul  3 23:44:16 2025] [::1]:60961 Accepted
+[Thu Jul  3 23:44:17 2025] [::1]:60961 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:44:17 2025] [::1]:60961 Closing
+[Thu Jul  3 23:55:11 2025] [::1]:61141 Accepted
+[Thu Jul  3 23:55:11 2025] [::1]:61142 Accepted
+[Thu Jul  3 23:55:26 2025] [::1]:61141 [200]: GET /social/following
+[Thu Jul  3 23:55:26 2025] [::1]:61141 Closing
+[Thu Jul  3 23:55:29 2025] [::1]:61142 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:55:29 2025] [::1]:61142 Closing
+[Thu Jul  3 23:55:29 2025] [::1]:61160 Accepted
+[Thu Jul  3 23:55:29 2025] [::1]:61161 Accepted
+[Thu Jul  3 23:55:30 2025] [::1]:61160 [200]: GET /social/following
+[Thu Jul  3 23:55:30 2025] [::1]:61160 Closing
+[Thu Jul  3 23:55:32 2025] [::1]:61161 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:55:32 2025] [::1]:61161 Closing
+[Thu Jul  3 23:55:32 2025] [::1]:61173 Accepted
+[Thu Jul  3 23:55:32 2025] [::1]:61173 [302]: GET /favicon.ico
+[Thu Jul  3 23:55:32 2025] [::1]:61173 Closing
+[Thu Jul  3 23:55:32 2025] [::1]:61174 Accepted
+[Thu Jul  3 23:55:33 2025] [::1]:61174 [200]: GET /dashboard
+[Thu Jul  3 23:55:33 2025] [::1]:61174 Closing
+[Thu Jul  3 23:55:37 2025] [::1]:61178 Accepted
+[Thu Jul  3 23:55:40 2025] [::1]:61178 [200]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:55:40 2025] [::1]:61178 Closing
+
+==> ./logs/node-server.log <==
+📝 Event file changed: follow_events
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:55:43 2025] [::1]:61183 Accepted
+[Thu Jul  3 23:55:43 2025] [::1]:61184 Accepted
+[Thu Jul  3 23:55:45 2025] [::1]:61183 [200]: GET /social/following
+[Thu Jul  3 23:55:45 2025] [::1]:61183 Closing
+[Thu Jul  3 23:55:46 2025] [::1]:61184 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:55:46 2025] [::1]:61184 Closing
+[Thu Jul  3 23:55:46 2025] [::1]:61191 Accepted
+[Thu Jul  3 23:55:46 2025] [::1]:61191 [302]: GET /favicon.ico
+[Thu Jul  3 23:55:46 2025] [::1]:61191 Closing
+[Thu Jul  3 23:55:46 2025] [::1]:61192 Accepted
+[Thu Jul  3 23:55:49 2025] [::1]:61192 [200]: GET /dashboard
+[Thu Jul  3 23:55:49 2025] [::1]:61192 Closing
+[Thu Jul  3 23:55:54 2025] [::1]:61201 Accepted
+[Thu Jul  3 23:55:56 2025] [::1]:61201 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:55:56 2025] [::1]:61201 Closing
+[Thu Jul  3 23:56:01 2025] [::1]:61238 Accepted
+[Thu Jul  3 23:56:03 2025] [::1]:61238 [200]: DELETE /api/users/79424a31-556d-40f1-8fb2-602497dca725/unfollow
+[Thu Jul  3 23:56:03 2025] [::1]:61238 Closing
+
+==> ./logs/node-server.log <==
+📝 Event file changed: follow_events
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:56:05 2025] [::1]:61259 Accepted
+
+==> ./logs/node-server.log <==
+[32m[nodemon] restarting due to changes...[39m
+📝 Event file changed: follow_events
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:56:06 2025] [::1]:61259 [200]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:56:06 2025] [::1]:61259 Closing
+
+==> ./logs/node-server.log <==
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:56:10 2025] [::1]:61289 Accepted
+[Thu Jul  3 23:56:11 2025] [::1]:61289 [405]: GET /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:56:11 2025] [::1]:61289 Closing
+[Thu Jul  3 23:56:11 2025] [::1]:61290 Accepted
+[Thu Jul  3 23:56:12 2025] [::1]:61290 [302]: GET /favicon.ico
+[Thu Jul  3 23:56:12 2025] [::1]:61290 Closing
+[Thu Jul  3 23:56:12 2025] [::1]:61299 Accepted
+[Thu Jul  3 23:56:13 2025] [::1]:61299 [200]: GET /dashboard
+[Thu Jul  3 23:56:13 2025] [::1]:61299 Closing
+[Thu Jul  3 23:56:31 2025] [::1]:61372 Accepted
+[Thu Jul  3 23:56:31 2025] [::1]:61373 Accepted
+[Thu Jul  3 23:56:32 2025] [::1]:61372 [200]: GET /dashboard
+[Thu Jul  3 23:56:32 2025] [::1]:61372 Closing
+[Thu Jul  3 23:56:32 2025] [::1]:61373 [200]: GET /dist/output.css
+[Thu Jul  3 23:56:32 2025] [::1]:61373 Closing
+[Thu Jul  3 23:56:32 2025] [::1]:61377 Accepted
+[Thu Jul  3 23:56:32 2025] [::1]:61377 [302]: GET /favicon.ico
+[Thu Jul  3 23:56:32 2025] [::1]:61377 Closing
+[Thu Jul  3 23:56:32 2025] [::1]:61378 Accepted
+[Thu Jul  3 23:56:33 2025] [::1]:61378 [200]: GET /dashboard
+[Thu Jul  3 23:56:33 2025] [::1]:61378 Closing
+ow
+[Thu Jul  3 23:56:06 2025] [::1]:61259 Closing
+
+==> ./logs/node-server.log <==
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:56:10 2025] [::1]:61289 Accepted
+[Thu Jul  3 23:56:11 2025] [::1]:61289 [405]: GET /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:56:11 2025] [::1]:61289 Closing
+[Thu Jul  3 23:56:11 2025] [::1]:61290 Accepted
+[Thu Jul  3 23:56:12 2025] [::1]:61290 [302]: GET /favicon.ico
+[Thu Jul  3 23:56:12 2025] [::1]:61290 Closing
+[Thu Jul  3 23:56:12 2025] [::1]:61299 Accepted
+[Thu Jul  3 23:56:13 2025] [::1]:61299 [200]: GET /dashboard
+[Thu Jul  3 23:56:13 2025] [::1]:61299 Closing
+[Thu Jul  3 23:56:31 2025] [::1]:61372 Accepted
+[Thu Jul  3 23:56:31 2025] [::1]:61373 Accepted
+[Thu Jul  3 23:56:32 2025] [::1]:61372 [200]: GET /dashboard
+[Thu Jul  3 23:56:32 2025] [::1]:61372 Closing
+[Thu Jul  3 23:56:32 2025] [::1]:61373 [200]: GET /dist/output.css
+[Thu Jul  3 23:56:32 2025] [::1]:61373 Closing
+[Thu Jul  3 23:56:32 2025] [::1]:61377 Accepted
+[Thu Jul  3 23:56:32 2025] [::1]:61377 [302]: GET /favicon.ico
+[Thu Jul  3 23:56:32 2025] [::1]:61377 Closing
+[Thu Jul  3 23:56:32 2025] [::1]:61378 Accepted
+[Thu Jul  3 23:56:33 2025] [::1]:61378 [200]: GET /dashboard
+[Thu Jul  3 23:56:33 2025] [::1]:61378 Closing
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            [Thu Jul  3 23:25:37 2025] [::1]:59530 Accepted
+[Thu Jul  3 23:25:37 2025] [::1]:59531 Accepted
+[Thu Jul  3 23:25:38 2025] [::1]:59530 [200]: GET /social/following
+[Thu Jul  3 23:25:38 2025] [::1]:59530 Closing
+[Thu Jul  3 23:25:39 2025] [::1]:59531 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:25:39 2025] [::1]:59531 Closing
+[Thu Jul  3 23:25:39 2025] [::1]:59538 Accepted
+[Thu Jul  3 23:25:39 2025] [::1]:59538 [302]: GET /favicon.ico
+[Thu Jul  3 23:25:39 2025] [::1]:59538 Closing
+[Thu Jul  3 23:25:39 2025] [::1]:59539 Accepted
+[Thu Jul  3 23:25:40 2025] [::1]:59539 [200]: GET /dashboard
+[Thu Jul  3 23:25:40 2025] [::1]:59539 Closing
+[Thu Jul  3 23:26:18 2025] [::1]:59566 Accepted
+[Thu Jul  3 23:26:19 2025] [::1]:59566 [200]: GET /social/following
+[Thu Jul  3 23:26:19 2025] [::1]:59566 Closing
+[Thu Jul  3 23:26:19 2025] [::1]:59567 Accepted
+[Thu Jul  3 23:26:21 2025] [::1]:59567 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:26:21 2025] [::1]:59567 Closing
+[Thu Jul  3 23:26:21 2025] [::1]:59577 Accepted
+[Thu Jul  3 23:26:21 2025] [::1]:59577 [302]: GET /favicon.ico
+[Thu Jul  3 23:26:21 2025] [::1]:59577 Closing
+[Thu Jul  3 23:26:21 2025] [::1]:59578 Accepted
+[Thu Jul  3 23:26:22 2025] [::1]:59578 [200]: GET /dashboard
+[Thu Jul  3 23:26:22 2025] [::1]:59578 Closing
+[Thu Jul  3 23:26:23 2025] [::1]:59582 Accepted
+[Thu Jul  3 23:26:23 2025] [::1]:59583 Accepted
+[Thu Jul  3 23:26:25 2025] [::1]:59582 [200]: GET /social
+[Thu Jul  3 23:26:25 2025] [::1]:59582 Closing
+[Thu Jul  3 23:26:25 2025] [::1]:59583 [200]: GET /dist/output.css
+[Thu Jul  3 23:26:25 2025] [::1]:59583 Closing
+[Thu Jul  3 23:26:25 2025] [::1]:59589 Accepted
+[Thu Jul  3 23:26:25 2025] [::1]:59589 [302]: GET /favicon.ico
+[Thu Jul  3 23:26:25 2025] [::1]:59589 Closing
+[Thu Jul  3 23:26:25 2025] [::1]:59590 Accepted
+
+==> ./logs/node-server.log <==
+👤 User connected: baCkZLLzzA8hpeAXAAAB
+Socket connected: baCkZLLzzA8hpeAXAAAB
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:26:26 2025] [::1]:59590 [200]: GET /dashboard
+[Thu Jul  3 23:26:26 2025] [::1]:59590 Closing
+[Thu Jul  3 23:26:26 2025] [::1]:59594 Accepted
+
+==> ./logs/node-server.log <==
+👋 User disconnected: baCkZLLzzA8hpeAXAAAB
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:26:27 2025] API Debug: resource=auth, action=token, id=, method=POST
+[Thu Jul  3 23:26:27 2025] [::1]:59594 [200]: POST /api/auth/token
+[Thu Jul  3 23:26:27 2025] [::1]:59594 Closing
+[Thu Jul  3 23:26:27 2025] [::1]:59598 Accepted
+[Thu Jul  3 23:26:28 2025] [::1]:59598 [200]: GET /social/following
+[Thu Jul  3 23:26:28 2025] [::1]:59598 Closing
+[Thu Jul  3 23:26:28 2025] [::1]:59604 Accepted
+[Thu Jul  3 23:26:29 2025] [::1]:59604 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:26:29 2025] [::1]:59604 Closing
+[Thu Jul  3 23:26:29 2025] [::1]:59608 Accepted
+[Thu Jul  3 23:26:29 2025] [::1]:59608 [302]: GET /favicon.ico
+[Thu Jul  3 23:26:29 2025] [::1]:59608 Closing
+[Thu Jul  3 23:26:29 2025] [::1]:59609 Accepted
+[Thu Jul  3 23:26:30 2025] [::1]:59609 [200]: GET /dashboard
+[Thu Jul  3 23:26:30 2025] [::1]:59609 Closing
+[Thu Jul  3 23:32:20 2025] [::1]:59865 Accepted
+[Thu Jul  3 23:32:20 2025] [::1]:59866 Accepted
+[Thu Jul  3 23:32:21 2025] [::1]:59865 [200]: GET /social/following
+[Thu Jul  3 23:32:21 2025] [::1]:59865 Closing
+[Thu Jul  3 23:32:21 2025] [::1]:59866 Closed without sending a request; it was probably just an unused speculative preconnection
+[Thu Jul  3 23:32:21 2025] [::1]:59866 Closing
+[Thu Jul  3 23:32:21 2025] [::1]:59871 Accepted
+[Thu Jul  3 23:32:23 2025] [::1]:59871 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:32:23 2025] [::1]:59871 Closing
+[Thu Jul  3 23:32:23 2025] [::1]:59875 Accepted
+[Thu Jul  3 23:32:23 2025] [::1]:59875 [302]: GET /favicon.ico
+[Thu Jul  3 23:32:23 2025] [::1]:59875 Closing
+[Thu Jul  3 23:32:23 2025] [::1]:59876 Accepted
+[Thu Jul  3 23:32:24 2025] [::1]:59876 [200]: GET /dashboard
+[Thu Jul  3 23:32:24 2025] [::1]:59876 Closing
+[Thu Jul  3 23:33:05 2025] [::1]:59904 Accepted
+[Thu Jul  3 23:33:05 2025] [::1]:59905 Accepted
+[Thu Jul  3 23:33:06 2025] [::1]:59904 [200]: GET /social/messages/79424a31-556d-40f1-8fb2-602497dca725
+[Thu Jul  3 23:33:06 2025] [::1]:59904 Closing
+[Thu Jul  3 23:33:06 2025] [::1]:59905 Closed without sending a request; it was probably just an unused speculative preconnection
+[Thu Jul  3 23:33:06 2025] [::1]:59905 Closing
+[Thu Jul  3 23:33:06 2025] [::1]:59910 Accepted
+[Thu Jul  3 23:33:07 2025] [::1]:59910 [302]: GET /social/messages/dist/output.css
+[Thu Jul  3 23:33:07 2025] [::1]:59910 Closing
+[Thu Jul  3 23:33:07 2025] [::1]:59914 Accepted
+[Thu Jul  3 23:33:08 2025] [::1]:59914 [200]: GET /social
+[Thu Jul  3 23:33:08 2025] [::1]:59914 Closing
+[Thu Jul  3 23:33:09 2025] [::1]:59921 Accepted
+[Thu Jul  3 23:33:09 2025] [::1]:59921 [302]: GET /favicon.ico
+[Thu Jul  3 23:33:09 2025] [::1]:59921 Closing
+[Thu Jul  3 23:33:09 2025] [::1]:59922 Accepted
+
+==> ./logs/node-server.log <==
+👤 User connected: Z1xbUx21g1h99jAoAAAD
+Socket connected: Z1xbUx21g1h99jAoAAAD
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:33:09 2025] [::1]:59922 [200]: GET /dashboard
+[Thu Jul  3 23:33:09 2025] [::1]:59922 Closing
+[Thu Jul  3 23:33:09 2025] [::1]:59926 Accepted
+[Thu Jul  3 23:33:10 2025] [::1]:59926 [200]: POST /api/auth/token
+[Thu Jul  3 23:33:10 2025] [::1]:59926 Closing
+
+==> ./logs/node-server.log <==
+User authenticated: NIKOLAI TRISTAN PAZON (f1c72308-9be5-4865-a034-23afb7caf390)
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:35:06 2025] [::1]:60021 Accepted
+
+==> ./logs/node-server.log <==
+👋 User disconnected: Z1xbUx21g1h99jAoAAAD
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:35:06 2025] [::1]:60022 Accepted
+
+==> ./logs/node-server.log <==
+User disconnected: f1c72308-9be5-4865-a034-23afb7caf390
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:35:08 2025] [::1]:60021 [200]: GET /social
+[Thu Jul  3 23:35:08 2025] [::1]:60021 Closing
+[Thu Jul  3 23:35:08 2025] [::1]:60026 Accepted
+[Thu Jul  3 23:35:09 2025] [::1]:60022 [200]: GET /social
+[Thu Jul  3 23:35:09 2025] [::1]:60022 Closing
+[Thu Jul  3 23:35:09 2025] [::1]:60026 [200]: GET /dist/output.css
+[Thu Jul  3 23:35:09 2025] [::1]:60026 Closing
+[Thu Jul  3 23:35:09 2025] [::1]:60032 Accepted
+[Thu Jul  3 23:35:09 2025] [::1]:60032 [302]: GET /favicon.ico
+[Thu Jul  3 23:35:09 2025] [::1]:60032 Closing
+[Thu Jul  3 23:35:09 2025] [::1]:60033 Accepted
+
+==> ./logs/node-server.log <==
+👤 User connected: 7IDcRGoKMKaViyf5AAAF
+Socket connected: 7IDcRGoKMKaViyf5AAAF
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:35:10 2025] [::1]:60033 [200]: GET /dashboard
+[Thu Jul  3 23:35:10 2025] [::1]:60033 Closing
+[Thu Jul  3 23:35:10 2025] [::1]:60037 Accepted
+[Thu Jul  3 23:35:11 2025] [::1]:60037 [200]: POST /api/auth/token
+[Thu Jul  3 23:35:11 2025] [::1]:60037 Closing
+[Thu Jul  3 23:35:11 2025] [::1]:60042 Accepted
+
+==> ./logs/node-server.log <==
+👋 User disconnected: 7IDcRGoKMKaViyf5AAAF
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:35:11 2025] [::1]:60043 Accepted
+
+==> ./logs/node-server.log <==
+User authenticated: NIKOLAI TRISTAN PAZON (f1c72308-9be5-4865-a034-23afb7caf390)
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:35:12 2025] [::1]:60042 [200]: GET /social/following
+[Thu Jul  3 23:35:12 2025] [::1]:60042 Closing
+[Thu Jul  3 23:35:14 2025] [::1]:60043 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:35:14 2025] [::1]:60043 Closing
+[Thu Jul  3 23:35:14 2025] [::1]:60051 Accepted
+[Thu Jul  3 23:35:14 2025] [::1]:60051 [302]: GET /favicon.ico
+[Thu Jul  3 23:35:14 2025] [::1]:60051 Closing
+[Thu Jul  3 23:35:14 2025] [::1]:60052 Accepted
+[Thu Jul  3 23:35:15 2025] [::1]:60052 [200]: GET /dashboard
+[Thu Jul  3 23:35:15 2025] [::1]:60052 Closing
+[Thu Jul  3 23:35:47 2025] [::1]:60085 Accepted
+[Thu Jul  3 23:35:47 2025] [::1]:60086 Accepted
+[Thu Jul  3 23:35:48 2025] [::1]:60085 [200]: GET /social/following
+[Thu Jul  3 23:35:48 2025] [::1]:60085 Closing
+[Thu Jul  3 23:35:49 2025] [::1]:60086 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:35:49 2025] [::1]:60086 Closing
+[Thu Jul  3 23:35:50 2025] [::1]:60093 Accepted
+[Thu Jul  3 23:35:50 2025] [::1]:60093 [302]: GET /favicon.ico
+[Thu Jul  3 23:35:50 2025] [::1]:60093 Closing
+[Thu Jul  3 23:35:50 2025] [::1]:60094 Accepted
+[Thu Jul  3 23:35:50 2025] [::1]:60094 [200]: GET /dashboard
+[Thu Jul  3 23:35:50 2025] [::1]:60094 Closing
+[Thu Jul  3 23:35:52 2025] [::1]:60099 Accepted
+[Thu Jul  3 23:35:53 2025] [::1]:60099 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:35:53 2025] [::1]:60099 Closing
+[Thu Jul  3 23:36:13 2025] [::1]:60122 Accepted
+[Thu Jul  3 23:36:15 2025] [::1]:60122 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:36:15 2025] [::1]:60122 Closing
+[Thu Jul  3 23:38:17 2025] [::1]:60701 Accepted
+[Thu Jul  3 23:38:17 2025] [::1]:60702 Accepted
+[Thu Jul  3 23:38:18 2025] [::1]:60701 [200]: GET /social/following
+[Thu Jul  3 23:38:18 2025] [::1]:60701 Closing
+[Thu Jul  3 23:38:19 2025] [::1]:60702 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:38:19 2025] [::1]:60702 Closing
+[Thu Jul  3 23:38:20 2025] [::1]:60712 Accepted
+[Thu Jul  3 23:38:20 2025] [::1]:60712 [302]: GET /favicon.ico
+[Thu Jul  3 23:38:20 2025] [::1]:60712 Closing
+[Thu Jul  3 23:38:20 2025] [::1]:60713 Accepted
+[Thu Jul  3 23:38:20 2025] [::1]:60713 [200]: GET /dashboard
+[Thu Jul  3 23:38:20 2025] [::1]:60713 Closing
+[Thu Jul  3 23:38:22 2025] [::1]:60716 Accepted
+[Thu Jul  3 23:38:23 2025] [::1]:60716 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:38:23 2025] [::1]:60716 Closing
+[Thu Jul  3 23:38:28 2025] [::1]:60721 Accepted
+[Thu Jul  3 23:38:28 2025] [::1]:60722 Accepted
+[Thu Jul  3 23:38:29 2025] [::1]:60721 [200]: GET /social/following
+[Thu Jul  3 23:38:29 2025] [::1]:60721 Closing
+[Thu Jul  3 23:38:31 2025] [::1]:60722 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:38:31 2025] [::1]:60722 Closing
+[Thu Jul  3 23:38:31 2025] [::1]:60729 Accepted
+[Thu Jul  3 23:38:31 2025] [::1]:60729 [302]: GET /favicon.ico
+[Thu Jul  3 23:38:31 2025] [::1]:60729 Closing
+[Thu Jul  3 23:38:31 2025] [::1]:60730 Accepted
+[Thu Jul  3 23:38:32 2025] [::1]:60730 [200]: GET /dashboard
+[Thu Jul  3 23:38:32 2025] [::1]:60730 Closing
+[Thu Jul  3 23:39:04 2025] [::1]:60744 Accepted
+[Thu Jul  3 23:39:04 2025] [::1]:60745 Accepted
+[Thu Jul  3 23:39:05 2025] [::1]:60744 [200]: GET /social/following
+[Thu Jul  3 23:39:05 2025] [::1]:60744 Closing
+[Thu Jul  3 23:39:06 2025] [::1]:60745 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:39:06 2025] [::1]:60745 Closing
+[Thu Jul  3 23:39:06 2025] [::1]:60752 Accepted
+[Thu Jul  3 23:39:06 2025] [::1]:60752 [302]: GET /favicon.ico
+[Thu Jul  3 23:39:06 2025] [::1]:60752 Closing
+[Thu Jul  3 23:39:06 2025] [::1]:60753 Accepted
+[Thu Jul  3 23:39:07 2025] [::1]:60753 [200]: GET /dashboard
+[Thu Jul  3 23:39:07 2025] [::1]:60753 Closing
+[Thu Jul  3 23:39:12 2025] [::1]:60756 Accepted
+[Thu Jul  3 23:39:12 2025] [::1]:60756 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:39:12 2025] [::1]:60756 Closing
+[Thu Jul  3 23:44:04 2025] [::1]:60942 Accepted
+[Thu Jul  3 23:44:04 2025] [::1]:60943 Accepted
+[Thu Jul  3 23:44:05 2025] [::1]:60942 [200]: GET /social/following
+[Thu Jul  3 23:44:05 2025] [::1]:60942 Closing
+[Thu Jul  3 23:44:07 2025] [::1]:60943 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:44:07 2025] [::1]:60943 Closing
+[Thu Jul  3 23:44:07 2025] [::1]:60951 Accepted
+[Thu Jul  3 23:44:07 2025] [::1]:60951 [302]: GET /favicon.ico
+[Thu Jul  3 23:44:07 2025] [::1]:60951 Closing
+[Thu Jul  3 23:44:07 2025] [::1]:60952 Accepted
+[Thu Jul  3 23:44:09 2025] [::1]:60952 [200]: GET /dashboard
+[Thu Jul  3 23:44:09 2025] [::1]:60952 Closing
+[Thu Jul  3 23:44:15 2025] [::1]:60957 Accepted
+[Thu Jul  3 23:44:16 2025] [::1]:60957 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:44:16 2025] [::1]:60957 Closing
+[Thu Jul  3 23:44:16 2025] [::1]:60961 Accepted
+[Thu Jul  3 23:44:17 2025] [::1]:60961 [405]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:44:17 2025] [::1]:60961 Closing
+[Thu Jul  3 23:55:11 2025] [::1]:61141 Accepted
+[Thu Jul  3 23:55:11 2025] [::1]:61142 Accepted
+[Thu Jul  3 23:55:26 2025] [::1]:61141 [200]: GET /social/following
+[Thu Jul  3 23:55:26 2025] [::1]:61141 Closing
+[Thu Jul  3 23:55:29 2025] [::1]:61142 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:55:29 2025] [::1]:61142 Closing
+[Thu Jul  3 23:55:29 2025] [::1]:61160 Accepted
+[Thu Jul  3 23:55:29 2025] [::1]:61161 Accepted
+[Thu Jul  3 23:55:30 2025] [::1]:61160 [200]: GET /social/following
+[Thu Jul  3 23:55:30 2025] [::1]:61160 Closing
+[Thu Jul  3 23:55:32 2025] [::1]:61161 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:55:32 2025] [::1]:61161 Closing
+[Thu Jul  3 23:55:32 2025] [::1]:61173 Accepted
+[Thu Jul  3 23:55:32 2025] [::1]:61173 [302]: GET /favicon.ico
+[Thu Jul  3 23:55:32 2025] [::1]:61173 Closing
+[Thu Jul  3 23:55:32 2025] [::1]:61174 Accepted
+[Thu Jul  3 23:55:33 2025] [::1]:61174 [200]: GET /dashboard
+[Thu Jul  3 23:55:33 2025] [::1]:61174 Closing
+[Thu Jul  3 23:55:37 2025] [::1]:61178 Accepted
+[Thu Jul  3 23:55:40 2025] [::1]:61178 [200]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:55:40 2025] [::1]:61178 Closing
+
+==> ./logs/node-server.log <==
+📝 Event file changed: follow_events
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:55:43 2025] [::1]:61183 Accepted
+[Thu Jul  3 23:55:43 2025] [::1]:61184 Accepted
+[Thu Jul  3 23:55:45 2025] [::1]:61183 [200]: GET /social/following
+[Thu Jul  3 23:55:45 2025] [::1]:61183 Closing
+[Thu Jul  3 23:55:46 2025] [::1]:61184 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:55:46 2025] [::1]:61184 Closing
+[Thu Jul  3 23:55:46 2025] [::1]:61191 Accepted
+[Thu Jul  3 23:55:46 2025] [::1]:61191 [302]: GET /favicon.ico
+[Thu Jul  3 23:55:46 2025] [::1]:61191 Closing
+[Thu Jul  3 23:55:46 2025] [::1]:61192 Accepted
+[Thu Jul  3 23:55:49 2025] [::1]:61192 [200]: GET /dashboard
+[Thu Jul  3 23:55:49 2025] [::1]:61192 Closing
+[Thu Jul  3 23:55:54 2025] [::1]:61201 Accepted
+[Thu Jul  3 23:55:56 2025] [::1]:61201 [200]: GET /social/dist/output.css
+[Thu Jul  3 23:55:56 2025] [::1]:61201 Closing
+[Thu Jul  3 23:56:01 2025] [::1]:61238 Accepted
+[Thu Jul  3 23:56:03 2025] [::1]:61238 [200]: DELETE /api/users/79424a31-556d-40f1-8fb2-602497dca725/unfollow
+[Thu Jul  3 23:56:03 2025] [::1]:61238 Closing
+
+==> ./logs/node-server.log <==
+📝 Event file changed: follow_events
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:56:05 2025] [::1]:61259 Accepted
+
+==> ./logs/node-server.log <==
+[32m[nodemon] restarting due to changes...[39m
+📝 Event file changed: follow_events
+[32m[nodemon] starting `node nodejs-server/server.js`[39m
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:56:06 2025] [::1]:61259 [200]: POST /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:56:06 2025] [::1]:61259 Closing
+
+==> ./logs/node-server.log <==
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: reconnect. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+👀 Starting file watchers...
+✅ Watching participant files: /opt/homebrew/var/www/accounts/storage/participants
+✅ Watching event files: /opt/homebrew/var/www/accounts/storage/events
+✅ File watchers started successfully
+🚀 Node.js WebSocket server running on port 3000
+📊 Health check: http://localhost:3000/health
+🔌 WebSocket endpoint: ws://localhost:3000
+💬 Real-time messaging enabled
+✅ Database connected successfully
+
+==> ./logs/php-server.log <==
+[Thu Jul  3 23:56:10 2025] [::1]:61289 Accepted
+[Thu Jul  3 23:56:11 2025] [::1]:61289 [405]: GET /api/users/79424a31-556d-40f1-8fb2-602497dca725/follow
+[Thu Jul  3 23:56:11 2025] [::1]:61289 Closing
+[Thu Jul  3 23:56:11 2025] [::1]:61290 Accepted
+[Thu Jul  3 23:56:12 2025] [::1]:61290 [302]: GET /favicon.ico
+[Thu Jul  3 23:56:12 2025] [::1]:61290 Closing
+[Thu Jul  3 23:56:12 2025] [::1]:61299 Accepted
+[Thu Jul  3 23:56:13 2025] [::1]:61299 [200]: GET /dashboard
+[Thu Jul  3 23:56:13 2025] [::1]:61299 Closing
+[Thu Jul  3 23:56:31 2025] [::1]:61372 Accepted
+[Thu Jul  3 23:56:31 2025] [::1]:61373 Accepted
+[Thu Jul  3 23:56:32 2025] [::1]:61372 [200]: GET /dashboard
+[Thu Jul  3 23:56:32 2025] [::1]:61372 Closing
+[Thu Jul  3 23:56:32 2025] [::1]:61373 [200]: GET /dist/output.css
+[Thu Jul  3 23:56:32 2025] [::1]:61373 Closing
+[Thu Jul  3 23:56:32 2025] [::1]:61377 Accepted
+[Thu Jul  3 23:56:32 2025] [::1]:61377 [302]: GET /favicon.ico
+[Thu Jul  3 23:56:32 2025] [::1]:61377 Closing
+[Thu Jul  3 23:56:32 2025] [::1]:61378 Accepted
+[Thu Jul  3 23:56:33 2025] [::1]:61378 [200]: GET /dashboard
+[Thu Jul  3 23:56:33 2025] [::1]:61378 Closing

@@ -80,7 +80,10 @@ class App {
 
         // Load the method
         if (isset($url[1])) {
-            if (method_exists($this->controller, $url[1])) {
+            // Special handling for API routes - always use index method for API controller
+            if (get_class($this->controller) === 'ApiController') {
+                $this->method = 'index';
+            } elseif (method_exists($this->controller, $url[1])) {
                 $this->method = $url[1];
                 unset($url[1]);
             }

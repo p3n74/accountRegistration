@@ -83,21 +83,18 @@ class ApiController extends Controller {
             } elseif ($resource === 'users') {
                 if ($action === 'search') {
                     return $this->searchUsers();
-                } elseif (is_numeric($action)) {
-                    // Handle /api/users/{id} routes
-                    $userId = $action;
-                    $userAction = $id;
-                    
-                    if ($userAction === 'follow') {
-                        return $this->followUser($userId);
-                    } elseif ($userAction === 'unfollow') {
-                        return $this->unfollowUser($userId);
-                    } else {
-                        return $this->getUserProfile($userId);
-                    }
+                }
+
+                // Treat $action as userId (can be UUID or numeric)
+                $userId = $action;
+                $userAction = $id;
+
+                if ($userAction === 'follow') {
+                    return $this->followUser($userId);
+                } elseif ($userAction === 'unfollow') {
+                    return $this->unfollowUser($userId);
                 } else {
-                    // Handle general user API
-                    return $this->getUserProfile($action);
+                    return $this->getUserProfile($userId);
                 }
             }
             
